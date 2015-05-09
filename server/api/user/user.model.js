@@ -12,6 +12,10 @@ var UserSchema = new Schema({
     type: String,
     default: 'user'
   },
+
+  created: {type: Date, required: true, default: new Date()},
+  lastLogin: Date,
+
   hashedPassword: String,
   provider: String,
   salt: String,
