@@ -13,9 +13,13 @@ angular.module('baseApp')
           email: $scope.user.email,
           password: $scope.user.password
         })
-        .then( function() {
+        .then( function(data) {
+            var home = '/';
+
+            if(data.roles.indexOf('admin') > -1) home = '/admin';
+
           // Logged in, redirect to home
-          $location.path('/');
+          $location.path(home);
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

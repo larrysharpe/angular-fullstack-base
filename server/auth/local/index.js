@@ -14,7 +14,7 @@ router.post('/', function(req, res, next) {
     user.lastLogin = new Date();
     user.save(function (err, user){
 
-      var roleSign = req.user.role.join('');
+      var roleSign = user.roles.join('');
 
       if(err)  {
         res.send(500);

@@ -133,6 +133,7 @@ angular.module('baseApp')
        * @return {Boolean}
        */
       hasRole: function (role) {
+        if(!currentUser || !currentUser.roles) return false;
         return currentUser.roles.indexOf(role) > -1;
       },
 
