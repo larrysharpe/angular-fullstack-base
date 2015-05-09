@@ -15,7 +15,7 @@ User.find({}).remove(function() {
     password: 'test'
   }, {
     provider: 'local',
-    role: 'admin',
+    roles: ['admin'],
     name: 'Admin',
     email: 'admin@admin.com',
     password: 'admin'
