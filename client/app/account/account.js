@@ -8,6 +8,16 @@ angular.module('baseApp')
         templateUrl: 'app/account/login/login.html',
         controller: 'LoginCtrl'
       })
+      .state('login-help', {
+        url: '/loginhelp',
+        templateUrl: 'app/account/login/loginhelp.html',
+        controller: 'LoginCtrl'
+      })
+      .state('login-help-reset', {
+        url: '/loginhelp/:token',
+        templateUrl: 'app/account/login/loginhelptoken.html',
+        controller: 'LoginCtrl'
+      })
       .state('signup', {
         url: '/signup',
         templateUrl: 'app/account/signup/signup.html',

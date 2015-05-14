@@ -18,6 +18,11 @@ var UserSchema = new Schema({
   lastLogin: Date,
 
   hashedPassword: String,
+  resetToken: {
+    token: {type: String},
+    date: {type: Date}
+  },
+
   provider: String,
   salt: String,
   facebook: {},
