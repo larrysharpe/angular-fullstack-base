@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location, $window, $http, $stateParams) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $window, $http, $stateParams, Flash) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -14,7 +14,10 @@ angular.module('baseApp')
       if(form.$valid) {
         $http.post('/api/users/passwordReset', {token: $scope.token, password: $scope.user.newPassword}  )
         .success(function(data){
-          if(data === 'OK') $location.path('/login');
+          if(data === 'OK') {
+            Flash.create('success', 'password changed');
+            $location.path('/login');
+          }
         });
       }
     };
