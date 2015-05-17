@@ -5,8 +5,33 @@ angular.module('baseApp')
     $scope.user = {};
     $scope.errors = {};
 
-    if($stateParams.token){
-      $scope.token = $stateParams.token;
+    if($stateParams.etoken){
+      $scope.token = $stateParams.etoken;
+    }
+
+    if($stateParams.vtoken){
+      $http.post('/api/users/verify/', {token: $stateParams.vtoken})
+        .success(function(data){
+          if (data === 'OK'){
+            $scope.emailConfirmed = true;
+            $scope.emailConfirmedSuccess = true;
+            if(Auth.isLoggedIn()){
+              redirectHome(Auth.getCurrentUser().roles);
+            }
+          } else {
+            $scope.emailConfirmedFail = true;
+          }
+        })
+        .error(function(data){
+          $scope.emailConfirmedFail = true;
+        })
+    }
+
+    var redirectHome = function (roles){
+      var home = '/';
+
+      if(roles.indexOf('admin') > -1) home = '/admin';
+      $location.path(home);
     }
 
     $scope.changePasswordByReset = function(form) {

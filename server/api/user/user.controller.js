@@ -111,6 +111,18 @@ exports.authCallback = function(req, res, next) {
   res.redirect('/');
 };
 
+exports.verifyEmail = function (req, res){
+  User.findOne({emailConfirmationToken: req.body.token}, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    user.emailConfirmed = true;
+    user.emailConfirmationToken = '';
+    user.save(function (err, user) {
+      res.send(200);
+    });
+  });
+}
+
 
 exports.accountHelp = function (req, res) {
   if (!req.body.email) return res.json(422, 'no email address');
@@ -139,3 +151,12 @@ exports.passwordReset = function (req, res){
     }
   });
 };
+
+exports.resendVerification = function (req, res, next){
+  User.findOne({_id: req.params.id}, 'emailConfirmationToken', function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    res.send(200);
+  });
+};
+

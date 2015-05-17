@@ -14,7 +14,7 @@ angular.module('baseApp')
         controller: 'LoginCtrl'
       })
       .state('login-help-reset', {
-        url: '/loginhelp/:token',
+        url: '/loginhelp/:etoken',
         templateUrl: 'app/account/login/loginhelptoken.html',
         controller: 'LoginCtrl'
       })
@@ -28,5 +28,10 @@ angular.module('baseApp')
         templateUrl: 'app/account/settings/settings.html',
         controller: 'SettingsCtrl',
         authenticate: true
+      })
+      .state('verify', {
+        url: '/verify/:vtoken',
+        templateUrl: 'app/account/login/verify.html',
+        controller: 'LoginCtrl'
       });
   });

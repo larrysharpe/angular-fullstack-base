@@ -5,9 +5,24 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
+var makeRandomString = function (length){
+  if(!length) length = 5;
+  var text = "",
+    possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < length; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
+
 var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
+  emailConfirmed: {type: Boolean, required: true, default: false},
+  emailConfirmationToken: {type: String, default: makeRandomString(16) },
+
   roles: {
     type: [String],
     default: 'user',
