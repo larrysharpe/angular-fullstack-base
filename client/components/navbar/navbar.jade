@@ -35,3 +35,5 @@ div(ng-controller='NavbarCtrl')
     .text-center(ng-if="!isVerified() && !verificationSent") Your email has not been confirmed.
       a(href="", ng-click="resendVerification()") Resend Confirmation
     .text-center(ng-if="!isVerified() && verificationSent") Your confirmation has been resent to {{getCurrentUser().email}}.
+
+  div(flash-message="10000")

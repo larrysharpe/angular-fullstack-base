@@ -15,14 +15,20 @@ angular.module('baseApp')
           if (data === 'OK'){
             $scope.emailConfirmed = true;
             $scope.emailConfirmedSuccess = true;
+
+            Auth.getCurrentUser().emailConfirmed = true;
+
+            Flash.create('success', 'Your email has been confirmed');
             if(Auth.isLoggedIn()){
               redirectHome(Auth.getCurrentUser().roles);
             }
           } else {
+            Flash.create('danger', 'Confirmation could not be saved. Please try again.');
             $scope.emailConfirmedFail = true;
           }
         })
         .error(function(data){
+          Flash.create('danger', 'There was an error please try again');
           $scope.emailConfirmedFail = true;
         })
     }
