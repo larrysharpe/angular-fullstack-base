@@ -22,7 +22,7 @@ div(ng-controller='NavbarCtrl')
             a(href='/login') Login
 
           li(ng-show='isLoggedIn()')
-            p.navbar-text Hello {{ getCurrentUser().name }}
+            p.navbar-text Hello {{ getCurrentUser().username }}
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/settings")}')
             a(href='/settings')

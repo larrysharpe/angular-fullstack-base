@@ -19,6 +19,7 @@ var makeRandomString = function (length){
 
 var UserSchema = new Schema({
   name: String,
+  username: {type: String, required: true},
   email: { type: String, lowercase: true },
   emailConfirmed: {type: Boolean, required: true, default: false},
   emailConfirmationToken: String,
