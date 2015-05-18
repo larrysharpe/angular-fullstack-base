@@ -21,7 +21,7 @@ var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
   emailConfirmed: {type: Boolean, required: true, default: false},
-  emailConfirmationToken: {type: String, default: makeRandomString(16) },
+  emailConfirmationToken: String,
 
   roles: {
     type: [String],
@@ -125,6 +125,8 @@ var validatePresenceOf = function(value) {
 UserSchema
   .pre('save', function(next) {
     if (!this.isNew) return next();
+
+    this.emailConfirmationToken = makeRandomString(16);
 
     if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
       next(new Error('Invalid password'));
