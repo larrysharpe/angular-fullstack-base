@@ -129,12 +129,22 @@ angular.module('baseApp')
 
       /**
        * Check if a user is an admin
-       * @param {String} role - role to be looked up
+       * @param {String|[String]} roles - role to be looked up
        * @return {Boolean}
        */
-      hasRole: function (role) {
+      hasRole: function (roles) {
         if(!currentUser || !currentUser.roles) return false;
-        return currentUser.roles.indexOf(role) > -1;
+        if(!roles) return false;
+        if(Array.isArray(roles)){
+          for (var i = 0; i<roles.length;i++){
+            if(currentUser.roles.indexOf(roles[i]) > -1){
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return currentUser.roles.indexOf(roles) > -1;
+        }
       },
 
       /**
