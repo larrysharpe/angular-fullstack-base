@@ -3,6 +3,12 @@
 angular.module('baseApp')
   .config(function ($stateProvider) {
     $stateProvider
+
+      .state('broadcasterSignup', {
+        url: '/broadcasterSignup',
+        templateUrl: 'app/account/signup/broadcasters.html',
+        controller: 'SignupCtrl'
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'app/account/login/login.html',
@@ -20,7 +26,7 @@ angular.module('baseApp')
       })
       .state('signup', {
         url: '/signup',
-        templateUrl: 'app/account/signup/signup.html',
+        templateUrl: 'app/account/signup/users.html',
         controller: 'SignupCtrl'
       })
       .state('settings', {

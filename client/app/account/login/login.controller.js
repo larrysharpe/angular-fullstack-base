@@ -37,6 +37,8 @@ angular.module('baseApp')
       var home = '/';
 
       if(roles.indexOf('admin') > -1) home = '/admin';
+      if(roles.indexOf('broadcaster') > -1) home = '/dashboard';
+      if(roles.indexOf('broadcaster applicant') > -1) home = '/dashboard';
       $location.path(home);
     }
 

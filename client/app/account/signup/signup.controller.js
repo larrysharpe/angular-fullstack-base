@@ -9,11 +9,18 @@ angular.module('baseApp')
       $scope.submitted = true;
 
       if(form.$valid) {
-        Auth.createUser({
+
+        var newUser = {
           username: $scope.user.username,
           email: $scope.user.email,
           password: $scope.user.password
-        })
+        };
+
+        if($location.path() === '/broadcasterSignup'){
+          newUser.roles = ['broadcaster applicant'];
+        }
+
+        Auth.createUser(newUser)
         .then( function() {
           // Account created, redirect to home
           $location.path('/');
