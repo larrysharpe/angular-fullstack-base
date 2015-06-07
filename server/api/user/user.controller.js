@@ -166,6 +166,43 @@ exports.accountHelp = function (req, res) {
   });
 }
 
+exports.changeEmail = function (req, res){
+  if (!req.body._id) return res.json(422, 'no user');
+  if (!req.body.email) return res.json(422, 'no email address');
+  User.findById(req.body._id, function(err, user) {
+    if (user) {
+      if(user.email === req.body.email) {
+        res.json(422,'Cannot use current email');
+      } else {
+        var token = makeRandomString(16);
+        user.emailConfirmationToken = token;
+        user.emailConfirmed = false;
+        user.email = req.body.email;
+        user.save(function (err, user) {
+          res.json({user: user});
+        });
+      }
+    } else {
+      res.json(422, 'Could not find user.');
+    }
+  });
+};
+
+
+exports.changeProfile = function (req, res){
+  if (!req.body._id) return res.json(422, 'no user');
+  User.findById(req.body._id, function(err, user) {
+    if (user) {
+      user.username = req.body.username;
+      user.save(function(err, user){
+        res.json(200, {user: user});
+      });
+    } else {
+      res.json(422, 'Could not find user.');
+    }
+  });
+};
+
 exports.passwordReset = function (req, res){
   User.findOne({"resetToken.token": req.body.token}, function (err, user) {
     if(err !== null) res.json({error:err});
