@@ -39,6 +39,8 @@ var UserSchema = new Schema({
     date: {type: Date}
   },
 
+  broadcasterDenialReason: String,
+
   provider: String,
   salt: String,
   facebook: {},

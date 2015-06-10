@@ -10,10 +10,13 @@ div(ng-include='"components/navbar/navbar.html"')
         th Roles
         th Trash
       tr(ng-repeat="user in users")
-        td {{::user.name}}
-        td {{::user.username}}
-        td {{::user.email}}
-        td {{::user.roles.join(',')}}
+        td {{user.name}}
+        td {{user.username}}
+        td {{user.email}}
+        td {{user.roles.join(',')}}
+        td
+          a(href="", ng-click="approveBroadcaster(user,$index)") Approve
+          a(href="", ng-click="denyBroadcaster(user,$index)") Deny
         td
           a.trash(ng-click='delete(user)')
             span.glyphicon.glyphicon-trash.pull-right

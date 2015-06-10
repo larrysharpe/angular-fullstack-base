@@ -18,4 +18,7 @@ router.post('/accountHelp', controller.accountHelp);
 router.post('/passwordReset', controller.passwordReset);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 
+router.post('/approveBroadcaster', auth.hasRole('admin'), controller.approveBroadcaster);
+router.post('/denyBroadcaster', auth.hasRole('admin'), controller.denyBroadcaster);
+
 module.exports = router;

@@ -14,4 +14,27 @@ angular.module('baseApp')
         }
       });
     };
+
+    $scope.approveBroadcaster = function (user,index) {
+      $http.post('/api/users/approveBroadcaster', {_id: user._id})
+        .success(function(userData){
+          console.log('Broadcaster Approved');
+          $scope.users[index] = userData;
+        })
+        .error(function(data){
+          console.log('Broadcaster Approval Failed.', data);
+        })
+    };
+
+    $scope.denyBroadcaster = function (user,index) {
+      $http.post('/api/users/denyBroadcaster', {_id: user._id})
+        .success(function(userData){
+          console.log('Broadcaster Denied');
+          $scope.users[index] = userData;
+        })
+        .error(function(data){
+          console.log('Broadcaster Denial Failed', data);
+
+        })
+    };
   });
