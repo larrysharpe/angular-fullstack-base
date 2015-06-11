@@ -15,6 +15,10 @@ angular.module('baseApp')
       });
     };
 
+    $scope.needsBroadcasterApproval = function (index) {
+      return $scope.users[index].roles.indexOf('broadcaster applicant') > -1;
+    }
+
     $scope.approveBroadcaster = function (user,index) {
       $http.post('/api/users/approveBroadcaster', {_id: user._id})
         .success(function(userData){

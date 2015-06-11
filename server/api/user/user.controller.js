@@ -144,7 +144,7 @@ exports.denyBroadcaster = function (req, res) {
       var oldPermissionIndex = user.roles.indexOf('broadcaster applicant');
       user.roles.splice(oldPermissionIndex, 1);
       user.roles.push('broadcaster denied');
-      if(req.body.broadcasterDenialReason) user.broadcasterDenialReason = req.body.broadcasterDenialReason;
+      user.broadcasterDenialReason = req.body.broadcasterDenialReason;
       user.save(function(err){
         res.json(200, user);
       });
