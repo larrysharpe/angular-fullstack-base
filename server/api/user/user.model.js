@@ -16,13 +16,58 @@ var makeRandomString = function (length){
   return text;
 }
 
+var CreditHistorySchema = new Schema({
+  date: {type: Date, required: true},
+  desc: {type: String, enum: ['tip', 'pvt', 'vip' ], required: true},
+  to: { type: String, required: true },
+  amount: { type: Number, required: true }
+});
+
 
 var UserSchema = new Schema({
-  name: String,
+  name: {
+    first: {type: String, required: true},
+    last: {type: String, required: true}
+  },
   username: {type: String, required: true},
+
+  birthdate: Date,
+
+  limits: {
+    daily: {type: Number, default: 5000}
+  },
+
+  credits: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  creditHistory: [CreditHistorySchema],
+
+  xp:  {
+    type: Number,
+    required: true,
+    default: 100
+  },
+
+  level:  {
+    type: Number,
+    required: true,
+    default: 1
+  },
+
+  achievements: [String],
+
   email: { type: String, lowercase: true },
   emailConfirmed: {type: Boolean, required: true, default: false},
   emailConfirmationToken: String,
+
+  address: {
+    line1: String,
+    country: {type: String, required: true},
+    zip: String
+  },
+
 
   roles: {
     type: [String],
