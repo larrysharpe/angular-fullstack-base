@@ -20,6 +20,19 @@ angular.module('baseApp')
       return $scope.getCurrentUser().emailConfirmed && $scope.isLoggedIn();
     };
 
+    $scope.broadcasterSetup = function (){
+      var usr = {
+        _id: $scope.getCurrentUser()._id
+      };
+      $http.post('/api/users/applyBroadcaster',usr)
+        .success(function(data){
+          if (data === 'OK'){
+            Auth.refreshUser();
+            $location.path('/dashboard');
+          }
+        })
+    }
+
     $scope.resendVerification = function (){
       $http.get('/api/users/resendVerification/'+$scope.getCurrentUser()._id)
         .success((function(data){

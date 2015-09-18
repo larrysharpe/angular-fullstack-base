@@ -20,6 +20,7 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 router.put('/changeEmail', auth.isAuthenticated(), controller.changeEmail);
 router.put('/changeProfile', auth.isAuthenticated(), controller.changeProfile);
 
+router.post('/applyBroadcaster', auth.isAuthenticated(), controller.applyBroadcaster)
 router.post('/approveBroadcaster', auth.hasRole('admin'), controller.approveBroadcaster);
 router.post('/denyBroadcaster', auth.hasRole('admin'), controller.denyBroadcaster);
 

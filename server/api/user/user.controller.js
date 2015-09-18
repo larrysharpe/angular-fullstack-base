@@ -122,6 +122,24 @@ exports.verifyEmail = function (req, res){
     });
   });
 }
+
+
+exports.applyBroadcaster = function (req, res) {
+  if(!req.body._id) return res.json(422, 'No user provided');
+  User.findById(req.body._id, function (err, user) {
+    if (user) {
+      if (user.roles.indexOf('broadcaster') > -1) res.json(422, 'Broadcaster Already Approved');
+      else if (user.roles.indexOf('broadcaster applicant') > -1) res.json(422, 'Broadcaster Has Already Applied');
+      else {
+        user.roles.push('broadcaster applicant');
+        user.save(function (err) {
+          res.json(200, 'OK');
+        });
+      }
+    }
+  });
+}
+
 exports.approveBroadcaster = function (req, res) {
   if(!req.body._id) return res.json(422, 'No user provided');
   User.findById(req.body._id, function (err, user) {
