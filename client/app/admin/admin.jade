@@ -1,23 +1,26 @@
 div(ng-include='"components/navbar/navbar.html"')
-.container
-  .col-md-6
-    table.table.table-striped.table-bordered
-      caption Users
-      tr
-        th Name
-        th Username
-        th Email
-        th Roles
-        th Trash
-      tr(ng-repeat="user in users")
-        td {{::user.name}}
-        td {{::user.username}}
-        td {{::user.email}}
-        td {{::user.roles.join(',')}}
-        td
-          span(ng-if="needsBroadcasterApproval($index)")
-            a(href="", ng-click="approveBroadcaster(user,$index)") Approve
-            a(href="", ng-click="denyBroadcaster(user,$index)") Deny
-        td
-          a.trash(ng-click='delete(user)')
-            span.glyphicon.glyphicon-trash.pull-right
+
+.contain-main
+  .container
+    .row
+      .col-md-6
+        table.table.table-striped.table-bordered
+          caption Users
+          tr
+            th Name
+            th Username
+            th Email
+            th Roles
+            th Trash
+          tr(ng-repeat="user in users")
+            td {{::user.name}}
+            td {{::user.username}}
+            td {{::user.email}}
+            td {{::user.roles.join(',')}}
+            td
+              span(ng-if="needsBroadcasterApproval($index)")
+                a(href="", ng-click="approveBroadcaster(user,$index)") Approve
+                a(href="", ng-click="denyBroadcaster(user,$index)") Deny
+            td
+              a.trash(ng-click='delete(user)')
+                span.glyphicon.glyphicon-trash.pull-right
