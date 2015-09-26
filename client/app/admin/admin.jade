@@ -11,7 +11,7 @@ div(ng-include='"components/navbar/navbar.html"')
             th Username
             th Email
             th Roles
-            th Trash
+            th(colspan=3) Actions
           tr(ng-repeat="user in users")
             td {{::user.name}}
             td {{::user.username}}
