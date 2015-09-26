@@ -69,6 +69,8 @@ var UserSchema = new Schema({
   },
 
 
+  faves: [],
+
   roles: {
     type: [String],
     default: 'user',

@@ -1,0 +1,17 @@
+
+
+Roles:
+  admin
+  user
+  broadcaster
+  broadcaster applicant
+
+
+
+Status:
+  away
+  group
+  pvt
+  vip
+  Offline
+  Online

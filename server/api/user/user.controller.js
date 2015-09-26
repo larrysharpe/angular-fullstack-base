@@ -122,6 +122,24 @@ exports.verifyEmail = function (req, res){
     });
   });
 }
+
+
+exports.applyBroadcaster = function (req, res) {
+  if(!req.body._id) return res.json(422, 'No user provided');
+  User.findById(req.body._id, function (err, user) {
+    if (user) {
+      if (user.roles.indexOf('broadcaster') > -1) res.json(422, 'Broadcaster Already Approved');
+      else if (user.roles.indexOf('broadcaster applicant') > -1) res.json(422, 'Broadcaster Has Already Applied');
+      else {
+        user.roles.push('broadcaster applicant');
+        user.save(function (err) {
+          res.json(200, 'OK');
+        });
+      }
+    }
+  });
+}
+
 exports.approveBroadcaster = function (req, res) {
   if(!req.body._id) return res.json(422, 'No user provided');
   User.findById(req.body._id, function (err, user) {
@@ -166,6 +184,43 @@ exports.accountHelp = function (req, res) {
   });
 }
 
+exports.changeEmail = function (req, res){
+  if (!req.body._id) return res.json(422, 'no user');
+  if (!req.body.email) return res.json(422, 'no email address');
+  User.findById(req.body._id, function(err, user) {
+    if (user) {
+      if(user.email === req.body.email) {
+        res.json(422,'Cannot use current email');
+      } else {
+        var token = makeRandomString(16);
+        user.emailConfirmationToken = token;
+        user.emailConfirmed = false;
+        user.email = req.body.email;
+        user.save(function (err, user) {
+          res.json({user: user});
+        });
+      }
+    } else {
+      res.json(422, 'Could not find user.');
+    }
+  });
+};
+
+
+exports.changeProfile = function (req, res){
+  if (!req.body._id) return res.json(422, 'no user');
+  User.findById(req.body._id, function(err, user) {
+    if (user) {
+      user.username = req.body.username;
+      user.save(function(err, user){
+        res.json(200, {user: user});
+      });
+    } else {
+      res.json(422, 'Could not find user.');
+    }
+  });
+};
+
 exports.passwordReset = function (req, res){
   User.findOne({"resetToken.token": req.body.token}, function (err, user) {
     if(err !== null) res.json({error:err});
@@ -188,3 +243,36 @@ exports.resendVerification = function (req, res, next){
   });
 };
 
+var returnBroadcasters = function (err, users, req, res, next) {
+  if (err) return next(err);
+  if (!users) return res.send(401);
+  res.send(200, users);
+};
+
+exports.broadcastersFavorites = function (req,res, next) {
+  User.findOne({ _id: req.query._id }, 'faves', function(err, user){
+    User.find({_id: { $in: user.faves}}, '_id username slug', function (err, broadcasters){
+      return returnBroadcasters(err, broadcasters, req, res, next);
+    });
+  });
+};
+
+exports.broadcastersTrending = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online', trending: true},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersPicks = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online', picks: true},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersOnline = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online'},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersOffline = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'offline'},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};

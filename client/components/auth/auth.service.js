@@ -39,6 +39,10 @@ angular.module('baseApp')
         return deferred.promise;
       },
 
+      refreshUser: function() {
+        currentUser = User.get();
+      },
+
       /**
        * Delete access token and user info
        *
