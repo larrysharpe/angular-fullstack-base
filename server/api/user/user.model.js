@@ -24,6 +24,8 @@ var UserSchema = new Schema({
   emailConfirmed: {type: Boolean, required: true, default: false},
   emailConfirmationToken: String,
 
+  faves: [],
+
   roles: {
     type: [String],
     default: 'user',

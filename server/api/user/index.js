@@ -24,4 +24,11 @@ router.post('/applyBroadcaster', auth.isAuthenticated(), controller.applyBroadca
 router.post('/approveBroadcaster', auth.hasRole('admin'), controller.approveBroadcaster);
 router.post('/denyBroadcaster', auth.hasRole('admin'), controller.denyBroadcaster);
 
+router.get('/broadcasters/favorites', auth.isAuthenticated(), controller.broadcastersFavorites);
+router.get('/broadcasters/trending', controller.broadcastersTrending);
+router.get('/broadcasters/picks',  controller.broadcastersPicks);
+router.get('/broadcasters/online', controller.broadcastersOnline);
+router.get('/broadcasters/offline', controller.broadcastersOffline);
+
+
 module.exports = router;

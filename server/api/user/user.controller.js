@@ -243,3 +243,36 @@ exports.resendVerification = function (req, res, next){
   });
 };
 
+var returnBroadcasters = function (err, users, req, res, next) {
+  if (err) return next(err);
+  if (!users) return res.send(401);
+  res.send(200, users);
+};
+
+exports.broadcastersFavorites = function (req,res, next) {
+  User.findOne({ _id: req.query._id }, 'faves', function(err, user){
+    User.find({_id: { $in: user.faves}}, '_id username slug', function (err, broadcasters){
+      return returnBroadcasters(err, broadcasters, req, res, next);
+    });
+  });
+};
+
+exports.broadcastersTrending = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online', trending: true},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersPicks = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online', picks: true},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersOnline = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'online'},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
+
+exports.broadcastersOffline = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}, status: 'offline'},
+    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+};
