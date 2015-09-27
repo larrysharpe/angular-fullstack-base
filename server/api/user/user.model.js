@@ -23,12 +23,20 @@ var CreditHistorySchema = new Schema({
   amount: { type: Number, required: true }
 });
 
+var AddressSchema = new Schema({
+  line1: String,
+  country: {type: String, required: true},
+  zip: String
+});
+
+var NameSchema = new Schema({
+  first: {type: String, required: true},
+  last: {type: String, required: true}
+});
+
 
 var UserSchema = new Schema({
-  name: {
-    first: {type: String, required: true},
-    last: {type: String, required: true}
-  },
+  name: [NameSchema],
   username: {type: String, required: true},
 
   birthdate: Date,
@@ -62,11 +70,7 @@ var UserSchema = new Schema({
   emailConfirmed: {type: Boolean, required: true, default: false},
   emailConfirmationToken: String,
 
-  address: {
-    line1: String,
-    country: {type: String, required: true},
-    zip: String
-  },
+  address: [AddressSchema],
 
 
   faves: [],
