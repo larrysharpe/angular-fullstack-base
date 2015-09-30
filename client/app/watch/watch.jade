@@ -1,6 +1,30 @@
 div(ng-include='"components/navbar/navbar.html"')
-.contain-main
+.contain-watch
   .container
     .row
-        .col-md-12
-          | This is the watch view.
+      .col-xs-12(ng-if="broadcaster")
+        h1 {{broadcaster.username}}
+        .video
+      .col-xs-12(ng-if="!broadcaster")
+        h1
+          small We're sorry {{slug}} does not exist.
+          p
+            Please checkout our other models below.
+.container
+  .row
+    .col-sm-12(ng-if="isLoggedIn")
+      h2 Online Favorites
+      broadcaster-list.favorites(type="favorites", limit="5")
+    .col-sm-12
+      h2 Trending
+      broadcaster-list.trending(type="trending")
+    .col-sm-12
+      h2 Our Picks
+      broadcaster-list(type="picks")
+    .col-sm-12
+      h2 Online
+      broadcaster-list(type="online")
+    .col-sm-12
+      h2 Offline
+      broadcaster-list(type="offline")
+

@@ -29,6 +29,6 @@ router.get('/broadcasters/trending', controller.broadcastersTrending);
 router.get('/broadcasters/picks',  controller.broadcastersPicks);
 router.get('/broadcasters/online', controller.broadcastersOnline);
 router.get('/broadcasters/offline', controller.broadcastersOffline);
-
+router.get('/broadcasters/:slug', controller.getBroadcaster)
 
 module.exports = router;

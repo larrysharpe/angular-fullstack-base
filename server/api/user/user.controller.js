@@ -276,3 +276,12 @@ exports.broadcastersOffline = function (req,res, next) {
   User.find({roles: {$in: ['broadcaster']}, status: 'offline'},
     'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
+
+
+exports.getBroadcaster = function (req, res, next) {
+  User.findOne({roles: 'broadcaster', slug: req.params.slug}, function (err, broadcaster){
+    if (err) return next(err);
+    if (!broadcaster) return res.send(404);
+    res.send(200, broadcaster);
+  });
+};
