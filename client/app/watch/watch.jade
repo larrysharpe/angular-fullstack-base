@@ -5,6 +5,13 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-xs-12(ng-if="broadcaster")
         h1 {{broadcaster.username}}
         .video
+          object#watch(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='300', height='225', align='middle')
+            param(name='allowScriptAccess', value='sameDomain')
+            param(name='allowFullScreen', value='true')
+            param(name='movie', value='assets/playerwork/watch.swf')
+            param(name='quality', value='high')
+            param(name='bgcolor', value='#ffffff')
+            embed(src='assets/playerwork/watch.swf', quality='high', bgcolor='#ffffff', width='300', height='225', name='watch', align='middle', allowscriptaccess='sameDomain', allowfullscreen='true', type='application/x-shockwave-flash', pluginspage='http://www.macromedia.com/go/getflashplayer')
       .col-xs-12(ng-if="!broadcaster")
         h1
           small We're sorry {{slug}} does not exist.
@@ -27,4 +34,3 @@ div(ng-include='"components/navbar/navbar.html"')
     .col-sm-12
       h2 Offline
       broadcaster-list(type="offline")
-
