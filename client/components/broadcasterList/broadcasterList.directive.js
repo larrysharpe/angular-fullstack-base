@@ -11,7 +11,7 @@ angular.module('baseApp')
       link: function (scope, element, attrs) {
         broadcasterListSVC.get(scope.type).then(function(response){
           scope.broadcasters = response.data;
-        });;
+        });
       }
     };
   });
