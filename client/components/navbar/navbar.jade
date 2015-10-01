@@ -22,6 +22,8 @@ div(ng-controller='NavbarCtrl')
             a(href='', ng-click="broadcasterSetup()", ng-show='isLoggedIn()') Broadcast Yourself
           li(ng-show='hasRole(["broadcaster","broadcaster applicant", "broadcaster denied"])', ng-class='{active: isActive("/dashboard")}')
             a(href='/dashboard') Dashboard
+          li(ng-show='hasRole(["broadcaster"])', ng-class='{active: isActive("/broadcast")}')
+            a(href='/broadcast') Broadcast
           li(ng-show='hasRole("admin")', ng-class='{active: isActive("/admin")}')
             a(href='/admin') Admin
 
