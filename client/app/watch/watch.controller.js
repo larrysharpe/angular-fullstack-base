@@ -13,4 +13,13 @@ angular.module('baseApp')
       .success(function(data){
         $scope.broadcaster = data;
       });
+
+
+    $scope.isOffline = function (){
+      return !$scope.broadcaster || $scope.broadcaster.status === 'offline';
+    }
+
+    $scope.isOnline = function (){
+      return $scope.broadcaster && $scope.broadcaster.status === 'online';
+    }
   });

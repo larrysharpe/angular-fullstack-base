@@ -2,7 +2,10 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-watch
   .container
     .row
-      .col-xs-12(ng-if="broadcaster")
+      .col-xs-12(ng-if="isOffline()")
+        h1 {{broadcaster.username}} is offline.
+          small Don't worry there's plenty more where that came from.
+      .col-xs-12(ng-if="isOnline()")
         h1 {{broadcaster.username}}
         .video#video
           object#watch(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='300', height='225', align='middle')
