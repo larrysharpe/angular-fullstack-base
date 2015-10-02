@@ -1,0 +1,14 @@
+.container
+  .row
+    .col-sm-12(ng-if="isLoggedIn")
+      h2 Online Favorites
+      broadcaster-list.favorites(type="favorites", limit="5")
+    .col-sm-12
+      h2 Trending
+      broadcaster-list.trending(type="trending")
+    .col-sm-12
+      h2 Online
+      broadcaster-list(type="online")
+    .col-sm-12
+      h2 Offline
+      broadcaster-list(type="offline")
