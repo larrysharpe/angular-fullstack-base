@@ -5,4 +5,11 @@ angular.module('baseApp')
 
     $scope.broadcaster = Auth.getCurrentUser();
 
+    $scope.doConnect = function () {
+      callToActionscript('doConnect');
+    };
+    $scope.undoConnect = function () {
+      callToActionscript('unPublish');
+    };
+
   });
