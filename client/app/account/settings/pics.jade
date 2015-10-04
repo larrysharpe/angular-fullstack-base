@@ -10,10 +10,23 @@ div(ng-include='"components/navbar/navbar.html"')
           br
           | Create Album
       .col-sm-3.photo-album(ng-repeat="album in user.albums")
-        p
-          a(href="") {{album.name}}
+        p(ng-if="!album.showRenameForm")
+          a(href="") {{album.name}} &nbsp;
+          a(href="", ng-click="showRenameForm($index)")
+            i.fa.fa-pencil-square-o
           br
           | {{album.pics.length}} Pics
+        form(ng-show="album.showRenameForm")
+          p
+            input(ng-model="newAlbumName")
+          p
+            a.btn.btn-primary(href="", ng-click="renameAlbum($index)")
+              i.fa.fa-save
+              |  Save
+            a.btn.btn-danger(href="", ng-click="hideRenameForm($index)")
+              i.fa.fa-times
+              |  Cancel
+
         form(ng-if="album.showUploadForm", action='/uploads/pics', enctype='multipart/form-data', method='post')
           input(type='hidden', name='slug', value="{{user.slug}}")
           br
@@ -26,7 +39,7 @@ div(ng-include='"components/navbar/navbar.html"')
             i.fa.fa-times
             |  Cancel
 
-        div(ng-if="!album.showUploadForm")
+        div(ng-if="!album.showUploadForm && !album.showRenameForm")
           p
             button.btn.btn-success(ng-click="showUploadForm($index)")
               i.fa.fa-photo
