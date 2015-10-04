@@ -36,6 +36,10 @@ div(ng-controller='NavbarCtrl')
             a(href='/account')
               span.glyphicon.glyphicon-cog
 
+          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account/pics")}')
+            a(href='/account/pics')
+              i.fa.fa-photo
+
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/logout")}')
             a(href='', ng-click='logout()') Logout
 
