@@ -29,10 +29,16 @@ angular.module('baseApp')
         templateUrl: 'app/account/signup/users.html',
         controller: 'SignupCtrl'
       })
-      .state('settings', {
-        url: '/settings',
+      .state('account', {
+        url: '/account',
         templateUrl: 'app/account/settings/settings.html',
         controller: 'SettingsCtrl',
+        authenticate: true
+      })
+      .state('pics', {
+        url: '/account/pics',
+        templateUrl: 'app/account/settings/pics.html',
+        controller: 'AlbumsCtrl',
         authenticate: true
       })
       .state('verify', {

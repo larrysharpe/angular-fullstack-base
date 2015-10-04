@@ -3,10 +3,8 @@ div(ng-include='"components/navbar/navbar.html"')
   .container
     .row
       .col-sm-12
-        h1 Upload Pics
-        form(action="/upload", method="post", enctype="multipart/form-data")
-          input(type="file", name="upload-file")
-          input(type="submit", value="Upload")
+        h1
+         a(href="/account/pics") Pics
       .col-sm-12
         h1 Change Profile
         form.form(name='profileForm', ng-submit='changeProfile(profileForm)', novalidate='')

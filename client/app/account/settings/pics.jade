@@ -1,0 +1,48 @@
+div(ng-include='"components/navbar/navbar.html"')
+.contain-main
+  .container
+    .row(ng-if="!createAlbumForm")
+      .col-sm-12
+        h1 Photo Albums
+      .col-sm-3.photo-album
+        a(href="", ng-click="openCreateAlbumForm()")
+          i.fa.fa-plus.fa-4x
+          br
+          | Create Album
+      .col-sm-3.photo-album(ng-repeat="album in user.albums")
+        p
+          a(href="") {{album.name}}
+          br
+          | {{album.pics.length}} Pics
+        form(ng-if="album.showUploadForm", action='/uploads/pics', enctype='multipart/form-data', method='post')
+          input(type='hidden', name='slug', value="{{user.slug}}")
+          br
+          input.form-control(type='file', name='pic', multiple='multiple')
+          br
+          button.btn.btn-primary
+            i.fa.fa-cloud-upload
+            |  Upload
+          a.btn.btn-danger(href="", ng-click="hideUploadForm($index)")
+            i.fa.fa-times
+            |  Cancel
+
+        div(ng-if="!album.showUploadForm")
+          p
+            button.btn.btn-success(ng-click="showUploadForm($index)")
+              i.fa.fa-photo
+              |  Add Pics
+          p
+            button.btn.btn-danger(ng-click="deleteAlbum($index)")
+              i.fa.fa-times
+              |  Delete Album
+
+
+    .row(ng-if="createAlbumForm")
+      .col-xs-12
+        h2 Create An Album
+        form
+          p
+            input.form-control(ng-model="newAlbum.name", ng-required)
+          p
+            input.btn.btn-primary(type="submit", value="Create", ng-click="createAlbum()")
+            input.btn.btn-danger(type="submit", value="Cancel", ng-click="closeCreateAlbumForm()")

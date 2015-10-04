@@ -32,8 +32,8 @@ div(ng-controller='NavbarCtrl')
           li(ng-show='isLoggedIn()')
             a Hello {{ getCurrentUser().username }}
 
-          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/settings")}')
-            a(href='/settings')
+          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
+            a(href='/account')
               span.glyphicon.glyphicon-cog
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/logout")}')
