@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .factory('socket', function(socketFactory) {
+  .factory('socket', function(socketFactory, $rootScope) {
 
     // socket.io now auto-configures its connection when we ommit a connection url
     var ioSocket = io('', {
@@ -17,7 +17,24 @@ angular.module('baseApp')
 
     return {
       socket: socket,
-
+        on: function (eventName, callback) {
+          socket.on(eventName, function () {
+            var args = arguments;
+            $rootScope.$apply(function () {
+              callback.apply(socket, args);
+            });
+          });
+        },
+        emit: function (eventName, data, callback) {
+          socket.emit(eventName, data, function () {
+            var args = arguments;
+            $rootScope.$apply(function () {
+              if (callback) {
+                callback.apply(socket, args);
+              }
+            });
+          })
+        },
       /**
        * Register listeners to sync an array with updates on a model
        *

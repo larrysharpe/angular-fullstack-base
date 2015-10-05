@@ -47,6 +47,18 @@ module.exports = function (socketio) {
       console.info('[%s] DISCONNECTED', socket.address);
     });
 
+
+
+    // broadcast a user's message to other users
+    socket.on('send:message', function (data) {
+      console.log('data: ', data);
+      socket.broadcast.emit('send:message', {
+        from: data.from,
+        content: data.content,
+        to: data.to
+      });
+    });
+
     // Call onConnect.
     onConnect(socket);
     console.info('[%s] CONNECTED', socket.address);

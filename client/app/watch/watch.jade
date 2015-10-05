@@ -5,7 +5,7 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-xs-12(ng-if="isOffline()")
         h1 {{broadcaster.username}} is offline.
           small Don't worry there's plenty more where that came from.
-      .col-xs-12(ng-if="isOnline()")
+      .col-xs-4(ng-if="isOnline()")
         h1 {{broadcaster.username}}
         .video#video
           object#watch(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='300', height='225', align='middle')
@@ -15,6 +15,9 @@ div(ng-include='"components/navbar/navbar.html"')
             param(name='quality', value='high')
             param(name='bgcolor', value='#ffffff')
             embed(src='assets/playerwork/watch.swf', quality='high', bgcolor='#ffffff', width='300', height='225', name='watch', align='middle', allowscriptaccess='sameDomain', allowfullscreen='true', type='application/x-shockwave-flash', pluginspage='http://www.macromedia.com/go/getflashplayer')
+      .col-xs-6
+        h3 Here is my topic
+        room-chat
       .col-xs-12(ng-if="!broadcaster")
         h1
           small We're sorry {{slug}} does not exist.
