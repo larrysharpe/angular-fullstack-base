@@ -1,2 +1,3 @@
-div.broadcaster-list
+div.broadcaster-list.col-sm-12(ng-if="broadcasters.length")
+  h2 {{header}}
   broadcaster-list-item(ng-repeat="broadcaster in broadcasters")

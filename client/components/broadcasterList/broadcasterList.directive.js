@@ -6,7 +6,8 @@ angular.module('baseApp')
       templateUrl: 'components/broadcasterList/broadcasterList.html',
       restrict: 'EA',
       scope: {
-        type: '@'
+        type: '@',
+        header: '@'
       },
       link: function (scope, element, attrs) {
         broadcasterListSVC.get(scope.type).then(function(response){

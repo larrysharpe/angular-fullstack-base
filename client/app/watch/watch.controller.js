@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth) {
+  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket) {
     $scope.slug = $stateParams.slug;
     $scope.user = Auth.getCurrentUser();
 
@@ -22,5 +22,13 @@ angular.module('baseApp')
     $scope.isOnline = function (){
       return $scope.broadcaster && $scope.broadcaster.status === 'online';
     }
+
+    socket.on('cam:status', function (data) {
+      console.log('cam:status', data);
+      if (data.slug === $scope.broadcaster.slug){
+        $scope.broadcaster.status = data.status;
+      }
+    });
+
 
   });

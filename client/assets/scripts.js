@@ -1,8 +1,9 @@
 /**
  * Created by digitalxtasy on 10/1/2015.
  */
-var getVideoScope = function (){
-  var broadcaster = angular.element('#video').scope().broadcaster.slug;
+var initVideoScope = function (){
+  var $scope = angular.element('#video').scope(),
+      broadcaster = $scope.broadcaster.slug;
   return broadcaster;
 }
 
@@ -14,4 +15,9 @@ function getFlashMovie(movieName) {
 function callToActionscript(str)
 {
   return getFlashMovie("watch").api(str);
+}
+
+var camStatus = function (status){
+  var $scope = angular.element('.contain-broadcast').scope();
+  $scope.camStatus(status);
 }

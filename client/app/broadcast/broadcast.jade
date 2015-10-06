@@ -1,9 +1,9 @@
 div(ng-include='"components/navbar/navbar.html"')
 .contain-broadcast
   .container
-    .row
-      .col-xs-12(ng-if="broadcaster")
-        h1 {{broadcaster.username}}
+    .row(ng-if="user")
+      .col-xs-4
+        h1 {{user.username}}
         .video#video
           object#watch(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='100%', height='100%', align='middle')
             param(name='allowScriptAccess', value='sameDomain')
@@ -15,3 +15,6 @@ div(ng-include='"components/navbar/navbar.html"')
         .controls
           button(ng-click="doConnect()") start
           button(ng-click="undoConnect()") stop
+      .col-xs-6
+        h3 Here is my topic
+        room-chat

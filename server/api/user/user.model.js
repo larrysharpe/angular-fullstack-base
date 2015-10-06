@@ -35,6 +35,12 @@ var UserSchema = new Schema({
   created: {type: Date, required: true, default: new Date()},
   lastLogin: Date,
 
+  status: {
+    type: String,
+    default: 'Offline',
+    enum: ['offline', 'online']
+  },
+
   hashedPassword: String,
   resetToken: {
     token: {type: String},

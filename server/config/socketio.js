@@ -3,6 +3,7 @@
  */
 
 'use strict';
+var User = require('../api/user/user.model');
 
 var config = require('./environment');
 
@@ -56,6 +57,15 @@ module.exports = function (socketio) {
         from: data.from,
         content: data.content,
         to: data.to
+      });
+    });
+
+    socket.on('cam:status', function (data) {
+      console.log('cam:status: ', data);
+      User.findOneAndUpdate({slug: data.slug}, {status: data.status}, function (err, user) {
+        if (err) return next(err);
+        if (!user) return res.send(401);
+        socket.broadcast.emit('cam:status', data);
       });
     });
 
