@@ -4,17 +4,37 @@ angular.module('baseApp')
   .controller('BroadcastCtrl', function ($scope, $http, $stateParams, Auth, socket) {
 
     $scope.user = Auth.getCurrentUser();
-
+    $scope.camState = 'offline';
 
     $scope.doConnect = function () {
-      callToActionscript('doConnect');
-    };
-    $scope.undoConnect = function () {
-      callToActionscript('unPublish');
+      $scope.camState = 'going-online';
+      callToActionscript('connect');
     };
 
+    $scope.undoConnect = function () {
+      $scope.camState = 'going-offline';
+      callToActionscript('disconnect');
+    };
+
+    $scope.isCamConnecting = function () {
+      return $scope.camState === 'going-online';
+    };
+
+    $scope.isCamDenied = function () {
+      return $scope.camState === 'camDenied';
+    }
+
+
+    $scope.isCamOffline = function () {
+      return ($scope.camState === 'offline' || $scope.camState === 'camDenied');
+    }
+
+    $scope.isCamOnline = function () {
+      return $scope.camState === 'online';
+    }
+
     $scope.camStatus = function (status){
-      console.log('Cam StatusChange: ', status);
+      $scope.camState = status;
       socket.emit('cam:status', {
         slug: $scope.user.slug,
         status: status

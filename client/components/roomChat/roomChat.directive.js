@@ -9,12 +9,7 @@ angular.module('baseApp')
       },
       controller: function ($scope, socket) {
 
-        $scope.messages = [
-          {
-            content: 'hello world',
-            from: 'Ruffio'
-          }
-        ];
+        $scope.messages = [];
 
         // Socket listeners
         // ================

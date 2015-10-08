@@ -2,8 +2,11 @@
  * Created by digitalxtasy on 10/1/2015.
  */
 var initVideoScope = function (){
-  var $scope = angular.element('#video').scope(),
-      broadcaster = $scope.broadcaster.slug;
+  console.log('initVideoScope');
+  var $scope = angular.element('#video-swf').scope(),
+      broadcaster = $scope.user.slug;
+  console.log('ivs: ');
+  console.log(broadcaster);
   return broadcaster;
 }
 
@@ -12,12 +15,12 @@ function getFlashMovie(movieName) {
   return (isIE) ? window[movieName] : document[movieName];
 }
 
-function callToActionscript(str)
-{
-  return getFlashMovie("watch").api(str);
+function callToActionscript(str){
+  return getFlashMovie("video-swf").api(str);
 }
 
 var camStatus = function (status){
   var $scope = angular.element('.contain-broadcast').scope();
   $scope.camStatus(status);
+  $scope.$apply();
 }
