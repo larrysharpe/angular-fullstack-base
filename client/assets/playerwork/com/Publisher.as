@@ -1,6 +1,6 @@
 package com {
 
-	import flash.net.NetConnection;
+  import flash.net.NetConnection;
 	import flash.events.NetStatusEvent;
 	import flash.net.NetStream;
 	import flash.events.EventDispatcher;

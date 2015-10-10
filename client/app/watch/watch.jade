@@ -9,13 +9,13 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-xs-4
         h1 {{broadcaster.username}}
         .video#video
-          object#watch(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='300', height='225', align='middle')
+          object#video-swf(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='300', height='225', align='middle')
             param(name='allowScriptAccess', value='sameDomain')
             param(name='allowFullScreen', value='true')
-            param(name='movie', value='assets/playerwork/watch.swf')
+            param(name='movie', value='assets/playerwork/watch2.swf')
             param(name='quality', value='high')
             param(name='bgcolor', value='#ffffff')
-            embed(src='assets/playerwork/watch.swf', quality='high', bgcolor='#ffffff', width='300', height='225', name='watch', align='middle', allowscriptaccess='sameDomain', allowfullscreen='true', type='application/x-shockwave-flash', pluginspage='http://www.macromedia.com/go/getflashplayer')
+            embed(src='assets/playerwork/watch2.swf', quality='high', bgcolor='#ffffff', width='300', height='225', name='video-swf', align='middle', allowscriptaccess='sameDomain', allowfullscreen='true', type='application/x-shockwave-flash', pluginspage='http://www.macromedia.com/go/getflashplayer')
       .col-xs-6
         h3 Here is my topic
         room-chat

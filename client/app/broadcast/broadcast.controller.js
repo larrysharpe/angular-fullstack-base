@@ -4,6 +4,7 @@ angular.module('baseApp')
   .controller('BroadcastCtrl', function ($scope, $http, $stateParams, Auth, socket) {
 
     $scope.user = Auth.getCurrentUser();
+    $scope.broadcaster = Auth.getCurrentUser();
     $scope.camState = 'offline';
 
     $scope.doConnect = function () {

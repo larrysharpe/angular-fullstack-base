@@ -4,7 +4,7 @@
 var initVideoScope = function (){
   console.log('initVideoScope');
   var $scope = angular.element('#video-swf').scope(),
-      broadcaster = $scope.user.slug;
+      broadcaster = $scope.broadcaster.slug;
   console.log('ivs: ');
   console.log(broadcaster);
   return broadcaster;
