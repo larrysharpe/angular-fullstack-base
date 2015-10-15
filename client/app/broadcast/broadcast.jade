@@ -2,7 +2,7 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-broadcast
   .container
     .row(ng-if="user")
-      .col-xs-4
+      .left
         h1 {{user.username}}
         .video#video
           object#video-swf(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='100%', height='100%', align='middle')
@@ -17,6 +17,6 @@ div(ng-include='"components/navbar/navbar.html"')
           button.btn.btn-success(ng-click="doConnect()", ng-if="isCamOffline()") Start
           button.btn.btn-warning(ng-if="isCamConnecting()") Connecting
           button.btn.btn-danger(ng-click="undoConnect()", ng-if="isCamOnline()") Stop
-      .col-xs-6
-        h3 Here is my topic
+      .left
+        h1 Here is my topic
         room-chat
