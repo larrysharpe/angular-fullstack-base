@@ -1,0 +1,10 @@
+div(ng-include='"components/navbar/navbar.html"')
+.contain-main
+  .container
+    .row
+      .col-xs-12
+        | {{profile}}
+        h1 {{profile.username}}
+          sup(ng-if="showSlug()")
+            small {{profile.slug}}
+        p {{profile._id}}
