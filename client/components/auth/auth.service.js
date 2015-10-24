@@ -43,6 +43,7 @@ angular.module('baseApp')
         currentUser = User.get();
       },
 
+
       /**
        * Delete access token and user info
        *
@@ -103,6 +104,10 @@ angular.module('baseApp')
        */
       getCurrentUser: function() {
         return currentUser;
+      },
+
+      setFaves: function (faves) {
+        currentUser.faves = faves;
       },
 
       /**

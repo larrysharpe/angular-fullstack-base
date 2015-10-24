@@ -34,6 +34,11 @@ div(ng-controller='NavbarCtrl')
           li(ng-show='isLoggedIn()')
             a Hello {{ getCurrentUser().username }}
 
+          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account/faves")}')
+            a(href="/account/faves", title="{{faves.online.length}} Online, {{faves.total}} Total.")
+              span.text-danger Faves
+                span.badge.badge-danger {{faves.online.length}}
+
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
             a(href='/account')
               span.glyphicon.glyphicon-cog

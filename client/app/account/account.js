@@ -41,6 +41,12 @@ angular.module('baseApp')
         controller: 'AlbumsCtrl',
         authenticate: true
       })
+      .state('faves', {
+        url: '/account/faves',
+        templateUrl: 'app/account/settings/faves.html',
+        controller: 'FavesCtrl',
+        authenticate: true
+      })
       .state('verify', {
         url: '/verify/:vtoken',
         templateUrl: 'app/account/login/verify.html',

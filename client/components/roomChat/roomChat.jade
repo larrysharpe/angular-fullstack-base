@@ -1,9 +1,8 @@
 .chat-box
   ul.list-unstyled
     li.msg(ng-repeat="msg in messages")
-      .left
-        b {{msg.from}}:&nbsp;
-        span {{msg.content}}
+      b {{msg.from}}:&nbsp;
+      span {{msg.content}}
 form(ng-submit="sendMessage()")
   p
     input.form-control(placeholder="Enter your chat here", ng-model="message")

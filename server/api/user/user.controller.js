@@ -251,7 +251,7 @@ var returnBroadcasters = function (err, users, req, res, next) {
 
 exports.broadcastersFavorites = function (req,res, next) {
   User.findOne({ _id: req.query._id }, 'faves', function(err, user){
-    User.find({_id: { $in: user.faves}}, '_id username slug', function (err, broadcasters){
+    User.find({_id: { $in: user.faves}}, '_id status username slug', function (err, broadcasters){
       return returnBroadcasters(err, broadcasters, req, res, next);
     });
   });
@@ -259,22 +259,22 @@ exports.broadcastersFavorites = function (req,res, next) {
 
 exports.broadcastersTrending = function (req,res, next) {
   User.find({roles: {$in: ['broadcaster']}, status: 'online', trending: true},
-    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+    'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 exports.broadcastersPicks = function (req,res, next) {
   User.find({roles: {$in: ['broadcaster']}, status: 'online', picks: true},
-    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+    'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 exports.broadcastersOnline = function (req,res, next) {
   User.find({roles: {$in: ['broadcaster']}, status: 'online'},
-    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+    'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 exports.broadcastersOffline = function (req,res, next) {
   User.find({roles: {$in: ['broadcaster']}, status: 'offline'},
-    'username slug', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
+    'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 
@@ -285,3 +285,59 @@ exports.getBroadcaster = function (req, res, next) {
     res.send(200, broadcaster);
   });
 };
+
+exports.listFaves = function (req, res, next){
+  User.findOne({_id: req.params.id}, function (err, user){
+    //console.log('ERROR:' + err);
+    //console.log('Faves:' + faves);
+    if (err) return next(err);
+    if (!user) return res.send(404);
+    User.find({_id: {$in: user.faves}}, 'username slug status', function (err, faves){
+      if (err) return next(err);
+      if (!faves) return res.send(404);
+      res.send(200, faves);
+    });
+  })
+};
+
+exports.setFaves = function (req, res, next){
+  User.findOne({_id: req.params.id},'faves', function (err, user){
+    if (err) return next(err);
+    if (!user) return res.send(404);
+    var i;
+    for(i = 0; i<req.body.ids.length; i++){
+      var index = user.faves.indexOf(req.body.ids[i]);
+      if (index === -1) user.faves.push(req.body.ids[i]);
+    }
+
+    user.save(function(err, user){
+      if (err) return next(err);
+      if (!user) return res.send(404);
+      res.send(200, user.faves);
+    });
+  })
+};
+
+exports.unsetFaves = function (req, res, next){
+  User.findOne({_id: req.params.id, faves: {$in: req.body.ids}}, 'faves', function (err, user){
+    if (err) return next(err);
+    if (!user) return res.send(404);
+
+    var i;
+    for(i = 0; i<req.body.ids.length; i++){
+      var index = user.faves.indexOf(req.body.ids[i]);
+      if (index > -1) user.faves.splice(index, 1);
+    }
+    user.save(function(err, user){
+      if (err) return next(err);
+      if (!user) return res.send(404);
+      res.send(200, user.faves);
+    });
+
+  })
+};
+
+
+exports.justSend = function (req, res, next){
+  res.send(200);
+}

@@ -12,6 +12,22 @@ angular.module('baseApp')
       $location.path('/login');
     };
 
+    if($scope.isLoggedIn()){
+      $http.get('/api/users/' + $scope.getCurrentUser()._id + '/faves')
+        .success(function(data){
+
+          var faves = {
+            total: data.length
+          };
+          for (var i = 0; i<data.length; i ++){
+            if (faves[data[i].status]) faves[data[i].status].push(data[i]);
+            else faves[data[i].status] = [data[i]];
+          }
+
+          $scope.faves = faves;
+        });
+    }
+
     $scope.isActive = function(route) {
       return route === $location.path();
     };

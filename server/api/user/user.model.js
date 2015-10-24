@@ -16,7 +16,6 @@ var makeRandomString = function (length){
   return text;
 }
 
-
 var UserSchema = new Schema({
   name: String,
   username: {type: String, required: true},
@@ -78,6 +77,17 @@ UserSchema
     return {
       'name': this.name,
       'roles': this.roles
+    };
+  });
+
+UserSchema
+  .virtual('favesList')
+  .get(function() {
+    return {
+      '_id': this._id,
+      'status': this.status,
+      'slug': this.slug,
+      'username': this.username
     };
   });
 
