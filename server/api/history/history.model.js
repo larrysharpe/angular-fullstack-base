@@ -11,7 +11,7 @@ var HistorySchema = new Schema({
     {
       showType: {
         type: String,
-        Enum: ['private', 'vip', 'meter', 'goal', 'password', 'booked private']
+        Enum: ['private', 'group', 'vip', 'courtesy', 'meter', 'goal', 'password', 'booked private']
       },
       start: Date,
       end: Date

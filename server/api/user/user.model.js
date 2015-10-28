@@ -36,7 +36,7 @@ var UserSchema = new Schema({
 
   status: {
     type: String,
-    default: 'Offline',
+    default: 'offline',
     enum: ['offline', 'online']
   },
 

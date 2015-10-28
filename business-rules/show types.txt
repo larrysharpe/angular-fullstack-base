@@ -1,0 +1,38 @@
+group
+  A show where 3 or more users have joined to watch the model.
+  The show is ended by the system if the number of users drops below 3.
+
+pvt
+  A show between one user and one broadcaster.
+  The show is ended by either party leaving.
+
+booked private
+  A pvt that is a set duration that is paid ahead of time.
+  The price most likely discounted.
+  The date can be set in the future.
+  Models can cancel which refunds users money.
+
+vip
+  A show that can be initiated by a single user.
+  Multiple users may join.
+  The show ends when all users leave or the broadcaster leaves.
+
+courtesy
+  A vip show where users are not charged.
+  Broadcasters and users must reach established rewards levels to participate.
+  The show is for a set length of time.
+
+meter
+  A show where a tip meter dictates the models actions.
+  The meter goes up with each tip and decreases with time.
+  This show ends when the broadcaster cancels it.
+
+goal
+  The broadcaster sets a minimum amount to start the show and a time limit for the show.
+  The show is for a set length of time.
+  Time can be added by collecting more tokens from users.
+
+password
+  The broadcaster sets an amount to start the show and a time limit for the show.
+  The show is for a set length of time.
+  Time can be added by collecting more tokens from users.

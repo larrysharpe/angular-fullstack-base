@@ -9,7 +9,11 @@ angular.module('baseApp')
       $location.path('/broadcast');
     }
 
-    $http.get('/api/users/broadcasters/'+$stateParams.slug)
+
+    var url = '/api/users/broadcasters/'+$stateParams.slug;
+    if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
+
+    $http.get(url)
       .success(function(data){
         $scope.broadcaster = data;
       });

@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
+var History = require('../history/history.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
@@ -39,6 +40,7 @@ exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.save(function(err, user) {
+    console.log(err);
     if (err) return validationError(res, err);
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
     res.json({ token: token });
@@ -282,6 +284,15 @@ exports.getBroadcaster = function (req, res, next) {
   User.findOne({roles: 'broadcaster', slug: req.params.slug}, function (err, broadcaster){
     if (err) return next(err);
     if (!broadcaster) return res.send(404);
+
+    if(req.query.addRecent === '1' && req.query.user){
+      var query = {'user': req.query.user};
+      var update = {$push: {"watches": {broadcaster: req.params.slug, date: new Date()}}};
+      History.findOneAndUpdate(query, update, {upsert:true}, function(err, doc){
+        if (err) return res.send(500, { error: err });
+      });
+    }
+
     res.send(200, broadcaster);
   });
 };
