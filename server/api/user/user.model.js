@@ -14,8 +14,58 @@ var makeRandomString = function (length){
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
-}
-
+};
+var enabled = {
+    type: Boolean,
+    default: true,
+    required: true
+  };
+var min = {
+  type: Number,
+  default: 0,
+  required: true
+};
+var cost = {
+  type: Number,
+  default: 5,
+  required: true
+};
+var BroadcasterAccountSchema = new Schema({
+  shows: {
+    group: {
+      enabled: enabled,
+      min: min
+    },
+    private:  {
+      enabled: enabled,
+      min: min
+    },
+    bookedPrivate: {
+      enabled: enabled,
+      cost: min,
+      length: min
+    },
+    vip:  {
+      enabled: enabled,
+      min: min
+    },
+    meter:  {
+      enabled: enabled,
+      milestones: {}
+    },
+    goal:  {
+      enabled: enabled,
+      min: min
+    },
+    password:  {
+      enabled: enabled,
+      password: {
+        type: String
+      },
+      cost: cost
+    }
+  }
+});
 var UserSchema = new Schema({
   name: String,
   username: {type: String, required: true},
@@ -24,6 +74,10 @@ var UserSchema = new Schema({
   emailConfirmationToken: String,
 
   faves: [],
+
+  accounts: {
+    broadcaster: [BroadcasterAccountSchema]
+  },
 
   roles: {
     type: [String],
