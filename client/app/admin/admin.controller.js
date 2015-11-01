@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('AdminCtrl', function ($scope, $http, Auth, User) {
+  .controller('AdminCtrl', function ($scope, $http, Auth, User, socket) {
 
     // Use the User $resource to fetch all users
     $scope.users = User.query();
@@ -14,6 +14,31 @@ angular.module('baseApp')
         }
       });
     };
+
+    $scope.statuses = [
+      'online',
+      'offline',
+      'group',
+      'private',
+      'booked private',
+      'vip',
+      'courtesy',
+      'meter',
+      'goal',
+      'password'
+    ];
+
+    $scope.setStatus = function (status, slug){
+      socket.setStatus(status, slug);
+    }
+    socket.on('cam:status', function (data) {
+      console.log('cam:status', data);
+      for(var i = 0; i < $scope.users.length; i++){
+        if ($scope.users[i].slug === data.slug){
+          $scope.users[i].status = data.status;
+        }
+      }
+    });
 
     $scope.needsBroadcasterApproval = function (index) {
       return $scope.users[index].roles.indexOf('broadcaster applicant') > -1;

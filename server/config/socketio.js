@@ -65,7 +65,8 @@ module.exports = function (socketio) {
       User.findOneAndUpdate({slug: data.slug}, {status: data.status}, function (err, user) {
         if (err) return next(err);
         if (!user) return res.send(401);
-        socket.broadcast.emit('cam:status', data);
+        socket.broadcast.emit('cam:status', user);
+        socket.emit('cam:status', user);
       });
     });
 
