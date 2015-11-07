@@ -35,6 +35,13 @@ angular.module('baseApp')
             });
           })
         },
+      setStatus: function (status, slug){
+        var data = {
+          slug: slug,
+          status: status
+        }
+        socket.emit('cam:status', data, function () {});
+      },
       /**
        * Register listeners to sync an array with updates on a model
        *

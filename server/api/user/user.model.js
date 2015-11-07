@@ -37,7 +37,10 @@ var UserSchema = new Schema({
   status: {
     type: String,
     default: 'offline',
-    enum: ['offline', 'online']
+    enum: ['offline', 'online', 'group',
+      'private', 'booked private', 'vip',
+      'courtesy', 'meter', 'goal', 'on call',
+      'password']
   },
 
   hashedPassword: String,
