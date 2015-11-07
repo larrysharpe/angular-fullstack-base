@@ -1,14 +1,39 @@
 'use strict';
 
 angular.module('baseApp')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $window) {
     var currentUser = {};
-    if($cookieStore.get('token')) {
-      currentUser = User.get();
-    }
+    var reload = function(data) {
+      $cookieStore.put('guest-token', data.token);
+      $window.location.reload();
+    };
+
+    var createGuest = function () {
+      console.log('User not logged in. Set guest cookie.');
+      $http.post('/api/guests')
+        .success(reload);
+    };
+    var loadGuest = function () {
+      console.log('guest user found');
+      $http.get('/api/guests/' + $cookieStore.get('guest-token'))
+        .success(getGuest)
+    };
+
+    var getGuest = function(data){
+      currentUser = {
+        username: 'Guest ' + data.guestNo
+      };
+      deferred.resolve(data);
+      console.log('user created');
+    };
+    var deferred = $q.defer();
+
+    if($cookieStore.get('token'))  currentUser = User.get();
+    else if ($cookieStore.get('guest-token')) loadGuest();
+    else createGuest();
+
 
     return {
-
       /**
        * Authenticate user and save token
        *
@@ -25,6 +50,7 @@ angular.module('baseApp')
           password: user.password
         }).
         success(function(data) {
+          $cookieStore.remove('guest-token');
           $cookieStore.put('token', data.token);
           currentUser = User.get();
           deferred.resolve(data);
@@ -52,6 +78,7 @@ angular.module('baseApp')
       logout: function() {
         $cookieStore.remove('token');
         currentUser = {};
+        createGuest();
       },
 
       /**

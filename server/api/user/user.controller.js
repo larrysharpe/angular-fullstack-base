@@ -348,7 +348,10 @@ exports.unsetFaves = function (req, res, next){
   })
 };
 
-
 exports.justSend = function (req, res, next){
+  res.send(200);
+}
+
+exports.guest = function (req, res, next){
   res.send(200);
 }
