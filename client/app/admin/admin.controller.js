@@ -18,6 +18,7 @@ angular.module('baseApp')
     $scope.statuses = [
       'online',
       'offline',
+      'on call',
       'group',
       'private',
       'booked private',
