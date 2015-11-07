@@ -39,7 +39,7 @@ var UserSchema = new Schema({
     default: 'offline',
     enum: ['offline', 'online', 'group',
       'private', 'booked private', 'vip',
-      'courtesy', 'meter', 'goal', 'on call',
+      'courtesy', 'meter', 'goal', 'on call', 'public',
       'password']
   },
 

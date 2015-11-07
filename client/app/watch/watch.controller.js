@@ -19,6 +19,14 @@ angular.module('baseApp')
       });
 
 
+    $scope.isBroadcaster = function () {
+      return false;
+    };
+
+    $scope.isStatus = function (status) {
+      return !$scope.broadcaster || $scope.broadcaster.status === status;
+    }
+
     $scope.isOffline = function (){
       return !$scope.broadcaster || $scope.broadcaster.status === 'offline';
     }

@@ -19,6 +19,7 @@ angular.module('baseApp')
       'online',
       'offline',
       'on call',
+      'public',
       'group',
       'private',
       'booked private',

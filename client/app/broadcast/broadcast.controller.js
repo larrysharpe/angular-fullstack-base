@@ -17,12 +17,21 @@ angular.module('baseApp')
       callToActionscript('disconnect');
     };
 
+    $scope.isBroadcaster = function () {
+      return true;
+    };
+
     $scope.isCamConnecting = function () {
       return $scope.camState === 'going-online';
     };
 
     $scope.isCamDenied = function () {
       return $scope.camState === 'camDenied';
+    }
+
+
+    $scope.isStatus = function (status) {
+      return $scope.camState === status;
     }
 
 
