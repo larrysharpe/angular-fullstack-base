@@ -6,7 +6,7 @@ div(ng-include='"components/navbar/navbar.html"')
         h1 {{broadcaster.username}} is offline.
           small Don't worry there's plenty more where that came from.
     .row(ng-if="isStatus('public')")
-      video-chat
+      video-chat-watch
       .col-xs-12(ng-if="!broadcaster")
         h1
           small We're sorry {{slug}} does not exist.

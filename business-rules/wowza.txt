@@ -1,6 +1,3 @@
-cd %WMSAPP_HOME%\bin
-startup.bat
+cd %WMSAPP_HOME%\bin && startup.bat
 
-
-cd ../mongo/bin
-mongod --dbpath ../
+cd ../mongo/bin && mongod --dbpath ../
