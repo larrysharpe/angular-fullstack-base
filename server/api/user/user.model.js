@@ -66,7 +66,8 @@ var BroadcasterAccountSchema = new Schema({
     }
   }
 });
-}
+
+
 
 var CreditHistorySchema = new Schema({
   date: {type: Date, required: true},
@@ -90,6 +91,7 @@ var NameSchema = new Schema({
 var UserSchema = new Schema({
   name: [NameSchema],
   username: {type: String, required: true},
+  slug: {type: String, required: true },
 
   birthdate: Date,
 
@@ -116,7 +118,7 @@ var UserSchema = new Schema({
     default: 1
   },
 
-  achievements: [String],
+  achievements: {type: Array, required: false},
 
   email: { type: String, lowercase: true },
   emailConfirmed: {type: Boolean, required: true, default: false},
@@ -125,7 +127,7 @@ var UserSchema = new Schema({
   address: [AddressSchema],
 
 
-  faves: [],
+  faves: { type: Array, required: false },
 
   accounts: {
     broadcaster: [BroadcasterAccountSchema]
