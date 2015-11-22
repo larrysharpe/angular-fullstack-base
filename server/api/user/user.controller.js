@@ -5,6 +5,15 @@ var History = require('../history/history.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var slugify = function (text)
+{
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '');            // Trim - from end of text
+};
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -39,6 +48,7 @@ exports.index = function(req, res) {
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
+  newUser.slug = slugify(newUser.username);
   newUser.save(function(err, user) {
     console.log(err);
     if (err) return validationError(res, err);
