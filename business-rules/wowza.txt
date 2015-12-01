@@ -1,3 +1,7 @@
 cd %WMSAPP_HOME%\bin && startup.bat
 
 cd ../mongo/bin && mongod --dbpath ../
+
+
+aws mongo
+root, 98FqEPmJTMDb
