@@ -6,7 +6,7 @@ angular.module('baseApp')
     var reload = function(data) {
       $cookieStore.put('guest-token', data.token);
       $window.location.reload();
-    };
+  };
 
     var createGuest = function () {
       console.log('User not logged in. Set guest cookie.');
@@ -57,7 +57,6 @@ angular.module('baseApp')
           return cb();
         }).
         error(function(err) {
-          this.logout();
           deferred.reject(err);
           return cb(err);
         }.bind(this));
@@ -78,7 +77,10 @@ angular.module('baseApp')
       logout: function() {
         $cookieStore.remove('token');
         currentUser = {};
-        createGuest();
+        if (!$cookieStore.get('guest-token')) {
+          createGuest();
+          $window.location.reload();
+        }
       },
 
       /**
