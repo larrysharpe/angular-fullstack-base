@@ -1,3 +1,12 @@
+public
+ default cam status, open to all viewers
+ models are encouraged to stay as clothed as possible
+ - guests
+    timed feature which nags guests to join the site and become a trusted member
+ - low level member
+    timed feature which nags guests to become a trusted member
+ The nag feature blocks sound and video
+
 group
   A show where 3 or more users have joined to watch the model.
   The show is ended by the system if the number of users drops below 3.

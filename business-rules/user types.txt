@@ -1,0 +1,19 @@
+Guests
+    
+    Users who are not logged into the site.
+    
+Members    
+
+    Users who are logged into the site.
+  
+    Standard Members
+        must first buy credits in order to participate in activities
+        
+    Trusted Members
+        Members who have spent XX in the last XX visits to our site
+        OR who have at least 1 subscription on our site
+        And Their Account is in good standing
+        Trusted members will be downgraded to Standard Members should these conditions not be met
+        Trusted members do not need credits in order to participate in activities unless they have not stored bank information
+       
+Administrators
