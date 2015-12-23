@@ -63,12 +63,7 @@ angular.module('baseApp')
           password: $scope.user.password
         })
         .then( function(data) {
-            var home = '/';
-
-            if(data.roles.indexOf('admin') > -1) home = '/admin';
-
-          // Logged in, redirect to home
-          $location.path(home);
+            redirectHome(data.roles)
         })
         .catch( function(err) {
           $scope.errors.other = err.message;
