@@ -2,11 +2,8 @@
  * Created by digitalxtasy on 10/1/2015.
  */
 var initVideoScope = function (){
-  console.log('initVideoScope');
   var $scope = angular.element('#video-swf').scope(),
       broadcaster = $scope.broadcaster.slug;
-  console.log('ivs: ');
-  console.log(broadcaster);
   return broadcaster;
 }
 
