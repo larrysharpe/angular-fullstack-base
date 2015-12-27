@@ -329,7 +329,7 @@ exports.broadcastersPicks = function (req,res, next) {
 };
 
 exports.broadcastersOnline = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, status: 'online'},
+  User.find({roles: {$in: ['broadcaster']}, status: {$in: ['online','public']}},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
