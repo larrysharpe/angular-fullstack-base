@@ -70,11 +70,40 @@ var BroadcasterAccountSchema = new Schema({
 
 
 var CreditHistorySchema = new Schema({
-  date: {type: Date, required: true},
-  desc: {type: String, enum: ['tip', 'pvt', 'vip' ], required: true},
-  to: { type: String, required: true },
-  amount: { type: Number, required: true }
+  cost: {
+    type: Number,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    enum: ['tokens','subscription']
+  },
+  item: {
+    type: String,
+    required: true
+  },
+  units: {
+    type: Number,
+    required: true
+  },
+  total: {
+    type: Number,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true,
+    default: new Date()
+  }
 });
+
+var LimitHistorySchema = new Schema({
+  date: {type: Date, required: true},
+  to: { type: Number, required: true },
+  from: { type: Number, required: true }
+});
+
 
 var AddressSchema = new Schema({
   line1: String,
@@ -95,16 +124,22 @@ var UserSchema = new Schema({
 
   birthdate: Date,
 
-  limits: {
-    daily: {type: Number, default: 5000}
-  },
+
 
   credits: {
-    type: Number,
-    required: true,
-    default: 0
+    units: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    limits: {
+      daily: {
+        amount: {type: Number, default: 5000, required: true},
+        history: [LimitHistorySchema]
+      }
+    },
+    history: [CreditHistorySchema]
   },
-  creditHistory: [CreditHistorySchema],
 
   xp:  {
     type: Number,

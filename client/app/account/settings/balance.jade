@@ -1,0 +1,24 @@
+div(ng-include='"components/navbar/navbar.html"')
+.contain-main
+  .container
+    .row
+      .col-xs-12
+        account-menu
+      .col-sm-12
+        h1 Balance:
+          =' '
+          span.balance {{user.credits.units}}
+
+      .col-sm-12
+        h1 Add Credits
+      .col-sm-12
+        form.form(name='balanceForm', ng-submit='buyTokens()', novalidate='')
+          .form-group
+            p
+              b Choose Amount:
+            select(type='radio', size='5', ng-model='purchase.amount', mongoose-error='', ng-change='purchase.update()')
+              option(ng-repeat='amt in purchase.purchaseAmounts')
+                | {{amt.amount}}
+          h1 {{purchase.amount}} credits @ {{purchase.perToken | currency}} per token.
+          h2 Total: {{purchase.total | currency}}
+          button.btn.btn-lg.btn-primary(type='submit') Buy

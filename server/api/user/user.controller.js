@@ -2,6 +2,7 @@
 
 var User = require('./user.model');
 var History = require('../history/history.model');
+var Transaction = require('../transaction/transaction.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
@@ -56,6 +57,54 @@ exports.create = function (req, res, next) {
     res.json({ token: token });
   });
 };
+
+var getCost = function (units) {
+  if(units > 999) return .08;
+  else return .10;
+};
+
+var getTotal = function (units) {
+  return units * getCost(units);
+};
+
+
+
+
+exports.buyTokens = function (req, res, next) {
+  var slug = req.body.slug;
+  var units = Number(req.body.units);
+
+  User.findOne({slug: slug}, function(err, user){
+
+    var transaction = {
+      user:{
+        id: user._id,
+        slug: user.slug
+      },
+      cost: getCost(units),
+      category: 'tokens',
+      item: 'Add Tokens',
+      units: units,
+      total: getTotal(units),
+      date: new Date()
+    };
+
+    var t = new Transaction(transaction);
+    t.save(function(err, trans){
+      if (err) return next(err);
+      if (!trans) return res.send(401);
+    });
+
+    user.credits.units = Number(user.credits.units) + units;
+    user.credits.history.push(transaction);
+    user.save(function(err, user){
+      if (err) return next(err);
+      if (!user) return res.send(401);
+      res.json(user);
+    });
+  });
+
+}
 
 /**
  * Get a single user

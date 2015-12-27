@@ -47,6 +47,12 @@ angular.module('baseApp')
         controller: 'FavesCtrl',
         authenticate: true
       })
+      .state('balance', {
+        url: '/account/balance',
+        templateUrl: 'app/account/settings/balance.html',
+        controller: 'BalanceCtrl',
+        authenticate: true
+      })
       .state('verify', {
         url: '/verify/:vtoken',
         templateUrl: 'app/account/login/verify.html',

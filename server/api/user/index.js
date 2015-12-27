@@ -31,6 +31,7 @@ router.post('/approveBroadcaster', auth.hasRole('admin'), controller.approveBroa
 router.post('/denyBroadcaster', auth.hasRole('admin'), controller.denyBroadcaster);
 router.post('/accountHelp', controller.accountHelp);
 router.post('/passwordReset', controller.passwordReset);
+router.post('/buyTokens', controller.buyTokens);
 router.post('/', controller.create);
 
 

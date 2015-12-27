@@ -3,22 +3,19 @@ div(ng-include='"components/navbar/navbar.html"')
   .container
     .row
       .col-xs-12
-        account-menu
-      .col-xs-12
-        h1 {{user.username}}'s History
-        span Joined: {{user.created | date:'MM/dd/yyyy @ h:mma'}}
-      .col-xs-12
         table.table.table-bordered.table-striped
           tr
             th
             th Date
+            th User
             th Category
             th Item
             th Units
             th Cost
             th Total
-          tr(ng-repeat='row in user.credits.history | orderBy:"date":true')
+          tr(ng-repeat='row in transactions | orderBy:"date":true')
             td {{$index + 1}}
+            td {{row.user.slug}}
             td {{row.date | date: 'MM/dd/yyyy @ h:mma'}}
             td {{row.category}}
             td {{row.item}}

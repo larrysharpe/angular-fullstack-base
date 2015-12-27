@@ -42,15 +42,19 @@ div(ng-controller='NavbarCtrl')
                 span.badge.badge-danger {{faves.online.length}}
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
-            a(href='/account')
+            a(href='/account/balance', title='Balance')
+              span.fa.fa-money
+
+          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
+            a(href='/account', title='Account')
               span.glyphicon.glyphicon-cog
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account/pics")}')
-            a(href='/account/pics')
+            a(href='/account/pics', title='Settings')
               i.fa.fa-photo
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/logout")}')
-            a(href='', ng-click='logout()') Logout
+            a(href='', ng-click='logout()', title='Logout') Logout
 
     div(ng-if="isLoggedIn()")
       .text-center(ng-if="!isVerified() && !verificationSent") Your email has not been confirmed.
