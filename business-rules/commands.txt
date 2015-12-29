@@ -1,7 +1,6 @@
 cd %WMSAPP_HOME%\bin && startup.bat
-
 cd ../mongo/bin && mongod --dbpath ../
-
+grunt serve
 
 aws mongo
 root, 98FqEPmJTMDb
