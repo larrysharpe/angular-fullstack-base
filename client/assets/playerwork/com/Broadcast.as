@@ -123,7 +123,7 @@
 
       // Publish Events
       private function onPublish(e = null) {
-        browser.camStatus("public");
+        browser.camStatus({online: 'online', show: 'public'});
       }
       private function onUnPublish(e = null){
         console.log('onUnPublish');

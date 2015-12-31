@@ -62,7 +62,7 @@ module.exports = function (socketio) {
 
     socket.on('cam:status', function (data) {
       console.log('cam:status: ', data);
-      User.findOneAndUpdate({slug: data.slug}, {'status.online': data.status}, function (err, user) {
+      User.findOneAndUpdate({slug: data.slug}, {'status': data.status}, function (err, user) {
         if (err) socket.emit('cam:status:error',err);
         console.log(err);
         if (!user) socket.emit('cam:status:error','no user');
