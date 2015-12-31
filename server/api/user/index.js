@@ -14,6 +14,7 @@ router.get('/broadcasters/picks',  controller.broadcastersPicks);
 router.get('/broadcasters/online', controller.broadcastersOnline);
 router.get('/broadcasters/offline', controller.broadcastersOffline);
 router.get('/broadcasters/:slug', controller.getBroadcaster);
+router.get('/broadcasters', controller.broadcasters);
 router.get('/resendVerification/:id', controller.resendVerification);
 router.get('/guest', controller.guest);
 router.get('/me', auth.isAuthenticated(), controller.me);

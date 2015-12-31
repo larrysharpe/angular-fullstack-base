@@ -310,6 +310,14 @@ var returnBroadcasters = function (err, users, req, res, next) {
   res.send(200, users);
 };
 
+
+
+exports.broadcasters = function (req,res, next) {
+  User.find({roles: {$in: ['broadcaster']}}, 'status username slug',  function(err, broadcasters){
+    return returnBroadcasters(err, broadcasters, req, res, next);
+  });
+};
+
 exports.broadcastersFavorites = function (req,res, next) {
   User.findOne({ _id: req.query._id }, 'faves', function(err, user){
     User.find({_id: { $in: user.faves}}, '_id status username slug', function (err, broadcasters){
