@@ -178,12 +178,21 @@ var UserSchema = new Schema({
   lastLogin: Date,
 
   status: {
-    type: String,
-    default: 'offline',
-    enum: ['offline', 'online', 'group',
-      'private', 'booked private', 'vip',
-      'courtesy', 'meter', 'goal', 'on call', 'public',
-      'password']
+
+    online: {
+      type: String,
+      default: 'offline',
+      enum: ['offline', 'online',  'on call', 'away',
+        'busy']
+    },
+    show: {
+      type: String,
+      default: 'public',
+      enum: ['public', 'group',
+        'private', 'booked private', 'vip',
+        'courtesy', 'meter', 'goal',
+        'password']
+    }
   },
 
   hashedPassword: String,

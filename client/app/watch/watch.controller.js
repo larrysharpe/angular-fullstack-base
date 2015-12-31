@@ -24,15 +24,19 @@ angular.module('baseApp')
     };
 
     $scope.isStatus = function (status) {
-      return !$scope.broadcaster || $scope.broadcaster.status === status;
+      return !$scope.broadcaster || $scope.broadcaster.status.online === status;
+    }
+
+    $scope.isShowStatus = function (status) {
+      return !$scope.broadcaster || $scope.broadcaster.status.show === status;
     }
 
     $scope.isOffline = function (){
-      return !$scope.broadcaster || $scope.broadcaster.status === 'offline';
+      return !$scope.broadcaster || $scope.broadcaster.status.online === 'offline';
     }
 
     $scope.isOnline = function (){
-      return $scope.broadcaster && $scope.broadcaster.status === 'online';
+      return $scope.broadcaster && $scope.broadcaster.status.online === 'online';
     }
 
     socket.on('cam:status', function (data) {

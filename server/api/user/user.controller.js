@@ -319,22 +319,22 @@ exports.broadcastersFavorites = function (req,res, next) {
 };
 
 exports.broadcastersTrending = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, status: 'online', trending: true},
+  User.find({roles: {$in: ['broadcaster']}, 'status.online': 'online', trending: true},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 exports.broadcastersPicks = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, status: 'online', picks: true},
+  User.find({roles: {$in: ['broadcaster']}, 'status.online': 'online', picks: true},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
 exports.broadcastersOnline = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, status: {$in: ['online','public']}},
+  User.find({roles: {$in: ['broadcaster']}, 'status.online': {$in: ['online','public']}},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
-};
+}
 
 exports.broadcastersOffline = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, status: 'offline'},
+  User.find({roles: {$in: ['broadcaster']}, 'status.online': 'offline'},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
