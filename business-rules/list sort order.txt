@@ -1,0 +1,24 @@
+
+faved
+  public
+  on call
+  vip
+  group
+  meter
+  goal
+  password
+  courtesy
+  pvt
+public
+on call
+vip
+group
+meter
+goal
+password
+courtesy
+pvt
+faved away
+away
+faved offline
+offline

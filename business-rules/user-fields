@@ -1,22 +1,23 @@
-
-
 Roles:
   admin
   user
   broadcaster
   broadcaster applicant
 
+Online Status:
+  busy: user is in a show
+  away: cam is not on,time out after inactivity
+  on call
+  Offline: default, not online
+  Online: cam is not on, chat is
 
-
-Status:
-  away
+Show Status:
+  public
   group
   pvt
+  booked private
   vip
-  open vip
-  Offline
-  Online
+  courtesy
   meter
   goal
   password
-  booked private
