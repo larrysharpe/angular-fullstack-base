@@ -2,7 +2,6 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-watch
   .container
     .row
-      .col-xs-12 {{broadcaster.status}} {{isOffline()}}
       .col-xs-12(ng-if="isOffline()")
         h1 {{broadcaster.username}} is offline.
           small Don't worry there's plenty more where that came from.
