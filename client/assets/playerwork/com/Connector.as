@@ -42,7 +42,6 @@ package com
 		}
 
 		public function ncOnStatus(infoObject:NetStatusEvent){
-			//trace();
       var info = "nc: " + infoObject.info.code + " (" + infoObject.info.description + ")";
       console.log(info);
 
@@ -51,12 +50,12 @@ package com
 				dispatchEvent(new ConnectorEvent('onSuccess'));
 			}
 			else if (infoObject.info.code == "NetConnection.Connect.Failed"){
-				trace("Connection failed: Try rtmp://[server-ip-address]/videochat");
+				console.log("Connection failed: Try rtmp://[server-ip-address]/videochat");
 				connected = false;
 				dispatchEvent(new ConnectorEvent('onFail'));
 			}
 			else if (infoObject.info.code == "NetConnection.Connect.Rejected"){
-				trace(infoObject.info.description);
+				console.log(infoObject.info.description);
 				connected = false;
 				dispatchEvent(new ConnectorEvent('onReject'));
 			}

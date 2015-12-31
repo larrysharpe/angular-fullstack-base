@@ -59,15 +59,15 @@ package com {
 		{
       var info = "nsPublish: "+infoObject.info.code+" ("+infoObject.info.description+")";
 			console.log(info);
-			if (infoObject.info.code == "NetStream.Publish.Start") {  trace('Publishing');
+			if (infoObject.info.code == "NetStream.Publish.Start") {  console.log('Publishing');
 				dispatchEvent(new PublisherEvent('onPublish'));
 			}
-			if (infoObject.info.code == "NetStream.Unpublish.Success") {  trace('Not Publishing');
+			if (infoObject.info.code == "NetStream.Unpublish.Success") {  console.log('Not Publishing');
 				dispatchEvent(new PublisherEvent('onUnPublish'));
 			}
 
 			if (infoObject.info.code == "NetStream.Play.StreamNotFound") {}
-			if (infoObject.info.code == "NetStream.Play.Failed") trace(infoObject.info.description);
+			if (infoObject.info.code == "NetStream.Play.Failed") console.log(infoObject.info.description);
 		}
 	}
 }

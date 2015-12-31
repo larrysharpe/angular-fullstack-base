@@ -34,16 +34,16 @@ package com {
       if (infoObject.info.code == 'NetStream.Play.PublishNotify') {}
       if (infoObject.info.code == 'NetStream.Play.Reset') {}
       if (infoObject.info.code == 'NetStream.Play.Start') {
-        trace('Broadcaster is Broadcasting.');
+        console.log('Broadcaster is Broadcasting.');
       }
       if (infoObject.info.code == 'NetStream.Play.UnpublishNotify') {
-        trace('Broadcaster Has Stopped Broadcasting.');
+        console.log('Broadcaster Has Stopped Broadcasting.');
       }
       if (infoObject.info.code == "NetStream.Play.StreamNotFound") {
-        trace('Broadcaster Is Offline.');
+        console.log('Broadcaster Is Not Found.');
       }
       if (infoObject.info.code == "NetStream.Play.Failed") {
-        trace('Broadcaster Status is unknown please check again.');
+        console.log('Broadcaster Status is unknown please check again.');
       }
     }
 
