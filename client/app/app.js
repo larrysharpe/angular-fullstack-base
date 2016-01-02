@@ -24,6 +24,7 @@ angular.module('baseApp', [
         config.headers = config.headers || {};
         if ($cookieStore.get('token')) {
           config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+          console.log('JWT: ' + config.headers.Authorization);
         }
         return config;
       },
