@@ -50,7 +50,7 @@ package com
 				dispatchEvent(new ConnectorEvent('onSuccess'));
 			}
 			else if (infoObject.info.code == "NetConnection.Connect.Failed"){
-				console.log("Connection failed: Try rtmp://[server-ip-address]/videochat");
+				console.log("Connection failed: tried connectiong to: "+this.connectURL+",  Try rtmp://[server-ip-address]/videochat");
 				connected = false;
 				dispatchEvent(new ConnectorEvent('onFail'));
 			}

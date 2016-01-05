@@ -1,10 +1,14 @@
 /**
  * Created by digitalxtasy on 10/1/2015.
  */
-var initVideoScope = function (){
-  var $scope = angular.element('#video-swf').scope(),
-      broadcaster = $scope.broadcaster.slug;
-  return broadcaster;
+var initVideoConfig = function (){
+  var $scope = angular.element('#video-swf').scope();
+  var config = {
+    broadcaster: $scope.broadcaster.slug,
+    streamServer: "rtmp://52.90.74.122:1935/videochat"
+  };
+
+  return config;
 }
 
 function getFlashMovie(movieName) {
