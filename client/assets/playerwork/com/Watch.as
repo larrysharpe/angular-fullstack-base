@@ -15,7 +15,8 @@
 
     var broadcaster = ExternalInterface.call("initVideoScope") || 'testing';
     var connector:Connector;
-    var connectURL:String = "rtmp://localhost/videochat/";
+    //var connectURL:String = "rtmp://localhost/videochat/";
+    var connectURL:String = "rtmp://52.90.74.122:1935/videochat";
     var console:Console = new Console();
     var browser:ScriptInterface = new ScriptInterface();
     var sub:Subscribe;
