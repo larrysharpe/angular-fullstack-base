@@ -15,6 +15,11 @@ router.post('/', function(req, res, next) {
     user.lastLogin = new Date();
     user.save(function (err, user){
 
+      if (err) return res.json(401, err);
+      if (!user) return res.json(404, {message: 'Something went wrong, please try again.'});
+
+      console.log(user)
+
       var roleSign = user.roles.join('');
 
       if(err)  {

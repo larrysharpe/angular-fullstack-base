@@ -13,6 +13,7 @@
     button.btn.btn-success(ng-click="doConnect()", ng-if="isStatus('offline')") Start
     button.btn.btn-warning(ng-if="isStatus('going-online')") Connecting
     button.btn.btn-danger(ng-click="undoConnect()", ng-if="isStatus('public')") Stop
+    span.right {{camState}}
 .left
   h1(contentEditable="true") Here is my topic
   room-chat

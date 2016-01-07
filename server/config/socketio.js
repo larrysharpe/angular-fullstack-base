@@ -61,15 +61,23 @@ module.exports = function (socketio) {
     });
 
     socket.on('cam:status', function (data) {
-      console.log('cam:status: ', data);
-      User.findOneAndUpdate({slug: data.slug}, {'status': data.status}, function (err, user) {
-        if (err) socket.emit('cam:status:error',err);
-        console.log(err);
-        if (!user) socket.emit('cam:status:error','no user');
-        console.log(user);
-        socket.broadcast.emit('cam:status', user);
-        socket.emit('cam:status', user);
-      });
+      console.log('cam:status: ', data, data.status);
+      User.findOne({slug: data.slug}, 'status', function (err, user) {
+
+        if(data.status.show) user.status.show = data.status.show;
+        if(data.status.online) user.status.online = data.status.online;
+
+        user.save(function(err, user){
+          if (err) socket.emit('cam:status:error',err);
+          console.log(err);
+          if (!user) socket.emit('cam:status:error','no user');
+          console.log(user);
+          socket.broadcast.emit('cam:status', user);
+          socket.emit('cam:status', user);
+        })
+
+
+        });
     });
 
     // Call onConnect.

@@ -1,0 +1,13 @@
+status
+  online: ['offline', 'online', 'on call', 'away', 'busy']
+  show: ['offline','public', 'group', 'private', 'booked private', 'vip', 'courtesy', 'meter', 'goal', 'password']
+
+
+
+
+client                            server                        client
+                   socket emit                socket emit
+=============================================================================
+broadcaster page    ---->         socketio      ---->           broadcaster page
+admin page          ---->                       ---->           admin page
+

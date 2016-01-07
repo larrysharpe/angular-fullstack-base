@@ -188,7 +188,7 @@ var UserSchema = new Schema({
     show: {
       type: String,
       default: 'public',
-      enum: ['public', 'group',
+      enum: ['offline','public', 'group',
         'private', 'booked private', 'vip',
         'courtesy', 'meter', 'goal',
         'password']

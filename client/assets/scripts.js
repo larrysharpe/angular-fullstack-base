@@ -5,9 +5,9 @@ var initVideoConfig = function (){
   var $scope = angular.element('#video-swf').scope();
   var config = {
     broadcaster: $scope.broadcaster.slug,
-    streamServer: "rtmp://52.90.74.122:1935/videochat"
+    streamServer: 'rtmp://localhost/videochat/'
+    //streamServer: "rtmp://52.90.74.122:1935/videochat" //prod
   };
-
   return config;
 }
 
@@ -21,7 +21,16 @@ function callToActionscript(str){
 }
 
 var camStatus = function (status){
+  var statusObj = {};
+
+  if(status === 'camDenied'){
+    statusObj.show = 'offline';
+  } else {
+    statusObj.show = status;
+  }
+  statusObj.online = 'online';
+
   var $scope = angular.element('.contain-broadcast').scope();
-  $scope.camStatus(status);
+  $scope.camStatus(statusObj);
   $scope.$apply();
 }

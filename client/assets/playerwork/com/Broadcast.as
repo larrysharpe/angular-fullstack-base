@@ -97,11 +97,11 @@
       private function onDisconnect(e = null){
         console.log('onDisconnect');
         removeCamera();
-        browser.camOffline();
+        browser.camStatus("offline");
       }
       private function onConnect(e = null){
-        console.log('NC Connected')
-        console.log('Is Cam Allowed?' + camAllowed)
+        console.log('NC Connected');
+        console.log('Is Cam Allowed?' + camAllowed);
         if (camAllowed)publisher.publish();
         console.log('Initiating Camera');
         initCamera();
@@ -112,7 +112,7 @@
       // Cam Events
       private function onCamDenied(e = null){
         console.log('Camera Denied');
-        browser.camDenied();
+        browser.camStatus('camDenied');
       }
       private function onCamAccepted(e = null) {
         console.log('Camera Accepted');
@@ -123,7 +123,7 @@
 
       // Publish Events
       private function onPublish(e = null) {
-        browser.camStatus({online: 'online', show: 'public'});
+        browser.camStatus('public');
       }
       private function onUnPublish(e = null){
         console.log('onUnPublish');

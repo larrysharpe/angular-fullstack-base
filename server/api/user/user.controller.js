@@ -67,9 +67,6 @@ var getTotal = function (units) {
   return units * getCost(units);
 };
 
-
-
-
 exports.buyTokens = function (req, res, next) {
   var slug = req.body.slug;
   var units = Number(req.body.units);
