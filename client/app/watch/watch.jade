@@ -2,11 +2,11 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-watch
   .container
     .row
-      .col-xs-12(ng-if="isOffline()")
-        h1 {{broadcaster.username}} is offline.
+      .col-xs-12
+        h1(ng-if="isOffline()") {{broadcaster.username}}'s cam is offline.
           small Don't worry there's plenty more where that came from.
-    .row(ng-if="isOnline() && isShowStatus('public')")
-      video-chat-watch
+    .row
+      video-chat-watch(ng-if="isOnline() && isShowStatus('public')")
       .col-xs-12(ng-if="!broadcaster")
         h1
           small We're sorry {{slug}} does not exist.

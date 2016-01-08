@@ -31,7 +31,16 @@ angular.module('baseApp')
     ];
 
     $scope.setStatus = function (status, slug){
-      socket.setStatus(status, slug);
+      var statusObj = {};
+
+      if(status === 'camDenied'){
+        statusObj.show = 'offline';
+      } else {
+        statusObj.show = status;
+      }
+      statusObj.online = 'online';
+
+      socket.setStatus(statusObj, slug);
     }
     socket.on('cam:status', function (data) {
       console.log('cam:status', data);

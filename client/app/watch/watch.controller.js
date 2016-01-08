@@ -32,18 +32,18 @@ angular.module('baseApp')
     }
 
     $scope.isOffline = function (){
-      return !$scope.broadcaster || $scope.broadcaster.status.online === 'offline';
+      return !$scope.broadcaster || $scope.broadcaster.status.show === 'offline';
     }
 
     $scope.isOnline = function (){
-      return $scope.broadcaster && $scope.broadcaster.status.online === 'online';
+      return $scope.broadcaster && $scope.broadcaster.status.show === 'public';
     }
 
     socket.on('cam:status', function (data) {
-      console.log('cam:status', data);
-      if (data.slug === $scope.broadcaster.slug){
-        $scope.broadcaster.status = data.status;
-      }
+      console.log('rcvd cam status',data);
+      if(data.status.show) $scope.broadcaster.status.show = data.status.show;
+      if(data.status.online) $scope.broadcaster.status.online = data.status.online;
+      $scope.camState = $scope.broadcaster.status.show;
     });
 
 

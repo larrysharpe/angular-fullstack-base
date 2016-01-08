@@ -334,12 +334,12 @@ exports.broadcastersPicks = function (req,res, next) {
 };
 
 exports.broadcastersOnline = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, 'status.online': {$in: ['online','public']}},
+  User.find({roles: {$in: ['broadcaster']}, 'status.show': {$in: ['online','public']}},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 }
 
 exports.broadcastersOffline = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}, 'status.online': 'offline'},
+  User.find({roles: {$in: ['broadcaster']}, 'status.show': 'offline'},
     'username slug status', function (err, users) { return returnBroadcasters(err, users, req, res, next);} );
 };
 
