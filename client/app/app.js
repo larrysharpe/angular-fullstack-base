@@ -7,7 +7,8 @@ angular.module('baseApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'flash'
+  'flash',
+  'ngToast'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
@@ -16,7 +17,13 @@ angular.module('baseApp', [
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
-
+  .config(['ngToastProvider', function(ngToast) {
+    ngToast.configure({
+      verticalPosition: 'bottom',
+      horizontalPosition: 'right',
+      maxNumber: 3
+    });
+  }])
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {
       // Add authorization token to headers
