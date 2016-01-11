@@ -6,29 +6,36 @@ angular.module('baseApp')
     // Use the User $resource to fetch all users
     $scope.users = User.query();
 
-    $scope.delete = function(user) {
-      User.remove({ id: user._id });
-      angular.forEach($scope.users, function(u, i) {
+    $scope.delete = function (user) {
+      User.remove({id: user._id});
+      angular.forEach($scope.users, function (u, i) {
         if (u === user) {
           $scope.users.splice(i, 1);
         }
       });
     };
 
-    $scope.statuses = [
-      'online',
-      'offline',
-      'on call',
-      'public',
-      'group',
-      'private',
-      'booked private',
-      'vip',
-      'courtesy',
-      'meter',
-      'goal',
-      'password'
-    ];
+    $scope.statuses = {
+      online: [
+        'online',
+        'offline',
+        'on call',
+        'away',
+        'busy'
+      ],
+      show: [
+        'offline',
+        'public',
+        'group',
+        'private',
+        'booked private',
+        'vip',
+        'courtesy',
+        'meter',
+        'goal',
+        'password'
+      ]
+  }
 
     $scope.setStatus = function (status, slug){
       var statusObj = {};

@@ -28,10 +28,13 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <toast></toast>
-    <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div ng-controller="AppCtrl">
 
+      <toast></toast>
+      <!-- Add your site or application content here -->
+      <div ui-view=""></div>
+
+    </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -82,6 +85,7 @@
           <script src="app/admin/admin.user.controller.js"></script>
           <script src="app/admin/transactions/transactions.controller.js"></script>
           <script src="app/admin/transactions/transactions.js"></script>
+          <script src="app/appCtrl/appCtrl.controller.js"></script>
           <script src="app/broadcast/broadcast.controller.js"></script>
           <script src="app/broadcast/broadcast.js"></script>
           <script src="app/dashboard/dashboard.controller.js"></script>

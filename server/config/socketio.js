@@ -62,7 +62,7 @@ module.exports = function (socketio) {
 
     socket.on('cam:status', function (data) {
       console.log('cam:status: ', data, data.status);
-      User.findOne({slug: data.slug}, 'status', function (err, user) {
+      User.findOne({slug: data.slug}, 'status username slug', function (err, user) {
 
         if(data.status.show) user.status.show = data.status.show;
         if(data.status.online) user.status.online = data.status.online;
@@ -71,8 +71,8 @@ module.exports = function (socketio) {
           if (err) socket.emit('cam:status:error',err);
           console.log(err);
           if (!user) socket.emit('cam:status:error','no user');
-          console.log(user);
           socket.broadcast.emit('cam:status', user);
+          socket.broadcast.emit('broadcaster:status:'+user.status.show, user);
           socket.emit('cam:status', user);
         })
 
