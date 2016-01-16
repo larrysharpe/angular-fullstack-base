@@ -19,10 +19,7 @@ angular.module('baseApp')
           $scope.users = data.users;
         });
 
-        socket.on('send:message', function (message) {
-          console.log('message rcvd');
-          $scope.messages.push(message);
-        });
+
 
         socket.on('user:join', function (data) {
           $scope.messages.push({
@@ -48,6 +45,11 @@ angular.module('baseApp')
               break;
             }
           }
+        });
+
+        socket.on('send:message', function (message) {
+          console.log('message rcvd');
+          $scope.messages.push(message);
         });
 
         $scope.sendMessage = function () {

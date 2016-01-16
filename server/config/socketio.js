@@ -3,7 +3,8 @@
  */
 
 'use strict';
-var User = require('../api/user/user.model');
+var Tips = require('../api/tips/tips.model');
+var Users = require('../api/user/user.model');
 
 var config = require('./environment');
 
@@ -48,7 +49,53 @@ module.exports = function (socketio) {
       console.info('[%s] DISCONNECTED', socket.address);
     });
 
+    socket.on('send-tip', function(tip, cb){
+      Tips.create(tip, function(err, tips) {
+        if(err) {  }
+        if(!tips) {  }
+        else {
+          var history = {
+            cost: .10,
+            category: 'tokens',
+            item: 'Tipped Broadcaster',
+            units: tips.amount,
+            total: tips.amount *.10,
+            to: tips.to,
+            from: tips.from,
+            rain: tips.rain || '',
+            hideTip:  tips.hideTip || '',
+            tipNote: tips.tipNote || ''
+          };
 
+          Users.findOne({slug: tips.from}, function (err, user){
+            if(err) { }
+            if(!user) {  }
+            user.credits.units -= tips.amount;
+            user.credits.history.push(history)
+
+            console.log(user);
+
+            user.save(function (err, userFrom){
+              if(err) {  }
+              if(!userFrom) {  }
+
+              Users.findOne({slug: tips.to}, function (err, user){
+                if(err) {  }
+                if(!user) {  }
+                user.credits.units += tips.amount;
+                user.credits.history.push(history)
+                user.save(function (err, user){
+                  if(err) {  }
+                  if(!user) {  }
+
+                    cb(userFrom);
+                });
+              });
+            });
+          });
+        }
+      });
+    });
 
     // broadcast a user's message to other users
     socket.on('send:message', function (data) {

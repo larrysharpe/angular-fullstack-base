@@ -91,6 +91,25 @@ var CreditHistorySchema = new Schema({
     type: Number,
     required: true
   },
+  to: {
+    type: String,
+    required: true
+  },
+  from: {
+    type: String,
+    required: true
+  },
+  rain: {
+    type: Boolean,
+    default: false
+  },
+  hideTip:  {
+    type: Boolean,
+    default: false
+  },
+  tipNote:  {
+    type: String
+  },
   date: {
     type: Date,
     required: true,
@@ -121,11 +140,7 @@ var UserSchema = new Schema({
   name: [NameSchema],
   username: {type: String, required: true},
   slug: {type: String, required: true },
-
   birthdate: Date,
-
-
-
   credits: {
     units: {
       type: Number,
@@ -140,43 +155,32 @@ var UserSchema = new Schema({
     },
     history: [CreditHistorySchema]
   },
-
   xp:  {
     type: Number,
     required: true,
     default: 100
   },
-
   level:  {
     type: Number,
     required: true,
     default: 1
   },
-
   achievements: {type: Array, required: false},
-
   email: { type: String, lowercase: true },
   emailConfirmed: {type: Boolean, required: true, default: false},
   emailConfirmationToken: String,
-
   address: [AddressSchema],
-
-
   faves: { type: Array, required: false },
-
   accounts: {
     broadcaster: [BroadcasterAccountSchema]
   },
-
   roles: {
     type: [String],
     default: 'user',
     enum: ['admin', 'user', 'broadcaster applicant', 'broadcaster']
   },
-
   created: {type: Date, required: true, default: new Date()},
   lastLogin: Date,
-
   status: {
 
     online: {
@@ -194,15 +198,12 @@ var UserSchema = new Schema({
         'password']
     }
   },
-
   hashedPassword: String,
   resetToken: {
     token: {type: String},
     date: {type: Date}
   },
-
   broadcasterDenialReason: String,
-
   provider: String,
   salt: String,
   facebook: {},
