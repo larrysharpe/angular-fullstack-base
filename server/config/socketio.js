@@ -119,8 +119,7 @@ module.exports = function (socketio) {
     });
 
     socket.on('cam:status', function (data, cb) {
-      console.log('cam:status: ', data);
-      Users.findOne({slug: data.slug}, 'status username slug', function (err, user) {
+      Users.findOne({slug: data.slug}, function (err, user) {
 
         if(err) { cb({error: err}); }
         else if (!user){ cb({error: 'User Not Found'}); }
@@ -134,8 +133,8 @@ module.exports = function (socketio) {
             else {
               socket.broadcast.emit('cam:status', user);
               socket.broadcast.emit('broadcaster:status:' + user.status.show, user);
-              user.index = data.index; //send an index back to the client for updating
-              cb(user);
+
+              cb({user: user, index: data.index} );
             }
           })
 

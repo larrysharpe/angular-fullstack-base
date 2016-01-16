@@ -39,7 +39,7 @@ angular.module('baseApp')
 
     var updateStatus = function (data){
       console.log('status updated',data);
-      $scope.users[data.index] = data;
+      $scope.users[data.index] = data.user;
     };
 
     $scope.setStatus = function (status, index, slug){
