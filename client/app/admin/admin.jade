@@ -20,7 +20,7 @@ div(ng-include='"components/navbar/navbar.html"')
                 | {{user.status}}
             td
               span(ng-repeat="status in statuses.show")
-                a(href="#", ng-click="setStatus(status, user.slug)") {{status}}
+                a(href="#", ng-click="setStatus(status, $index, user.slug)") {{status}}
                 | |
             td
               span(ng-if="needsBroadcasterApproval($index)")

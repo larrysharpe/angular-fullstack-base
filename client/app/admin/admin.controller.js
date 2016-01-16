@@ -35,19 +35,30 @@ angular.module('baseApp')
         'goal',
         'password'
       ]
-  }
+  };
 
-    $scope.setStatus = function (status, slug){
-      var statusObj = {};
+    var updateStatus = function (data){
+      console.log('status updated',data);
+      $scope.users[data.index] = data;
+    };
 
-      if(status === 'camDenied'){
-        statusObj.show = 'offline';
-      } else {
-        statusObj.show = status;
-      }
-      statusObj.online = 'online';
+    $scope.setStatus = function (status, index, slug){
 
-      socket.setStatus(statusObj, slug);
+      var obj = {
+        slug: slug,
+        status: {
+          show: '',
+          online: ''
+        },
+        index: index
+      };
+
+      if(status === 'camDenied')obj.status.show = 'offline';
+      else obj.status.show = status;
+
+      obj.status.online = 'online';
+
+      socket.emit('cam:status', obj, updateStatus);
     }
     socket.on('cam:status', function (data) {
       console.log('cam:status', data);

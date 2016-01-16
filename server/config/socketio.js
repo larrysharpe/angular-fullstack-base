@@ -49,6 +49,14 @@ module.exports = function (socketio) {
       console.info('[%s] DISCONNECTED', socket.address);
     });
 
+    socket.on('join:room', function(room, cb){
+      socket.join(room);
+
+      console.log('join room: ', room);
+
+      cb('joined')
+    });
+
     socket.on('send-tip', function(tip, cb){
       Tips.create(tip, function(err, tips) {
         if(err) {  }
@@ -100,28 +108,38 @@ module.exports = function (socketio) {
     // broadcast a user's message to other users
     socket.on('send:message', function (data) {
       console.log('data: ', data);
-      socket.broadcast.emit('send:message', {
+
+      console.log('send mesage to room:' + data.to);
+
+      socket.to(data.to).emit('send:message', {
         from: data.from,
         content: data.content,
         to: data.to
       });
     });
 
-    socket.on('cam:status', function (data) {
-      console.log('cam:status: ', data, data.status);
-      User.findOne({slug: data.slug}, 'status username slug', function (err, user) {
+    socket.on('cam:status', function (data, cb) {
+      console.log('cam:status: ', data);
+      Users.findOne({slug: data.slug}, 'status username slug', function (err, user) {
 
-        if(data.status.show) user.status.show = data.status.show;
-        if(data.status.online) user.status.online = data.status.online;
+        if(err) { cb({error: err}); }
+        else if (!user){ cb({error: 'User Not Found'}); }
+        else {
+          if (data.status.show) user.status.show = data.status.show;
+          if (data.status.online) user.status.online = data.status.online;
 
-        user.save(function(err, user){
-          if (err) socket.emit('cam:status:error',err);
-          console.log(err);
-          if (!user) socket.emit('cam:status:error','no user');
-          socket.broadcast.emit('cam:status', user);
-          socket.broadcast.emit('broadcaster:status:'+user.status.show, user);
-          socket.emit('cam:status', user);
-        })
+          user.save(function (err, user) {
+            if (err) cb({error: err});
+            else if (!user) cb({error: 'User Not Saved'});
+            else {
+              socket.broadcast.emit('cam:status', user);
+              socket.broadcast.emit('broadcaster:status:' + user.status.show, user);
+              user.index = data.index; //send an index back to the client for updating
+              cb(user);
+            }
+          })
+
+        }
 
 
         });

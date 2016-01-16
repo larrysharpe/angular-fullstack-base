@@ -9,6 +9,8 @@ angular.module('baseApp')
       $location.path('/broadcast');
     }
 
+    socket.emit('join:room', $scope.slug + '_public', function(ret){console.log(ret);});
+
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
@@ -38,6 +40,7 @@ angular.module('baseApp')
     $scope.isOnline = function (){
       return $scope.broadcaster && $scope.broadcaster.status.show === 'public';
     }
+
 
     socket.on('cam:status', function (data) {
       console.log('rcvd cam status',data);

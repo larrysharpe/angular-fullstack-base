@@ -19,8 +19,6 @@ angular.module('baseApp')
           $scope.users = data.users;
         });
 
-
-
         socket.on('user:join', function (data) {
           $scope.messages.push({
             to: 'chatroom',
@@ -55,7 +53,7 @@ angular.module('baseApp')
         $scope.sendMessage = function () {
           socket.emit('send:message', {
             from: $scope.user.username,
-            to: 'chatroom',
+            to: $scope.broadcaster.slug + '_public',
             content: $scope.message
           });
 
