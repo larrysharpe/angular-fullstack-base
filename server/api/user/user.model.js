@@ -92,12 +92,10 @@ var CreditHistorySchema = new Schema({
     required: true
   },
   to: {
-    type: String,
-    required: true
+    type: String
   },
   from: {
-    type: String,
-    required: true
+    type: String
   },
   rain: {
     type: Boolean,

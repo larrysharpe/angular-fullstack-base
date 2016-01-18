@@ -22,7 +22,7 @@ angular.module('baseApp')
             tipNote: $scope.tipNote
           };
 
-          socket.emit('send-tip', tip, function(user){
+          socket.emit('tip:send', tip, function(user){
             $scope.user = user;
           });
         };

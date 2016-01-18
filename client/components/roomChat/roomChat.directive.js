@@ -7,9 +7,16 @@ angular.module('baseApp')
       restrict: 'EA',
       link: function (scope, element, attrs) {
       },
-      controller: function ($scope, socket) {
+      controller: function ($scope, $http, socket, $stateParams) {
 
         $scope.messages = [];
+
+        var room = $stateParams.slug + '_public';
+        $http.get('/api/messages/room/' + room)
+          .error(function(err){})
+          .success(function(data){
+            $scope.messages = data;
+          })
 
         // Socket listeners
         // ================
@@ -18,6 +25,7 @@ angular.module('baseApp')
           $scope.name = data.name;
           $scope.users = data.users;
         });
+
 
         socket.on('user:join', function (data) {
           $scope.messages.push({
@@ -45,27 +53,23 @@ angular.module('baseApp')
           }
         });
 
-        socket.on('send:message', function (message) {
-          console.log('message rcvd');
-          $scope.messages.push(message);
-        });
+
+        var postMessage = function (msg){
+          $scope.messages.push(msg);
+        };
+
+        socket.on('message:rcv', postMessage);
 
         $scope.sendMessage = function () {
-          socket.emit('send:message', {
+
+          var msg = {
             from: $scope.user.username,
             to: $scope.broadcaster.slug + '_public',
             content: $scope.message
-          });
+          };
 
-          // add the message to our model locally
-          $scope.messages.push({
-            from: $scope.user.username,
-            to: 'chatroom',
-            content: $scope.message
-          });
-
-          // clear message box
-          $scope.message = '';
+          socket.emit('message:send', msg, postMessage );
+          $scope.message = '';// clear message box
         };
 
       }

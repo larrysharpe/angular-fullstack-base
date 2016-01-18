@@ -23,3 +23,8 @@ chmod +x post-receive
 cd ~/
 mkdir www
 chown ubuntu:ubuntu -R www
+
+
+
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -L -n --line-number

@@ -4,8 +4,8 @@
 
 'use strict';
 var Tips = require('../api/tips/tips.model');
+var Messages = require('../api/message/message.model');
 var Users = require('../api/user/user.model');
-
 var config = require('./environment');
 
 // When the user disconnects.. perform this
@@ -51,17 +51,18 @@ module.exports = function (socketio) {
 
     socket.on('join:room', function(room, cb){
       socket.join(room);
-
       console.log('join room: ', room);
-
       cb('joined')
     });
 
-    socket.on('send-tip', function(tip, cb){
+    socket.on('tip:send', function(tip, cb){
+      var _tmpTip = tip;
+      var room = tip.to + '_public';
       Tips.create(tip, function(err, tips) {
         if(err) {  }
         if(!tips) {  }
         else {
+          var room = tips.to + '_public';
           var history = {
             cost: .10,
             category: 'tokens',
@@ -74,29 +75,30 @@ module.exports = function (socketio) {
             hideTip:  tips.hideTip || '',
             tipNote: tips.tipNote || ''
           };
-
           Users.findOne({slug: tips.from}, function (err, user){
             if(err) { }
             if(!user) {  }
             user.credits.units -= tips.amount;
-            user.credits.history.push(history)
-
-            console.log(user);
-
+            user.credits.history.push(history);
             user.save(function (err, userFrom){
               if(err) {  }
               if(!userFrom) {  }
-
               Users.findOne({slug: tips.to}, function (err, user){
                 if(err) {  }
                 if(!user) {  }
                 user.credits.units += tips.amount;
-                user.credits.history.push(history)
+                user.credits.history.push(history);
                 user.save(function (err, user){
                   if(err) {  }
                   if(!user) {  }
-
-                    cb(userFrom);
+                  if(!tips.hideTip) {
+                    var content = ' tipped ' + tips.amount + ' tokens.';
+                    if (tips.tipNote) content += '<br>"' + tips.tipNote + '"';
+                    _tmpTip.content = content;
+                    socket.emit('message:rcv', _tmpTip);
+                    socket.in(room).emit('message:rcv', _tmpTip);
+                  }
+                  cb(userFrom);
                 });
               });
             });
@@ -106,42 +108,40 @@ module.exports = function (socketio) {
     });
 
     // broadcast a user's message to other users
-    socket.on('send:message', function (data) {
-      console.log('data: ', data);
-
-      console.log('send mesage to room:' + data.to);
-
-      socket.to(data.to).emit('send:message', {
+    socket.on('message:send', function (data, cb) {
+      var msg = {
         from: data.from,
         content: data.content,
         to: data.to
-      });
+      };
+
+      Messages.create(msg, function(err, msg){
+        if(err) cb({error: err});
+        if(!msg) cb({error: 'Message not created'});
+        socket.to(data.to).emit('message:rcv', msg);
+        cb(msg);
+      })
+
     });
 
     socket.on('cam:status', function (data, cb) {
       Users.findOne({slug: data.slug}, function (err, user) {
-
         if(err) { cb({error: err}); }
         else if (!user){ cb({error: 'User Not Found'}); }
         else {
           if (data.status.show) user.status.show = data.status.show;
           if (data.status.online) user.status.online = data.status.online;
-
           user.save(function (err, user) {
             if (err) cb({error: err});
             else if (!user) cb({error: 'User Not Saved'});
             else {
               socket.broadcast.emit('cam:status', user);
               socket.broadcast.emit('broadcaster:status:' + user.status.show, user);
-
               cb({user: user, index: data.index} );
             }
           })
-
         }
-
-
-        });
+      });
     });
 
     // Call onConnect.

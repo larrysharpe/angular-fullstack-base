@@ -72,6 +72,8 @@ exports.buyTokens = function (req, res, next) {
   var units = Number(req.body.units);
 
   User.findOne({slug: slug}, function(err, user){
+    if (err) return next(err);
+    if (!user) return res.send(401);
 
     var transaction = {
       user:{
@@ -88,6 +90,7 @@ exports.buyTokens = function (req, res, next) {
 
     var t = new Transaction(transaction);
     t.save(function(err, trans){
+      if (err) console.log('Error Transaction: ',err);
       if (err) return next(err);
       if (!trans) return res.send(401);
     });
@@ -95,6 +98,7 @@ exports.buyTokens = function (req, res, next) {
     user.credits.units = Number(user.credits.units) + units;
     user.credits.history.push(transaction);
     user.save(function(err, user){
+      if (err) console.log('Error User: ',err);
       if (err) return next(err);
       if (!user) return res.send(401);
       res.json(user);
