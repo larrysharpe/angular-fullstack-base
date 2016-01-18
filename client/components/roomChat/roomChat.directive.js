@@ -6,6 +6,10 @@ angular.module('baseApp')
       templateUrl: 'components/roomChat/roomChat.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
+        scope.$watchCollection('messages', function(newNames, oldNames) {
+          var lst = element.find('.chat-box')[0];
+          lst.scrollTop = lst.scrollHeight;
+        });
       },
       controller: function ($scope, $http, socket, $stateParams) {
 
