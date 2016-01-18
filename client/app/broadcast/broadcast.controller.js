@@ -55,6 +55,8 @@ angular.module('baseApp')
       socket.emit('cam:status', {
         slug: $scope.user.slug,
         status: status
+      }, function(data){
+        $scope.camState = data.user.status.show;
       });
     }
 
