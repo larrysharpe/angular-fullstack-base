@@ -25,6 +25,24 @@ angular.module('baseApp')
       return false;
     };
 
+
+    $scope.showVid  = function () {
+
+      var screenStatuses = ['public','group', 'private', 'meter', 'password', 'vip'];
+
+      if($scope.broadcaster.status.online === 'online'){
+        if(screenStatuses.indexOf($scope.broadcaster.status.show) > -1){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+
+    };
+
+
     $scope.isStatus = function (status) {
       return !$scope.broadcaster || $scope.broadcaster.status.online === status;
     }
