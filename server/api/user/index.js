@@ -33,6 +33,7 @@ router.post('/denyBroadcaster', auth.hasRole('admin'), controller.denyBroadcaste
 router.post('/accountHelp', controller.accountHelp);
 router.post('/passwordReset', controller.passwordReset);
 router.post('/buyTokens', controller.buyTokens);
+router.post('/createBatch', controller.createBatch);
 router.post('/', controller.create);
 
 

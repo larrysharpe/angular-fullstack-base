@@ -9,8 +9,10 @@ angular.module('baseApp')
       return {
         get: function (type) {
 
-          var url = '/api/users/broadcasters/' + type,
+          var url = '/api/users/broadcasters/',
               usr = Auth.getCurrentUser()._id;
+
+          if (type) url += type;
 
           if (type === 'favorites' && usr) {
             url += '?_id=' + usr;

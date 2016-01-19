@@ -11,6 +11,9 @@ angular.module('baseApp')
       },
       controller: function ($scope, socket, broadcasterListSVC){
 
+        if (!$scope.header) $scope.header = '';
+        if(!$scope.type) $scope.type = '';
+
         $scope.getList = function () {
           broadcasterListSVC.get($scope.type).then(function(response){
             $scope.broadcasters = response.data;

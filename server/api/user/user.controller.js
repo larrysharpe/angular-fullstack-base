@@ -16,6 +16,13 @@ var slugify = function (text)
     .replace(/-+$/, '');            // Trim - from end of text
 };
 
+var convertToEmail = function (input){
+  var output;
+  output = slugify(input);
+  output += '@a.com';
+  return output;
+};
+
 var validationError = function(res, err) {
   return res.json(422, err);
 };
@@ -42,6 +49,32 @@ exports.index = function(req, res) {
     res.json(200, users);
   });
 };
+
+exports.createBatch = function (req, res){
+
+  var usernames = ['Abriana','Aira','Africa','Alabama','Alana','Alaya','Alecia','Alicia','Alex','Alexis','Alexa','Alexandra','Alexandria','Alison','Allura','Ally','Alpha','Alyssa','Amanda','Amaze','Amber','Amelia','Amethyst','Analis','Anastasia','Andra','Andrea','Andromeda','Angel','Angela','Angelique','Angie','Anise','Anisette','Anna','Annabella','Annie','Annika','Antoinette','Aphrodite','April','Ariel','Aries','Ashlee','Ashley','Ashlyn','Asia','Athena','Atlanta','Aubra','Aubrey','Audra','Aura','Aurora','Austin','Autumn','Ava','Azrael','Baby','Bailey','Bambi','Barbie','Beau','Beautiful','Becky','Bede','Belinda','Belle','Berry','Bethany','Bianca','Bindi','Bird','Bo','Bolero','Blade','Blake','Blanca','Blaze','Blondie','Blossom','Blue','Blush','Bobbie','Bordeaux','Bountiful','Brandy','Brandi','Breeze','Breezy','Brianna','Bridget','Brie','Brilliant','Brita','Britain','Brittany','Bronte','Bubbles','Buffy','Bunny','Burgundie','Butterfly','Callie','Cameo','Camille','Candi','Candice','Candy','Candee','Carmel','Carmela','Carmen','Carrie','Cashmere','Champagne','Chance','Chanel','Chantal','Chantelle','Chantilly','Chantiqua','Chaos','Charity','Charlie','Charlotte','Chastity','Cherie','Cherry','Cheyenne','China','Chloe','Chocolate','Chrissy','Christian','Christi','Lynn','Christy','Christine','Chynna','Cecilia','Cinder','Cinnamon','CJ','Cleo','Cleopatra','Clover','Coco','Cody','Constance','Contessa','Cookie','Crystal','Cuddles','Cynara','Cynder','Cyndi','Dagny','Dahlia','Daisy','Dakota','Dallas','Damiana','Dana','Danger','Danielle','Danni','Daphne','Darby','Darkness','Darla','Dawn','Decadence','Dee','Ann','Deidre','Deja','Delicious','Delight','Delilah','Delta','Deluxe','Denver','Desert','Rose','Desire','Desiree','Destiny','Devon','Devyn','Dharma','Diablo','Diamond','Diana','Dido','Diva','Divine','Divinity','Dixie','Dolly','Dominique','Dream','Duchess','Dusty','Dylan','Ebony','Echo','Ecstasy','Eden','Elan','Ella','Elle','Electra','Eli','Eliza','Elizabeth','Elvira','Elyse','Ember','Emerald','Emergency','Emily','Empress','Envy','Epiphany','Erotica','Esme','Eva','Evie','Eve','Fable','Fabulous','Faith','Fallon','Fame','Fantasia','Fantasy','Farrah','Fate','Fawn','Fawna','Fawnia','Feather','Felicia','Felicity','Felony','Ferrari','Fern','Fetish','Fiona','Fire','Francesca','Flame','Foxxxy','Frankie','Frosty','Gabrielle','Gabriella','Gaia','Gem','Gemma','Gemini','Genie','Gentle','Georgia','Gia','Giggles','Gigi','Gillian','Ginger','Giselle','Glamour','Glitter','Glory','Godiva','Grace','Gracious','Gypsy','Hanna','Harley','Harlow','Harmony','Heather','Heaven','Heavenleigh','Heavenly','Helena','Hillary','Holiday','Holly','Honey','Hope','Houston','Hyacinth','Ianna','Ice','Iesha','Illusion','Imagine','India','Indigo','Inferno','Infinity','Ireland','Irene','Isabel','Isabella','Isis','Ivory','Ivy','Izzy','Jade','Jaguar','Jamie','Janelle','Jasmine','Jasmyn','Jeanette','Jeanie','Jenna','Jenny','Jessica','Jessie','Jewel','Jewels','Jezebel','Jill','Jinx','JJ','Joetta','Joelle','Jolene','Jordan','Journey','Joy','Juicy','Julia','Julie','Juliet','June','Juno','Kaia','Kailli','Kara','Karla','Kashmir','Kat','Kathleen','Kayla','Kelli','Kenya','Karma','Kira','Kitten','Kitty','Krista','Kristen','Kristi','Krystal','Kylie','Kyra','Lace','Lacy','Lainie','Lakota','Lana','Latifah','Laura','Layla','Leah','Leather','Leggs','Leia','Leigh','Lexie','Licorice','Lightning','Lila','Lilith','Lily','Lindsey','Lisa','Lita','Liza','Logan','Lola','London','Loni','Lori','Love','Lucinda','Lucky','Lucretia','Lumina','Luna','Luscious','Luxury','Luxxie','Macy','Madeline','Madison','Magdalene','Magenta','Maggie','Magic','Magnolia','Malia','Malibu','Malice','Mandy','Manhattan','Margot','Maria','Mariah','Mariana','Marilyn','Marina','Marla','Marlena','Marti','Mary','Ann','Mary','Jane','Maxxx','May','McKenzie','Medusa','Megan','Melano','Melanie','Melinda','Melody','Melonie','Mercury','Merlot','Merlyn','Michelle','Mikhaila','Mikki','Mindee','Mindy','Mink','Mistress','Misty','Mercedes','Mercy','Midnight','Miracle','Mocha','Molly','Mona','Monaco','Monica','Monique','Montana','Morgan','Muse','Music','Mystery','Mystique','Nadia','Nanette','Nastasia','Nasty','Natalia','Natalie','Natasha','Nica','Nicole','Nikita','Nikki','Niko','Nina','Nixie','Noel','Nola','Norah','Notorious','Octavia','Olive','Olivia','Olympia','Omega','Opal','Ophelia','Paige','Pallas','Pamela','Pandemonium','Pandora','Pansy','Panther','Paradise','Paris','Passion','Paula','Peaches','Peanut','Pearl','Pebbles','Penelope','Penny','Pepper','Persephone','Petal','Peyton','Phoenix','Piper','Pisces','Pixie','Poison','Porsche','Power','Precious','Princess','Puppy','(yep.)','Queen','Quinn','Rachel','Rain','Ramona','Raven','Reba','Rebecca','Red','Renee','Rhiannon','Ria','Rio','Rita','River','Robyn','Rocki','Roma','Rose','Rosemary','Rosie','Roxanna','Roxanne','Ruby','Sable','Sabrina','Sachet','Saffron','Sage','Salome','Samantha','Sandi','Sapphire','Sarah','Sarasota','Saraya','Sasha','Sashay','Sassparilla','Sassy','Satan','Satin','Sativa','Savannah','Scandal','Scarlet','Selena','September','Septiva','Serena','Serenity','Seven','Shana','Shane','Shannon','Shawna','Shay','Shea','Shelby','Shelly','Sheree','Sherri','Sherry','Shine','Siam','Siena','Sierra','Silk','Silky','Silver','Sin','Simone','Siren','Skye','Sloane','Smoky','Soleil','Sonia','Song','Sorority','Spice','Spider','Spring','Staci','Stacia','Starr','Stevie','Storm','Stormy','Strawberry','Suavecita','Sublime','Sugar','Summer','Sundae','Sundance','Sunday','Sunni','Sunny','Sunshine','Sunset','Susanna','Suzanne','Swallow','Sweet','Sweetness','Tabitha','Taffy','Talia','Tallulah','Tamar','Tamara','Tammi','Tane','Tanya','Tara','Tasha','Tasty','Tatiana','Tawni','Taylor','Temper','Tempest','Temptation','Terra','Terror','Tess','Tessa','Texxxas','Thai','Thia','Thumper','Thyme','Tia','Tickle','Tiffany','Tiger','Tigra','Tika','Time','Tina','Tinker','Tisha','Toffee','Tommy','Toni','Topaz','Tori','Traci','Tracy','Tricia','Trinity','Trip','Tristana','Trixie','Trouble','Tuesday','Tyffany','Tyler','Tyra','Unique','Utopia','Valentina','Valentine','Vandal','Vanessa','Vanity','Velvet','Venus','Veronica','Viagra','Victoria','Victory','Viola','Violet','Viper','Virginia','Virgo','Vision','Vivienne','Vixen','Vonda','Wanda','Wednesday','Wendy','Whimsy','Whisky','Whisper','Willow','Windy','Winter','Wish','Wyndi','Xanadu','Xanthe','Xaviera','Xena','Xiola','Xtase','Yasmin','Yolanda','Yvette','Yvonne','Zena','Zenith','Zinnia','Zoe','Zoey','Zora'];
+  var role = 'broadcaster';
+
+  for (var i = 0; i<usernames.length; i++) {
+    var usr = {
+      email: convertToEmail(usernames[i]),
+      password: "aaa",
+      roles: role,
+      provider: 'local',
+      username: usernames[i],
+      slug: slugify(usernames[i])
+    }
+
+    var newUser = new User(usr);
+    newUser.save(function (err, user) {
+      console.log(err);
+      if (err) return validationError(res, err);
+    });
+  }
+
+  res.send(200);
+
+}
 
 /**
  * Creates a new user
@@ -208,8 +241,10 @@ exports.approveBroadcaster = function (req, res) {
     if(user && user.roles.indexOf('broadcaster') > -1) res.json(422, 'Broadcaster Already Approved');
     else if(user && user.roles.indexOf('broadcaster applicant') === -1) res.json(422, 'No Broadcaster Application');
     else if(user){
+      var userPermissionIndex = user.roles.indexOf('user');
       var oldPermissionIndex = user.roles.indexOf('broadcaster applicant');
-      user.roles.splice(oldPermissionIndex, 1);
+      if(userPermissionIndex > -1) user.roles.splice(userPermissionIndex, 1);
+      if(oldPermissionIndex > -1) user.roles.splice(oldPermissionIndex, 1);
       user.roles.push('broadcaster');
       user.save(function(err){
         res.json(200, user);
@@ -221,8 +256,10 @@ exports.denyBroadcaster = function (req, res) {
   if(!req.body._id) return res.json(422, 'No user provided');
   User.findById(req.body._id, function (err, user) {
     if(user){
+      var userPermissionIndex = user.roles.indexOf('user');
       var oldPermissionIndex = user.roles.indexOf('broadcaster applicant');
-      user.roles.splice(oldPermissionIndex, 1);
+      if(userPermissionIndex > -1) user.roles.splice(userPermissionIndex, 1);
+      if(oldPermissionIndex > -1) user.roles.splice(oldPermissionIndex, 1);
       user.roles.push('broadcaster denied');
       user.broadcasterDenialReason = req.body.broadcasterDenialReason;
       user.save(function(err){
@@ -314,7 +351,7 @@ var returnBroadcasters = function (err, users, req, res, next) {
 
 
 exports.broadcasters = function (req,res, next) {
-  User.find({roles: {$in: ['broadcaster']}}, 'status username slug',  function(err, broadcasters){
+  User.find({roles: {$in: ['broadcaster']}}, 'status username slug', {sort: 'username', limit: 100}, function(err, broadcasters){
     return returnBroadcasters(err, broadcasters, req, res, next);
   });
 };

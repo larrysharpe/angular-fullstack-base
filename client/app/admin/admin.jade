@@ -11,7 +11,7 @@ div(ng-include='"components/navbar/navbar.html"')
             th Roles
             th Status
             th(colspan=3) Actions
-          tr(ng-repeat="user in users")
+          tr(ng-repeat="user in users | orderBy:'username' ")
             td
               a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
             td {{::user.roles.join(',')}}

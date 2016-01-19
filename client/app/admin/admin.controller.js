@@ -38,8 +38,8 @@ angular.module('baseApp')
   };
 
     var updateStatus = function (data){
-      console.log('status updated',data);
-      $scope.users[data.index] = data.user;
+    //  console.log('status updated',data);
+    //  $scope.users[data.index] = data.user;
     };
 
     $scope.setStatus = function (status, index, slug){
@@ -58,7 +58,7 @@ angular.module('baseApp')
 
       obj.status.online = 'online';
 
-      socket.emit('cam:status', obj, updateStatus);
+      socket.emit('cam:status', obj);
     }
     socket.on('cam:status', function (data) {
       console.log('cam:status', data);

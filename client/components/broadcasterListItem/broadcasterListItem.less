@@ -9,6 +9,57 @@
 
   .inside {
     margin: 5px;
+    position: relative;
+
+    .status {
+      position: absolute;
+      top: 0;
+      color: #fff;
+      font-weight: bold;
+      opacity: .5;
+      padding: 0 5px;
+
+      &.public {
+        background: green;
+      }
+
+      &.offline {
+        background: red;
+      }
+
+      &.group{
+        background: orange;
+      }
+
+      &.private{
+        background: purple;
+      }
+
+      &.bookedprivate{
+        background: red;
+      }
+
+      &.vip {
+        background: blue;
+      }
+
+      &.courtesy {
+        background: gold;
+      }
+
+      &.meter {
+        background: silver;
+      }
+
+      &.goal {
+        background: saddlebrown;
+      }
+
+      &.password {
+        background: teal;
+      }
+    }
+
   }
 
   .username {

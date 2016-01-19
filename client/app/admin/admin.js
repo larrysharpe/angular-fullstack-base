@@ -13,5 +13,11 @@ angular.module('baseApp')
         templateUrl: 'app/admin/users/user.html',
         controller: 'AdminUserCtrl'
       })
+
+      .state('adminBatchUsers', {
+        url: '/admin/user/createBatch',
+        templateUrl: 'app/admin/users/createBatch.html',
+        controller: 'AdminUserCtrl'
+      })
     ;
   });
