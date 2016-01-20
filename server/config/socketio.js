@@ -95,6 +95,10 @@ module.exports = function (socketio) {
                     var content = ' tipped ' + tips.amount + ' tokens.';
                     if (tips.tipNote) content += '<br>"' + tips.tipNote + '"';
                     _tmpTip.content = content;
+                    _tmpTip.type = 'tip';
+                    if(_tmpTip.amount > 99) _tmpTip.subType = 'multiRing';
+                    else _tmpTip.subType = 'singleRing';
+
                     socket.emit('message:rcv', _tmpTip);
                     socket.in(room).emit('message:rcv', _tmpTip);
                   }
@@ -112,7 +116,8 @@ module.exports = function (socketio) {
       var msg = {
         from: data.from,
         content: data.content,
-        to: data.to
+        to: data.to,
+        type: 'message'
       };
 
       Messages.create(msg, function(err, msg){

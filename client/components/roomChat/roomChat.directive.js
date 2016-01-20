@@ -6,12 +6,19 @@ angular.module('baseApp')
       templateUrl: 'components/roomChat/roomChat.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
-        scope.$watchCollection('messages', function(newNames, oldNames) {
-          var lst = element.find('.chat-box')[0];
-          lst.scrollTop = lst.scrollHeight;
+        scope.$watchCollection('messages', function(newValues, oldValues) {
+          if(newValues != oldValues) {
+            var lst = element.find('.chat-box')[0];
+            lst.scrollTop = lst.scrollHeight;
+            if(scope[newValues[newValues.length-1].subType]) scope[newValues[newValues.length-1].subType].play();
+            console.log(newValues);
+          }
         });
       },
-      controller: function ($scope, $http, socket, $stateParams) {
+      controller: function ($scope, $http, socket, $stateParams, ngAudio) {
+
+        $scope.singleRing = ngAudio.load('/assets/sounds/single-ring.wav');
+        $scope.multiRing = ngAudio.load('/assets/sounds/multi-ring.wav');
 
         $scope.messages = [];
 
