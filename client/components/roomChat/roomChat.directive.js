@@ -17,8 +17,10 @@ angular.module('baseApp')
       },
       controller: function ($scope, $http, socket, $stateParams, ngAudio) {
 
-        $scope.singleRing = ngAudio.load('/assets/sounds/single-ring.wav');
-        $scope.multiRing = ngAudio.load('/assets/sounds/multi-ring.wav');
+        $scope.tipLevel1 = ngAudio.load('/assets/sounds/tipLevel1.wav');
+        $scope.tipLevel2 = ngAudio.load('/assets/sounds/tipLevel2.wav');
+        $scope.tipLevel3 = ngAudio.load('/assets/sounds/tipLevel3.wav');
+        $scope.tipLevel4 = ngAudio.load('/assets/sounds/tipLevel4.wav');
 
         $scope.messages = [];
 
@@ -66,7 +68,16 @@ angular.module('baseApp')
 
 
         var postMessage = function (msg){
-          $scope.messages.push(msg);
+          if(msg.rain) {
+
+
+            $scope.messages.push(msg.main);
+            for(var i = 0; i < 10; i ++){
+              $scope.messages.push(msg.tips);
+            }
+          } else {
+            $scope.messages.push(msg);
+          }
         };
 
         socket.on('message:rcv', postMessage);

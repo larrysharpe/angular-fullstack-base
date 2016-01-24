@@ -1,20 +1,27 @@
 .tipComponent
-  button.btn.btn-warning(ng-hide='open', ng-click='openTips()') TIP
-  div(ng-show='open')
+  p
+    button.btn.btn-warning(ng-hide='open', ng-click='toggleTips()') TIP
+  div(ng-show='tipsOpen')
     p(ng-show='!user.roles') Join Now
     div(ng-show='user.roles')
-      p You have {{user.credits.units}} tokens left.
-      p
-        button.btn.btn-warning(ng-repeat='amt in tipAmounts', ng-click='sendTip(amt)') {{amt}}
-      p
-        input.form-control(placeholder='Enter Custom Amount', type='number', ng-model='tipAmount', style='width:250px')
-      p
-        label
-          input(type='checkbox', ng-model='hideTip')
-          |  Hide my tip
-      p
-        textarea(ng-model='tipNote', placeholder='Tip Note', style='width:250px')
-      p
-        button.btn.btn-primary(ng-click='sendTip(tipAmount)') Send
-        button.btn.btn-primary(ng-click='sendTip(tipAmount,"rain")') Make It Rain
-        button.btn.btn-danger(ng-click='closeTips()') Cancel
+      p You have &nbsp;
+        b {{user.credits.units}}
+        | &nbsp; tokens left.
+        a.bg-gold Get More!
+      div(ng-if="user.credits.units")
+        p
+          button.btn.btn-warning(ng-repeat='amt in tipAmounts', ng-click='sendTip(amt)', ng-disabled="amt > user.credits.units") {{amt}}
+        p
+          input.form-control(placeholder='Enter Custom Amount', type='number', ng-model='tipAmount', style='width:250px')
+        p
+          label
+            input(type='checkbox', ng-model='hideTip')
+            |  Hide my tip
+        p
+          textarea(ng-model='tipNote', placeholder='Tip Note', style='width:250px')
+        p
+          button.btn.btn-primary(ng-click='sendTip(tipAmount)', ng-disabled='!tipAmount') Send
+          button.btn.btn-primary(ng-click='sendTip(tipAmount,true)', ng-disabled='!tipAmount || tipAmount < 99') Make It Rain
+          button.btn.btn-danger(ng-click='closeTips()') Close
+      div(ng-if="!user.credits.units")
+        button.btn.btn-danger(ng-click='closeTips()') Close

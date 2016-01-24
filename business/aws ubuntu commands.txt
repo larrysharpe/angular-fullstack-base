@@ -28,3 +28,7 @@ chown ubuntu:ubuntu -R www
 
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 iptables -t nat -L -n --line-number
+
+
+set production mode on server:
+http://www.hacksparrow.com/running-express-js-in-production-mode.html

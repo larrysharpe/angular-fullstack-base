@@ -1,0 +1,8 @@
+.input-group(ng-if="!tipsOpen")
+  .btn-group(ng-class='{open: showsOpen}')
+    button.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', ng-click='showsOpen=!showsOpen')
+      | Shows
+      span.caret
+    ul.dropdown-menu
+      li(ng-repeat="choice in ['Private','Vip','Group']", ng-click="setChoiceIndex($index);$parent.showsOpen =!$parent.showsOpen")
+        a(href="#") {{choice}}

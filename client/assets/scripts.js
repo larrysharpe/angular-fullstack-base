@@ -6,7 +6,7 @@ var initVideoConfig = function (){
   var config = {
     broadcaster: $scope.broadcaster.slug,
     streamServer: 'rtmp://localhost/videochat/'
-    //streamServer: "rtmp://52.90.74.122:1935/videochat" //prod
+    //streamServer: "rtmp://52.90.39.216:1935/videochat" //prod
   };
   return config;
 }

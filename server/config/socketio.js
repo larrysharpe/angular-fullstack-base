@@ -78,34 +78,76 @@ module.exports = function (socketio) {
           Users.findOne({slug: tips.from}, function (err, user){
             if(err) { }
             if(!user) {  }
-            user.credits.units -= tips.amount;
-            user.credits.history.push(history);
-            user.save(function (err, userFrom){
-              if(err) {  }
-              if(!userFrom) {  }
-              Users.findOne({slug: tips.to}, function (err, user){
-                if(err) {  }
-                if(!user) {  }
-                user.credits.units += tips.amount;
-                user.credits.history.push(history);
-                user.save(function (err, user){
-                  if(err) {  }
-                  if(!user) {  }
-                  if(!tips.hideTip) {
-                    var content = ' tipped ' + tips.amount + ' tokens.';
-                    if (tips.tipNote) content += '<br>"' + tips.tipNote + '"';
-                    _tmpTip.content = content;
-                    _tmpTip.type = 'tip';
-                    if(_tmpTip.amount > 99) _tmpTip.subType = 'multiRing';
-                    else _tmpTip.subType = 'singleRing';
-
-                    socket.emit('message:rcv', _tmpTip);
-                    socket.in(room).emit('message:rcv', _tmpTip);
+            if(tips.amount > user.credits.units) {
+              cb({error: 'not enough tokens', errorCode: 101})
+            }else {
+              user.credits.units -= tips.amount;
+              user.credits.history.push(history);
+              user.save(function (err, userFrom) {
+                if (err) {
+                }
+                if (!userFrom) {
+                }
+                Users.findOne({slug: tips.to}, function (err, user) {
+                  if (err) {
                   }
-                  cb(userFrom);
+                  if (!user) {
+                  }
+                  user.credits.units += tips.amount;
+                  user.credits.history.push(history);
+                  user.save(function (err, user) {
+                    if (err) {
+                    }
+                    if (!user) {
+                    }
+                    if (!tips.hideTip) {
+                      var content;
+                      _tmpTip.type = 'tip';
+
+                      if (_tmpTip.amount > 999) _tmpTip.subType = 'tipLevel4';
+                      else if (_tmpTip.amount > 499) _tmpTip.subType = 'tipLevel3';
+                      else if (_tmpTip.amount > 99) _tmpTip.subType = 'tipLevel2';
+                      else _tmpTip.subType = 'tipLevel1';
+
+                      if(_tmpTip.rain) {
+                        var rainAmount = _tmpTip.amount / 10;
+                        var rainMsg =   {
+                          content: 'has made it rain!',
+                          from: _tmpTip.from,
+                          subType: _tmpTip.subType,
+                          to: _tmpTip.to,
+                          type: "tip"
+                        }
+                        var rainTips =   {
+                          amount: rainAmount,
+                          content: " tipped "+ rainAmount +" tokens.",
+                          from: _tmpTip.from,
+                          hideTip: _tmpTip.hideTip,
+                          rain: _tmpTip.rain,
+                          subType: _tmpTip.subType,
+                          to: _tmpTip.to,
+                          type: "tip"
+                        }
+
+                        var _tmpMsg = {rain: true, main: rainMsg, tips: rainTips}
+
+                        socket.emit('message:rcv', _tmpMsg);
+                        socket.in(room).emit('message:rcv', _tmpMsg);
+                      } else {
+                        content = ' tipped ' + tips.amount + ' tokens.';
+                        _tmpTip.content = content;
+                        socket.emit('message:rcv', _tmpTip);
+                        socket.in(room).emit('message:rcv', _tmpTip);
+                      }
+
+
+
+                    }
+                    cb(userFrom);
+                  });
                 });
               });
-            });
+            }
           });
         }
       });

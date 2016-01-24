@@ -30,7 +30,7 @@ angular.module('baseApp')
 
       var screenStatuses = ['public','group', 'private', 'meter', 'password', 'vip'];
 
-      if($scope.broadcaster.status.online === 'online'){
+      if($scope.broadcaster  && $scope.broadcaster.status.online === 'online'){
         if(screenStatuses.indexOf($scope.broadcaster.status.show) > -1){
           return true;
         } else {

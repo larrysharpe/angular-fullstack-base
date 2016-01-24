@@ -14,22 +14,8 @@
       span(ng-if="broadcaster.status.show == 'vip'"){{broadcaster.username}} is in a vip show.
       span(ng-if="broadcaster.status.show == 'password'"){{broadcaster.username}} is in a password show.
   .controls
-    tip-component
-    .btn-group
-      button.btn.btn-danger(type='button') Action
-      button.btn.btn-danger.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-        span.caret
-        span.sr-only Toggle Dropdown
-      ul.dropdown-menu
-        li
-          a(href='#') Action
-        li
-          a(href='#') Another action
-        li
-          a(href='#') Something else here
-        li.divider(role='separator')
-        li
-          a(href='#') Separated link
+    tip-component.left
+    show-component.left
 .left
   h1 Here is my topic
   room-chat
