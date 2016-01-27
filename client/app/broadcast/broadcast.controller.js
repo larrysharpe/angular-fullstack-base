@@ -13,7 +13,7 @@ angular.module('baseApp')
     $scope.user = Auth.getCurrentUser();
     $scope.broadcaster = Auth.getCurrentUser();
     $scope.camState = 'offline';
-    socket.emit('init', {room: $scope.slug, user: $scope.user.slug});
+    socket.emit('init', {room: $scope.user.slug + '_public', user: $scope.user.slug});
 
 
     $scope.doConnect = function () {

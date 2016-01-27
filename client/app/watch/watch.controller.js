@@ -9,7 +9,7 @@ angular.module('baseApp')
       $location.path('/broadcast');
     }
 
-    socket.emit('init', {room: $scope.slug, user: $scope.user.slug});
+    socket.emit('init', {room: $stateParams.slug + '_public', user: $scope.user.slug});
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
