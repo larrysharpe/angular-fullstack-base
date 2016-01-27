@@ -1,17 +1,21 @@
-div(ng-if="convos")
+div(ng-if="convos && pmopen")
+  div
+    a(ng-click="togglePm()") Close X
+    span {{convoCount()}}
   div
     .chat-box.left
       div
         h2 {{convos[selectedConvo].username}}
         ul.list-unstyled
           li.msg(ng-repeat="msg in convos[selectedConvo].messages", class="{{::msg.type}} {{::msg.subType}}")
-            b {{::msg.from}}:&nbsp;
+            b {{::msg.fromUsername}}:&nbsp;
             span {{::msg.content}}
-    div.user-list
+    div.user-list(ng-if='hasMultipleConvos()')
       ul.list-unstyled
         li(ng-repeat='(username,user) in convos')
           a(href='', ng-click='selectUser(username)') {{user.username}}
             span(ng-show='user.unread') {{user.unread}}
+          a(href='', ng-click='closeConvo(username)') X
   form(ng-submit="sendMessage()")
     p
       input.form-control(placeholder="Enter your chat here", ng-model="$parent.message")

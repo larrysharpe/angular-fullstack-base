@@ -16,33 +16,9 @@ angular.module('baseApp')
       },
       controller: function ($scope, $http, socket, $stateParams){
 
-        $scope.pmopen = false;
-        $scope.togglePm = function (){
-          console.log('toggle pm called');
-          var to = $scope.broadcaster.slug + '_direct';
-
-          if(!$scope.convos) {
-            $scope.selectedConvo = to;
-            $scope.convos = {};
-          }
-
-          $scope.convos[to] = {
-            username: $scope.broadcaster.username,
-            messages: [],
-            active: true
-          }
-
-          $scope.pmopen = !$scope.pmopen;
-        }
-
-        $scope.$on('togglepm', $scope.togglePm)
-
-        $scope.selectUser = function (input){
-          $scope.selectedConvo = input;
-          $scope.convos[input].unread = 0;
-        }
-        $scope.convos;
-
+        var convoCount = function () {
+          return Object.keys($scope.convos).length;
+        };
         var postMessage = function (msg){
           if(!$scope.convos) $scope.convos = {};
           if(!$scope.convos[msg.from]){
@@ -58,14 +34,35 @@ angular.module('baseApp')
             if(!$scope.convos[msg.from].unread) $scope.convos[msg.from].unread = 1;
             else $scope.convos[msg.from].unread++;
           }
-        };
 
+          $scope.pmopen = true;
+        };
         var postMessageSent = function (msg){
           $scope.convos[msg.to].messages.push(msg);
         };
+        var selectFirstConvo = function () {
+          for(var convo in $scope.convos){
+            $scope.selectUser(convo);
+            break;
+          }
+        };
+        var singleConvoCheck = function () {
+          if(!$scope.hasMultipleConvos()) selectFirstConvo();
+        };
 
-        socket.on('privatemessage:rcv', postMessage);
-
+        $scope.convos;
+        $scope.pmopen = false;
+        $scope.closeConvo = function (input) {
+          delete $scope.convos[input];
+          singleConvoCheck()
+        };
+        $scope.hasMultipleConvos = function (){
+          return convoCount() > 1;
+        };
+        $scope.selectUser = function (input){
+          $scope.selectedConvo = input;
+          if($scope.convos && $scope.convos[input].unread)$scope.convos[input].unread = 0;
+        };
         $scope.sendMessage = function () {
 
           var msg = {
@@ -80,6 +77,28 @@ angular.module('baseApp')
           socket.emit('privatemessage:send', msg, postMessageSent );
           $scope.message = '';// clear message box
         };
+        $scope.togglePm = function (){
+          console.log('toggle pm called');
+          var to = $scope.broadcaster.slug + '_direct';
+
+          if(!$scope.convos) {
+            $scope.selectUser(to);
+            $scope.convos = {};
+          }
+
+          if (!$scope.convos[to]) {
+            $scope.convos[to] = {
+              username: $scope.broadcaster.username,
+              messages: [],
+              active: true
+            }
+          }
+
+          $scope.pmopen = !$scope.pmopen;
+        };
+
+        $scope.$on('togglepm', $scope.togglePm);
+        socket.on('privatemessage:rcv', postMessage);
       }
     };
   });
