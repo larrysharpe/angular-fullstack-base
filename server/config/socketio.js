@@ -8,6 +8,13 @@ var Messages = require('../api/message/message.model');
 var Users = require('../api/user/user.model');
 var config = require('./environment');
 
+
+
+var clients = {};
+var rooms = {};
+var sockets = {};
+
+
 // When the user disconnects.. perform this
 function onDisconnect(socket) {
 }
@@ -49,11 +56,42 @@ module.exports = function (socketio) {
       console.info('[%s] DISCONNECTED', socket.address);
     });
 
-    socket.on('join:room', function(room, cb){
-      socket.join(room);
-      console.log('join room: ', room);
-      cb('joined')
-    });
+    var initClient = function (data, b){
+      console.log('Init Client: ', socket.id, data);
+
+      if(data.room) socket.join(data.room);
+      socket.join(data.user + '_direct');
+
+      console.log('Direct Join: ',data.user, data.user + '_direct');
+
+      var sockObj = {user: data.user, room: data.room, socket: socket.id};
+      sockets[socket.id] = sockObj;
+
+
+      if(clients[data.user]) {
+        if(data.room){
+          var roomIndex = clients[data.user].rooms.indexOf(data.room)
+          if(roomIndex === -1) clients[data.user].rooms.push(data.room);
+        }
+      } else {
+        clients[data.user] = {
+          socket: socket.id
+        };
+        if (data.room) clients[data.user].rooms = [data.room];
+      }
+
+
+
+      if (data.room && rooms[data.room]) {
+        if(rooms[data.room].indexOf(data.user) === -1) rooms[data.room].push(data.user);
+      } else if (data.room) rooms[data.room] = [data.user];
+
+      console.log('Clients: ',clients);
+      console.log('Rooms: ',rooms);
+      console.log('Sockets: ',sockets);
+    };
+
+    socket.on('init', initClient);
 
     socket.on('tip:send', function(tip, cb){
       var _tmpTip = tip;
@@ -139,9 +177,6 @@ module.exports = function (socketio) {
                         socket.emit('message:rcv', _tmpTip);
                         socket.in(room).emit('message:rcv', _tmpTip);
                       }
-
-
-
                     }
                     cb(userFrom);
                   });
@@ -169,6 +204,15 @@ module.exports = function (socketio) {
         cb(msg);
       })
 
+    });
+
+    socket.on('privatemessage:send', function (data, cb) {
+      Messages.create(data, function(err, msg){
+        if(err) cb({error: err});
+        if(!msg) cb({error: 'Message not created'});
+        socket.to(data.to).emit('privatemessage:rcv', data);
+        cb(data);
+      });
     });
 
     socket.on('cam:status', function (data, cb) {

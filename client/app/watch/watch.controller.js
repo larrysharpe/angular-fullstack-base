@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket) {
+  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, $rootScope) {
     $scope.slug = $stateParams.slug;
     $scope.user = Auth.getCurrentUser();
 
@@ -9,8 +9,7 @@ angular.module('baseApp')
       $location.path('/broadcast');
     }
 
-    socket.emit('join:room', $scope.slug + '_public', function(ret){console.log(ret);});
-
+    socket.emit('init', {room: $scope.slug, user: $scope.user.slug});
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;

@@ -12,4 +12,8 @@ div(ng-include='"components/navbar/navbar.html"')
           small We're sorry {{slug}} does not exist.
           p
             Please checkout our other models below.
+      .extras
+        h1 Extras
+        pm-button
 div(ng-include='"components/broadcasterSuggestions/broadcasterSuggestions.html"')
+private-chat(user='user', broadcaster='broadcaster')

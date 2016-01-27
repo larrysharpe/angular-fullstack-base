@@ -69,8 +69,6 @@ angular.module('baseApp')
 
         var postMessage = function (msg){
           if(msg.rain) {
-
-
             $scope.messages.push(msg.main);
             for(var i = 0; i < 10; i ++){
               $scope.messages.push(msg.tips);

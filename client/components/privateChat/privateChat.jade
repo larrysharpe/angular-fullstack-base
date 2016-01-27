@@ -1,0 +1,17 @@
+div(ng-if="convos")
+  div
+    .chat-box.left
+      div
+        h2 {{convos[selectedConvo].username}}
+        ul.list-unstyled
+          li.msg(ng-repeat="msg in convos[selectedConvo].messages", class="{{::msg.type}} {{::msg.subType}}")
+            b {{::msg.from}}:&nbsp;
+            span {{::msg.content}}
+    div.user-list
+      ul.list-unstyled
+        li(ng-repeat='(username,user) in convos')
+          a(href='', ng-click='selectUser(username)') {{user.username}}
+            span(ng-show='user.unread') {{user.unread}}
+  form(ng-submit="sendMessage()")
+    p
+      input.form-control(placeholder="Enter your chat here", ng-model="$parent.message")

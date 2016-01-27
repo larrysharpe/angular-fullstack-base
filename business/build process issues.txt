@@ -1,0 +1,2 @@
+Line Separators
+  https://github.com/ericclemmons/grunt-angular-templates/issues/116

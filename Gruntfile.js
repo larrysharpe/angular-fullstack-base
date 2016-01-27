@@ -314,6 +314,11 @@ module.exports = function (grunt) {
 
     // Package all the html partials into a single javascript payload
     ngtemplates: {
+      app: {
+        options: {
+          prefix: '/'
+        }
+      },
       options: {
         // This should be the name of your apps angular module
         module: 'baseApp',
