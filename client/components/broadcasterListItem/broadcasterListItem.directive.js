@@ -21,22 +21,16 @@ angular.module('baseApp')
           }
 
           var handleSetFaves = function (data) {
-            console.log('handlesetfaves: ', data, $scope.broadcaster);
-            Auth.setFaves(data.faves);
+            $scope.faves = data.faves;
           };
 
-
-          var handleUnsetFaves = function (data) {
-            console.log('handleunsetfaves: ', data);
-            Auth.setFaves(data.faves);
-          };
 
           $scope.fave = function (id, index) {
             socket.emit('fave:set',{_id: userId, faves: [id]}, handleSetFaves);
           }
 
           $scope.unFave = function (id) {
-            socket.emit('fave:unset',{_id: userId, faves: [id]}, handleUnsetFaves);
+            socket.emit('fave:unset',{_id: userId, faves: [id]}, handleSetFaves);
           }
         }
       }

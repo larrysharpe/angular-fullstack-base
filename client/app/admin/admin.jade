@@ -3,6 +3,10 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-main
   .container
     .row
+      .col-xs-12
+        p
+          a(ng-click='seedDB()') Seed The DB
+    .row
       .col-md-6
         table.table.table-striped.table-bordered
           caption Users

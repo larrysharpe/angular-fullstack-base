@@ -15,6 +15,13 @@ angular.module('baseApp')
       show: ['offline','public', 'group', 'private', 'booked private', 'vip', 'courtesy', 'meter', 'goal', 'password']
     };
 
+    $scope.seedDB = function (){
+      $http.post('/api/users/createBatch')
+        .success(function(data){
+          console.log(data);
+        })
+    }
+
     $scope.statusOnlineChange = function (user){
       var obj = {
         slug: user.slug,

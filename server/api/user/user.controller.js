@@ -69,6 +69,11 @@ exports.createBatch = function (req, res){
     var usr = {
       email: convertToEmail(usernames[i]),
       password: "aaa",
+      status: {
+        online: false,
+        show: 'offline',
+        availability: 'offline'
+      },
       roles: role,
       provider: 'local',
       username: usernames[i],

@@ -17,7 +17,6 @@ angular.module('baseApp')
         var user = Auth.getCurrentUser();
 
         var handleGetBroadcasters = function (data){
-          console.log('handleGetBroadcasters',data);
           if(data.status === 'success'){
             $scope.broadcasters = data.broadcasters;
           }
@@ -28,7 +27,6 @@ angular.module('baseApp')
         }
 
         socket.on('status:change', function (data) {
-          console.log('status:change',data);
           $scope.getList();
         });
 
