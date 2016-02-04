@@ -22,7 +22,20 @@ angular.module('baseApp')
         })
     }
 
-    $scope.statusOnlineChange = function (user){
+
+    var handleStatusAvailability = function (d) {
+      console.log(d)
+    };
+
+    var handleStatusOnline = function (d) {
+      console.log(d)
+    };
+
+    var handleStatusShow = function (d) {
+      console.log(d)
+    };
+
+    $scope.statusOnlineChange = function (user, index){
       var obj = {
         slug: user.slug,
         status: {
@@ -30,29 +43,30 @@ angular.module('baseApp')
         },
         index: index
       };
-      socket.emit('status:change', obj);
+      socket.emit('status:change', obj, handleStatusOnline);
     };
 
-    $scope.statusAvailabilityChange = function (user){
+
+    $scope.statusAvailabilityChange = function (user, index){
       var obj = {
         slug: user.slug,
         status: {
-          availability: user.status.online
+          availability: user.status.availability
         },
         index: index
       };
-      socket.emit('status:change', obj);
+      socket.emit('status:change', obj, handleStatusAvailability);
     };
 
-    $scope.statusShowChange = function (user){
+    $scope.statusShowChange = function (user, index){
       var obj = {
         slug: user.slug,
         status: {
-          show: user.status.online
+          show: user.status.show
         },
         index: index
       };
-      socket.emit('status:change', obj);
+      socket.emit('status:change', obj, handleStatusShow);
     };
 
     $scope.updateStatusOnline = function (status, slug, index){
@@ -63,7 +77,7 @@ angular.module('baseApp')
         },
         index: index
       };
-      socket.emit('status:change', obj);
+      socket.emit('status:change', obj, handleStatusOnline);
     } ;
 
     $scope.isOnline = function (val) {

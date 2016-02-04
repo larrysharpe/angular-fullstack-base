@@ -21,12 +21,12 @@ div(ng-include='"components/navbar/navbar.html"')
               a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
             td {{::user.roles.join(',')}}
             td
-              select(ng-model='user.status.online', ng-change='statusOnlineChange(user.status.online)')
+              select(ng-model='user.status.online', ng-change='statusOnlineChange(user)')
                 option(ng-repeat='opt in options.online', value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
             td
-              select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user.status.availability)')
+              select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user)')
             td
-              select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user.status.show)')
+              select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user)')
             td(ng-if="needsBroadcasterApproval($index)")
               span
                 a(href="", ng-click="approveBroadcaster(user,$index)") Approve
