@@ -106,8 +106,14 @@
         console.log('Initiating Camera');
         initCamera();
       }
-      private function onConnectFail(e = null) {}
-      private function onConnectReject(e = null){}
+      private function onConnectFail(e = null) {
+        console.log('Connection Failed');
+        browser.camStatus('connectionFailed');
+      }
+      private function onConnectReject(e = null){
+        console.log('Connection Rejected');
+        browser.camStatus('connectionRejected');
+      }
 
       // Cam Events
       private function onCamDenied(e = null){

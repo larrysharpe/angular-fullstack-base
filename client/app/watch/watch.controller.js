@@ -9,7 +9,12 @@ angular.module('baseApp')
       $location.path('/broadcast');
     }
 
-    socket.emit('init', {room: $stateParams.slug + '_public', user: $scope.user.slug});
+    var userObj = {
+      slug: $scope.user.slug,
+      username: $scope.user.username
+    };
+
+    socket.emit('init', {room: $stateParams.slug + '_public', user: userObj});
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
@@ -59,7 +64,7 @@ angular.module('baseApp')
     }
 
 
-    socket.on('cam:status', function (data) {
+    socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
       if(data.status.show) $scope.broadcaster.status.show = data.status.show;
       if(data.status.online) $scope.broadcaster.status.online = data.status.online;

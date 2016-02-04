@@ -9,19 +9,26 @@ angular.module('baseApp')
         type: '@',
         header: '@'
       },
-      controller: function ($scope, socket, broadcasterListSVC){
+      controller: function ($scope, socket, broadcasterListSVC, Auth){
 
         if (!$scope.header) $scope.header = '';
         if(!$scope.type) $scope.type = '';
 
+        var user = Auth.getCurrentUser();
+
+        var handleGetBroadcasters = function (data){
+          console.log('handleGetBroadcasters',data);
+          if(data.status === 'success'){
+            $scope.broadcasters = data.broadcasters;
+          }
+        };
+
         $scope.getList = function () {
-          broadcasterListSVC.get($scope.type).then(function(response){
-            $scope.broadcasters = response.data;
-          });
+          socket.emit('broadcasters:get', user, handleGetBroadcasters);
         }
 
-        socket.on('cam:status', function (data) {
-          console.log(data);
+        socket.on('status:change', function (data) {
+          console.log('status:change',data);
           $scope.getList();
         });
 

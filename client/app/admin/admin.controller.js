@@ -4,7 +4,67 @@ angular.module('baseApp')
   .controller('AdminCtrl', function ($scope, $http, Auth, User, socket) {
 
     // Use the User $resource to fetch all users
-    $scope.users = User.query();
+
+    var handleLoadUsers = function (users) {
+      $scope.users = users;
+    };
+
+    $scope.options = {
+      online: [{label:'online', value: true}, {label: 'offline', value: false}],
+      availability: ['offline', 'online',  'on call', 'away', 'busy'],
+      show: ['offline','public', 'group', 'private', 'booked private', 'vip', 'courtesy', 'meter', 'goal', 'password']
+    };
+
+    $scope.statusOnlineChange = function (user){
+      var obj = {
+        slug: user.slug,
+        status: {
+          online: user.status.online
+        },
+        index: index
+      };
+      socket.emit('status:change', obj);
+    };
+
+    $scope.statusAvailabilityChange = function (user){
+      var obj = {
+        slug: user.slug,
+        status: {
+          availability: user.status.online
+        },
+        index: index
+      };
+      socket.emit('status:change', obj);
+    };
+
+    $scope.statusShowChange = function (user){
+      var obj = {
+        slug: user.slug,
+        status: {
+          show: user.status.online
+        },
+        index: index
+      };
+      socket.emit('status:change', obj);
+    };
+
+    $scope.updateStatusOnline = function (status, slug, index){
+      var obj = {
+        slug: slug,
+        status: {
+          online: status
+        },
+        index: index
+      };
+      socket.emit('status:change', obj);
+    } ;
+
+    $scope.isOnline = function (val) {
+      if (val) return 'online';
+      else return 'offline';
+    }
+
+    $http.get('/api/users/adminHome').success(handleLoadUsers);
 
     $scope.delete = function (user) {
       User.remove({id: user._id});
@@ -47,8 +107,7 @@ angular.module('baseApp')
       var obj = {
         slug: slug,
         status: {
-          show: '',
-          online: ''
+          show: ''
         },
         index: index
       };
@@ -56,12 +115,9 @@ angular.module('baseApp')
       if(status === 'camDenied')obj.status.show = 'offline';
       else obj.status.show = status;
 
-      obj.status.online = 'online';
-
-      socket.emit('cam:status', obj);
+      socket.emit('status:change', obj);
     }
-    socket.on('cam:status', function (data) {
-      console.log('cam:status', data);
+    socket.on('status:change', function (data) {
       for(var i = 0; i < $scope.users.length; i++){
         if ($scope.users[i].slug === data.slug){
           $scope.users[i].status = data.status;

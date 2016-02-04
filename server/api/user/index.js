@@ -17,6 +17,7 @@ router.get('/broadcasters/:slug', controller.getBroadcaster);
 router.get('/broadcasters', controller.broadcasters);
 router.get('/resendVerification/:id', controller.resendVerification);
 router.get('/guest', controller.guest);
+router.get('/adminHome', controller.adminHome);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/:id/faves', auth.isAuthenticated(), controller.listFaves);
 router.get('/:id', auth.isAuthenticated(), controller.show);

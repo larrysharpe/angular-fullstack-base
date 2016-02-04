@@ -7,7 +7,7 @@ angular.module('baseApp')
       restrict: 'EA',
       link: function (scope, element, attrs) {
       },
-      controller: function ($scope, Auth, $http) {
+      controller: function ($scope, Auth, $http, socket) {
 
         var userId = Auth.getCurrentUser()._id;
 
@@ -20,22 +20,23 @@ angular.module('baseApp')
             return $scope.faves.indexOf(id) > -1;
           }
 
-          $scope.fave = function (id) {
-            console.log($scope.faves);
-            $http.post('/api/users/' + userId + '/faves/set', {ids: [id]})
-              .success(function (faves) {
-                $scope.faves = faves;
-                Auth.setFaves(faves);
-              });
+          var handleSetFaves = function (data) {
+            console.log('handlesetfaves: ', data, $scope.broadcaster);
+            Auth.setFaves(data.faves);
+          };
+
+
+          var handleUnsetFaves = function (data) {
+            console.log('handleunsetfaves: ', data);
+            Auth.setFaves(data.faves);
+          };
+
+          $scope.fave = function (id, index) {
+            socket.emit('fave:set',{_id: userId, faves: [id]}, handleSetFaves);
           }
 
           $scope.unFave = function (id) {
-            console.log($scope.faves);
-            $http.post('/api/users/' + userId + '/faves/unset', {ids: [id]})
-              .success(function (faves) {
-                $scope.faves = faves;
-                Auth.setFaves(faves);
-              });
+            socket.emit('fave:unset',{_id: userId, faves: [id]}, handleUnsetFaves);
           }
         }
       }

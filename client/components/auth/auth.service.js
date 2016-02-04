@@ -22,7 +22,8 @@ angular.module('baseApp')
     var getGuest = function(data){
       currentUser = {
         username: 'Guest ' + data.guestNo,
-        slug: 'guest-' + data.guestNo
+        slug: 'guest-' + data.guestNo,
+        loggedIn: false
       };
       deferred.resolve(data);
       console.log('user created');

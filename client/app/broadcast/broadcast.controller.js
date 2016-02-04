@@ -3,7 +3,7 @@
 angular.module('baseApp')
   .controller('BroadcastCtrl', function ($scope, $http, $stateParams, Auth, socket) {
 
-    socket.on('cam:status', function (data) {
+    socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
       if(data.status.show) $scope.user.status.show = data.status.show;
       if(data.status.online) $scope.user.status.online = data.status.online;
@@ -15,9 +15,12 @@ angular.module('baseApp')
     $scope.camState = 'offline';
     socket.emit('init', {room: $scope.user.slug + '_public', user: $scope.user.slug});
 
-
-    $scope.doConnect = function () {
+    $scope.doConnect = function (show) {
       $scope.camState = 'going-online';
+
+
+      var connector = {method: 'connect', connectUrl: cwlGlobal.streamServer};
+
       callToActionscript('connect');
     };
 
@@ -52,7 +55,7 @@ angular.module('baseApp')
     }
 
     $scope.camStatus = function (status){
-      socket.emit('cam:status', {
+      socket.emit('status:change', {
         slug: $scope.user.slug,
         status: status
       }, function(data){

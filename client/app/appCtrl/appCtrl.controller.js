@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('AppCtrl', function ($scope, socket, ngToast) {
-
+  .controller('AppCtrl', function ($scope, socket, ngToast, Auth, $stateParams) {
     var broadcasterPublic = function (data){
       var onlineToast = '<a href="/watch/'+data.slug+'">'+data.username+'</a> is in Public.';
 

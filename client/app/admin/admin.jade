@@ -9,21 +9,22 @@ div(ng-include='"components/navbar/navbar.html"')
           tr
             th Username
             th Roles
-            th Status
-            th(colspan=3) Actions
+            th Online
+            th Availability
+            th Show
           tr(ng-repeat="user in users | orderBy:'username' ")
             td
               a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
             td {{::user.roles.join(',')}}
             td
+              select(ng-model='user.status.online', ng-change='statusOnlineChange(user.status.online)')
+                option(ng-repeat='opt in options.online', value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
+            td
+              select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user.status.availability)')
+            td
+              select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user.status.show)')
+            td(ng-if="needsBroadcasterApproval($index)")
               span
-                | {{user.status}}
-            td
-              span(ng-repeat="status in statuses.show")
-                a(href="#", ng-click="setStatus(status, $parent.$index, user.slug)") {{status}}
-                | |
-            td
-              span(ng-if="needsBroadcasterApproval($index)")
                 a(href="", ng-click="approveBroadcaster(user,$index)") Approve
                 a(href="", ng-click="denyBroadcaster(user,$index)") Deny
             td

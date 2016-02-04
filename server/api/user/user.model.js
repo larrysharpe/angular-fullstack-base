@@ -180,8 +180,12 @@ var UserSchema = new Schema({
   created: {type: Date, required: true, default: new Date()},
   lastLogin: Date,
   status: {
-
     online: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    availability: {
       type: String,
       default: 'offline',
       enum: ['offline', 'online',  'on call', 'away',

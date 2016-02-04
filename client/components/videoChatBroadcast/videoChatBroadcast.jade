@@ -17,3 +17,11 @@
 .left
   h1(contentEditable="true") Here is my topic
   room-chat
+ul.request-list.left.list-unstyled
+  li(ng-repeat='req in requests track by $index')
+    p
+      b {{req.broadcaster.name}}
+      |  wants a {{req.show}} show.
+    p
+      button.btn.btn-success(ng-click='acceptShow($index)') Accept
+      button.btn.btn-danger(ng-click='denyShowStep1($index)') Deny
