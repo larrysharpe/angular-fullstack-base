@@ -22,7 +22,7 @@ div(ng-include='"components/navbar/navbar.html"')
             td {{::user.roles.join(',')}}
             td
               select(ng-model='user.status.online', ng-change='statusOnlineChange(user)')
-                option(ng-repeat='opt in options.online', value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
+                option(ng-repeat='opt in options.online', ng-value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
             td
               select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user)')
             td

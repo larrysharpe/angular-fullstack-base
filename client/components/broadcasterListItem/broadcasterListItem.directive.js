@@ -11,10 +11,23 @@ angular.module('baseApp')
 
         var userId = Auth.getCurrentUser()._id;
 
+        $scope.returnStatusClass = function (status){
+          if (!status.online || (status.availability === 'offline' && status.show === 'offline')) return 'offline';
+          else if (status.show === 'offline') return status.availability.replace(' ','-');
+          else return status.show.replace(' ','-');
+        }
+
+        $scope.returnStatusName = function (status){
+          if (!status.online || (status.availability === 'offline' && status.show === 'offline')) return 'offline';
+          else if (status.show === 'offline') return status.availability;
+          else return status.show;
+        }
+
+
         if (userId) {
           $scope.faves = Auth.getCurrentUser().faves;
 
-          $scope.faved = false;
+          $scope.faved = $scope.faves.indexOf($scope.broadcaster._id) > -1
 
           $scope.isFaved = function (id) {
             return $scope.faves.indexOf(id) > -1;

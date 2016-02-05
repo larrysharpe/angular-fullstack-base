@@ -1,11 +1,11 @@
 .broadcaster-list-item
   .inside
-    .status(class="{{broadcaster.status.show}}") {{broadcaster.status.show}}
+    .status(class="{{returnStatusClass(broadcaster.status)}}") {{returnStatusName(broadcaster.status)}}
     a.avatar(href="/watch/{{broadcaster.slug}}")
       img(src="", width="100%", height="100%")
       //img(src="http://loremflickr.com/320/240/woman,sexy/all?radn={{broadcaster._id}}", width="100%", height="100%")
     a.username(href="/watch/{{broadcaster.slug}}") {{broadcaster.username}}
-    a(href="#", ng-if="isFaved(broadcaster._id)")
+    a(href="#", ng-if="faved")
       span.fa.fa-heart.text-danger(title="UnFave Me", ng-click="unFave(broadcaster._id)")
-    a(href="#", ng-if="!isFaved(broadcaster._id)")
+    a(href="#", ng-if="!faved")
       span.fa.fa-heart-o.text-danger(title="Fave Me", ng-click="fave(broadcaster._id)")

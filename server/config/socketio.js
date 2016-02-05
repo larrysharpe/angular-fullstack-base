@@ -301,7 +301,7 @@ module.exports = function (socketio) {
       });
     }
 
-    var sortOrderList = ['public','on call','vip','group','meter','goal','password','courtesy','pvt'];
+    var sortOrderList = ['public','on call','vip','group','meter','goal','password','courtesy','private','offline'];
     var broadcasterShowSort = function (a,b) {
       var c = sortOrderList.indexOf(a.status.show);
       var d = sortOrderList.indexOf(b.status.show);
@@ -326,13 +326,11 @@ module.exports = function (socketio) {
       var faves = [];
       var i = 0;
 
-      if (data.roles.indexOf('user') > -1 && data.faves.length){
+      if (data.roles && data.faves.length){
         for(i; i < data.faves.length; i++){
           faves.push(data.faves[i]);
         }
       }
-
-      console.log(faves);
 
       Users.find({roles: 'broadcaster'}, 'slug username status', function(err, broadcasters){
         if (err) { cb({status: 'error', err: err}); }
@@ -350,10 +348,12 @@ module.exports = function (socketio) {
             else offline.push(broadcasters[i]);
           }
 
+
           console.log('online faves: ',onlineFaves.length);
           console.log('online: ',online.length);
           console.log('offline faves: ',offlineFaves.length);
           console.log('offline: ',offline.length);
+
 
           onlineFaves.sort(broadcasterShowSort);
           online.sort(broadcasterShowSort);
