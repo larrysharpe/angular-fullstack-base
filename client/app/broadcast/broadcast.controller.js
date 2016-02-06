@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('BroadcastCtrl', function ($scope, $http, $stateParams, Auth, socket) {
+  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket) {
 
     socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
@@ -62,5 +62,15 @@ angular.module('baseApp')
         $scope.camState = data.user.status.show;
       });
     }
+
+    var data = {
+      page: $state.current.name,
+      user: {
+        slug: $scope.user.slug,
+        username: $scope.user.username
+      }
+    };
+
+    socket.emit('init', data);
 
   });

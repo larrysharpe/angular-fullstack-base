@@ -11,10 +11,10 @@ var initVideoConfig = function (){
   var $scope = angular.element('#video-swf').scope();
   cwlGlobal.broadcaster = $scope.broadcaster.slug;
   cwlGlobal.show = $scope.broadcaster.status.show;
-  cwlGlobal.broadcasterUrl = serverURL + broadcaster + '/';
-  cwlGlobal.streamServer = serverURL + broadcaster + ((show && show !== 'public') ? '/' + show : '');
+  cwlGlobal.broadcasterUrl = cwlGlobal.serverURL + cwlGlobal.broadcaster + '/';
+  cwlGlobal.streamServer = cwlGlobal.serverURL + cwlGlobal.broadcaster + ((cwlGlobal.show && cwlGlobal.show !== 'public') ? '/' + cwlGlobal.show : '');
   var config = {
-    broadcaster:cwlGlobal. broadcaster,
+    broadcaster:cwlGlobal.broadcaster,
     streamServer: cwlGlobal.streamServer
   };
   return config;

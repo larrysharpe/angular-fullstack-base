@@ -153,6 +153,7 @@ module.exports = function (socketio) {
       });
     }
     var handlePrivateMessageSend = function (data, cb) {
+      console.log('receiving private message', data);
       Messages.create(data, function(err, msg){
         if(err) cb({error: err});
         if(!msg) cb({error: 'Message not created'});
@@ -199,7 +200,7 @@ module.exports = function (socketio) {
             else if (!user) cb({error: 'User Not Saved'});
             else {
               console.log(user.slug + 'status changed to: ', user.status);
-              socket.broadcast.emit('status:change');
+              socket.broadcast.emit('status:change', user);
               cb({user: user, index: data.index} );
             }
           })

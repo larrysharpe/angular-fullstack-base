@@ -1,5 +1,6 @@
 ﻿package com {
 
+  import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
   import flash.external.ExternalInterface;
   import com.Connector;
@@ -19,9 +20,9 @@
     var browser:ScriptInterface = new ScriptInterface();
     var publisher:Publisher;
     var webcam:WebCam;
+    var settings:Object;
 
 		public function Broadcast() {
-      console.log(broadcaster);
       ExternalInterface.addCallback("api", api);
       if(broadcaster === 'testing') initConnector();
     }
@@ -64,6 +65,12 @@
       connector.connect();
     }
 
+    private function loadSettings(){
+      console.log('--- Load Settings Called ---');
+      settings = ExternalInterface.call('initVideoConfig');
+      console.log('--- Load Settings Called ---');
+    };
+
     private function initPublish(){
       console.log('Starting Publish');
       console.log(connector);
@@ -77,14 +84,15 @@
       publisher.publish();
     }
 
-    function unPublish(){
+    private function unPublish(){
       publisher.unPublish();
     }
 
     public function api(name:String){
       var methods =  {
         connect: initConnector,
-        disconnect: unPublish
+        disconnect: unPublish,
+        loadSettings: loadSettings
       }
 
       console.log(name);

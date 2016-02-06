@@ -12,7 +12,7 @@ angular.module('baseApp')
     $scope.options = {
       online: [{label:'online', value: true}, {label: 'offline', value: false}],
       availability: ['offline', 'online',  'on call', 'away', 'busy'],
-      show: ['offline','public', 'group', 'private', 'booked private', 'vip', 'courtesy', 'meter', 'goal', 'password']
+      show: ['offline','public', 'group', 'private', 'booked private', 'vip', 'jukebox','courtesy', 'meter', 'goal', 'password']
     };
 
     $scope.seedDB = function (){

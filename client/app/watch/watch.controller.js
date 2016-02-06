@@ -29,12 +29,11 @@ angular.module('baseApp')
       return false;
     };
 
+    var screenStatuses = ['public', 'jukebox', 'group', 'private', 'meter', 'courtesy', 'password', 'vip'];
 
     $scope.showVid  = function () {
 
-      var screenStatuses = ['public','group', 'private', 'meter', 'password', 'vip'];
-
-      if($scope.broadcaster  && $scope.broadcaster.status.online === 'online'){
+      if($scope.broadcaster  && $scope.broadcaster.status.online === true){
         if(screenStatuses.indexOf($scope.broadcaster.status.show) > -1){
           return true;
         } else {

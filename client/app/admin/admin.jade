@@ -20,7 +20,7 @@ div(ng-include='"components/navbar/navbar.html"')
             td
               a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
             td {{::user.roles.join(',')}}
-            td
+            td {{user.status.online}}
               select(ng-model='user.status.online', ng-change='statusOnlineChange(user)')
                 option(ng-repeat='opt in options.online', ng-value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
             td
