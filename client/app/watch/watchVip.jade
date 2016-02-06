@@ -3,7 +3,7 @@ div(ng-include='"components/navbar/navbar.html"')
   .container
     .row
       .col-xs-12(ng-if="!broadcaster")
-        video-chat-watch(ng-if="showVid()")
+        video-chat-pvt(ng-if="showVid()")
       .extras
         h1 Extras
         pm-button
