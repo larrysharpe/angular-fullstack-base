@@ -6,6 +6,7 @@
 var Tips = require('../api/tips/tips.model');
 var Messages = require('../api/message/message.model');
 var Users = require('../api/user/user.model');
+var Show = require('../api/show/show.model');
 var config = require('./environment');
 var socketsToUsers = {};
 var usersToSockets = {};
@@ -164,24 +165,50 @@ module.exports = function (socketio) {
     var handleShowRequest = function (data, cb) {
       data.broadcaster.room = data.broadcaster.slug + '_direct';
       console.log('handle show request', data);
-      socket.to(data.broadcaster.room).emit('show:request:rcv', [data]);
-      cb({status: 'success', show: data.show});
+      var newShow = new Show(data);
+      newShow.save(function(err,show){
+        if(err) { cb({error: err}); }
+        else if (!show){ cb({error: 'Show Not Found'}); }
+        else {
+          socket.to(data.broadcaster.room).emit('show:request:rcv', [show]);
+          cb({status: 'success', show: show});
+        }
+      });
     };
     var handleShowRequestAccepted = function (d, cb){
-      d.user.room = d.user.slug + '_direct';
+      d.requestor.room = d.requestor.slug + '_direct';
 
-      Users.findOne({slug: d.broadcaster.slug}, function(err, user){
+      Show.findById(d._id, function(err, show){
         if(err) { cb({err: err, status: 'error'}); }
-        else if (!user) { cb({ err: 'user not found', status: 'error' }); }
+        else if (!show) { cb({ err: 'show not found', status: 'error' }); }
         else {
-          console.log('my user:', user, user.status, d)
-          user.status.show = d.show.toLowerCase();
-          user.save(function (err, user){
+
+          show.status = 'accepted';
+          show.started = new Date();
+
+          show.save(function(err,show){
             if(err) { cb({err: err, status: 'error'}); }
-            else if (!user) { cb({ err: 'user not saved', status: 'error' }); }
+            else if (!show) { cb({ err: 'show not found', status: 'error' }); }
             else {
-              socket.to(d.user.room).emit('show:requestAccepted:rcv',d);
-              cb({status: 'success'})
+              Users.findOne({slug: d.broadcaster.slug}, function(err, user){
+                if(err) { cb({err: err, status: 'error'}); }
+                else if (!user) { cb({ err: 'user not found', status: 'error' }); }
+                else {
+                  console.log('my user:', d)
+                  user.status.show = d.show.toLowerCase();
+                  user.save(function (err, user){
+                    if(err) { cb({err: err, status: 'error'}); }
+                    else if (!user) { cb({ err: 'user not saved', status: 'error' }); }
+                    else {
+
+                      console.log('######## user saved', user)
+
+                      socket.to(d.requestor.room).emit('show:requestAccepted:rcv',d);
+                      cb({status: 'success', show: show.show})
+                    }
+                  })
+                }
+              })
             }
           })
         }

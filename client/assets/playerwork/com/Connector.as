@@ -22,7 +22,7 @@ package com
 		}
 
 		public function disconnect(e = null){
-      console.log('NC Close');
+      console.log('NC Close'  );
       if(nc) nc.close();
       console.log('NC Null');
       nc = null;

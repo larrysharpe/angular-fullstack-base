@@ -1,21 +1,19 @@
 /**
  * Created by digitalxtasy on 10/1/2015.
  */
-var cwlGlobal = {
-broadcaster: '',
-serverURL: 'rtmp://localhost/videochat/',  //"rtmp://52.90.39.216:1935/videochat"
-show: ''
-};
+
+var swfConfig;
 
 var initVideoConfig = function (){
   var $scope = angular.element('#video-swf').scope();
-  cwlGlobal.broadcaster = $scope.broadcaster.slug;
-  cwlGlobal.show = $scope.broadcaster.status.show;
-  cwlGlobal.broadcasterUrl = cwlGlobal.serverURL + cwlGlobal.broadcaster + '/';
-  cwlGlobal.streamServer = cwlGlobal.serverURL + cwlGlobal.broadcaster + ((cwlGlobal.show && cwlGlobal.show !== 'public') ? '/' + cwlGlobal.show : '');
-  var config = {
-    broadcaster:cwlGlobal.broadcaster,
-    streamServer: cwlGlobal.streamServer
+   swfConfig = {
+    broadcaster: $scope.broadcaster.slug,
+    server: {
+      dev: 'rtmp://localhost/videochat/',
+      prod: 'rtmp://52.90.39.216:1935/videochat'
+    },
+    env: 'dev',
+    show: $scope.broadcaster.status.show
   };
   return config;
 }
@@ -29,10 +27,27 @@ function callToActionscript(input){
   return getFlashMovie("video-swf").api(input);
 }
 
+var watchTest = function (input){
+  console.log('watchTest', input);
+};
+
+var streamPlaying = function () {
+  var $scope = angular.element('.contain-watch').scope();
+  $scope.startTimer();
+};
+
+var streamNotPlaying = function (){
+  var $scope = angular.element('.contain-watch').scope();
+  $scope.stopTimer();
+}
+
 var camStatus = function (status){
   var statusObj = {};
+  var $scope = angular.element('.contain-broadcast').scope();
 
-  if(status === 'camDenied'){
+  if(status === 'inherit') {
+    statusObj.show = $scope.broadcaster.status.show;
+  } else if(status === 'camDenied'){
     statusObj.show = 'offline';
     statusObj.msg = 'You have denied access to your camera.';
   } else if(status === 'connectionFailed'){
@@ -45,7 +60,6 @@ var camStatus = function (status){
     statusObj.show = status;
   }
 
-  var $scope = angular.element('.contain-broadcast').scope();
   $scope.camStatus(statusObj);
   $scope.$apply();
 }

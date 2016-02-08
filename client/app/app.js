@@ -9,7 +9,8 @@ angular.module('baseApp', [
   'ui.bootstrap',
   'flash',
   'ngToast',
-  'ngAudio'
+  'ngAudio',
+  'timer'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

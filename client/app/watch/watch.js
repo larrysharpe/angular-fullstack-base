@@ -16,7 +16,7 @@ angular.module('baseApp')
       .state('private', {
         url: '/private/:slug',
         templateUrl: 'app/watch/watchPrivate.html',
-        controller: 'WatchCtrl'
+        controller: 'WatchPvtCtrl'
       })
       .state('group', {
         url: '/group/:slug',

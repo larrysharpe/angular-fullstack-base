@@ -39,16 +39,18 @@ angular.module('baseApp')
         socket.on('show:requestAccepted:rcv', handleShowReqAccepted);
 
         $scope.requestShow = function (show){
+          var userObj = {
+            slug: $scope.user.slug,
+            name: $scope.user.username
+          };
           var data = {
             broadcaster: {
               slug: $scope.broadcaster.slug,
               name: $scope.broadcaster.username
             },
-            user: {
-              slug: $scope.user.slug,
-              name: $scope.user.username
-            },
-            show: show
+            requestor: userObj,
+            users: [userObj],
+            show: show.toLowerCase()
           };
 
           if(!$scope.isDisabled(show)) $scope.disabledShows.push(show);

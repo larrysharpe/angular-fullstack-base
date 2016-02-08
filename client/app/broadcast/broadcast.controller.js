@@ -17,17 +17,24 @@ angular.module('baseApp')
 
     $scope.doConnect = function (show) {
       $scope.camState = 'going-online';
-
-
-      var connector = {method: 'connect', connectUrl: cwlGlobal.streamServer};
-
-      callToActionscript('connect');
+      var obj = {method: 'connect',
+        connectUrl: swfConfig.server[swfConfig.env],
+        show: show
+      };
+      callToActionscript(obj);
     };
 
     $scope.undoConnect = function () {
       $scope.camState = 'going-offline';
-      callToActionscript('disconnect');
+      var obj = {method: 'disconnect'};
+      callToActionscript(obj);
     };
+
+    $scope.changePublish = function (show){
+      var obj = {method: 'changePublish', instance: $scope.broadcaster.slug + '-' + show,
+        show: show }
+      callToActionscript(obj);
+    }
 
     $scope.isBroadcaster = function () {
       return true;

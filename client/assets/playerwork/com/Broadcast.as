@@ -21,10 +21,49 @@
     var publisher:Publisher;
     var webcam:WebCam;
     var settings:Object;
+    var changingConnection:String = null;
+    var show:String = null;
+    var streamInstance:String;
 
-		public function Broadcast() {
+
+    public function Broadcast() {
+
+      console.log('Broadcast Initial Config:');
+      console.log(this.config);
+
+      if(!this.config) {
+        this.config = {
+          broadcaster: 'testing',
+          server: { dev: 'rtmp://localhost/videochat/'},
+          env: 'dev',
+          show: 'public'
+        }
+      }
+
+      console.log('Broadcast Final Config');
+      console.log(this.config);
+
       ExternalInterface.addCallback("api", api);
       if(broadcaster === 'testing') initConnector();
+
+    }
+    private function initConnector(e = null){
+      if(connector){
+        console.log('Undoing Connector');
+        connector.disconnect();
+        console.log('Nulling Connector');
+        connector = null;
+      }
+
+      this.connectURL = this.config.server[this.config.env] + '/' + this.config.broadcaster
+
+      console.log('Creating Connector::: ' + connectURL);
+      connector = new Connector(connectURL);
+      connector.addEventListener(ConnectorEvent.ON_DISCONNECT, onDisconnect);
+      connector.addEventListener(ConnectorEvent.ON_SUCCESS, onConnect);
+      connector.addEventListener(ConnectorEvent.ON_FAIL, onConnectFail);
+      connector.addEventListener(ConnectorEvent.ON_REJECT, onConnectReject);
+      connector.connect();
     }
 
     private function initCamera(){
@@ -48,22 +87,6 @@
       camAllowed = false;
     }
 
-    private function initConnector(){
-      if(connector){
-        console.log('Undoing Connector');
-        connector.disconnect();
-        console.log('Nulling Connector');
-        connector = null;
-      }
-
-      console.log('Creating Connector');
-      connector = new Connector(connectURL);
-      connector.addEventListener(ConnectorEvent.ON_DISCONNECT, onDisconnect);
-      connector.addEventListener(ConnectorEvent.ON_SUCCESS, onConnect);
-      connector.addEventListener(ConnectorEvent.ON_FAIL, onConnectFail);
-      connector.addEventListener(ConnectorEvent.ON_REJECT, onConnectReject);
-      connector.connect();
-    }
 
     private function loadSettings(){
       console.log('--- Load Settings Called ---');
@@ -73,10 +96,13 @@
 
     private function initPublish(){
       console.log('Starting Publish');
-      console.log(connector);
-      console.log(broadcaster);
-      console.log(webcam);
-      publisher = new Publisher(connector.nc, broadcaster, webcam);
+      console.log('connector: '+ connector);
+      console.log('instance:' +  broadcaster);
+      console.log('webcam:' + webcam);
+
+      this.streamInstance = this.config.broadcaster + '-' +this.config.show;
+
+      publisher = new Publisher(connector.nc, this.streamInstance, webcam);
       console.log('Publisher Created');
       publisher.addEventListener(PublisherEvent.ON_PUBLISH, onPublish);
       publisher.addEventListener(PublisherEvent.ON_UNPUBLISH, onUnPublish);
@@ -88,24 +114,47 @@
       publisher.unPublish();
     }
 
-    public function api(name:String){
+    private function changePublish (){
+      publisher.unPublish();
+      console.log('**** obj instance ****');
+    }
+
+
+    public function api(obj){
       var methods =  {
         connect: initConnector,
         disconnect: unPublish,
-        loadSettings: loadSettings
+        loadSettings: loadSettings,
+        changePublish: changePublish
       }
 
-      console.log(name);
-      console.log('api');
-      methods[name]();
+      console.log('flash api call:' + obj);
+      console.log('api: ' + obj.method);
+      console.log('show: ' + obj.show);
+      if(obj.method === 'changePublish' && obj.instance) this.changingConnection = obj.instance;
+      if (obj.show) this.show = obj.show;
+
+      methods[obj.method]();
     }
 
     /*/// EVENTS ///*/
       // Connection Events
       private function onDisconnect(e = null){
         console.log('onDisconnect');
-        removeCamera();
-        browser.camStatus("offline");
+
+        console.log('oooooooo ----- ooooooo');
+        console.log(this.changingConnection);
+
+        if (this.changingConnection){
+          this.broadcaster = this.changingConnection;
+          this.changingConnection = null;
+          this.initConnector();
+        } else {
+          removeCamera();
+          browser.camStatus("offline");
+        }
+
+
       }
       private function onConnect(e = null){
         console.log('NC Connected');
@@ -137,7 +186,7 @@
 
       // Publish Events
       private function onPublish(e = null) {
-        browser.camStatus('public');
+        browser.camStatus(this.show);
       }
       private function onUnPublish(e = null){
         console.log('onUnPublish');

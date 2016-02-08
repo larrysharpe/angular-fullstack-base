@@ -4,3 +4,5 @@ div(ng-include='"components/navbar/navbar.html"')
     .row(ng-if="user")
       video-chat-broadcast
 private-chat(user='user', broadcaster='broadcaster')
+.container
+  .row {{user}}

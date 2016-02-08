@@ -25,7 +25,7 @@ angular.module('baseApp')
         var acceptShowCB = function (data) {
           if (data.status == 'success'){
             clearRequests();
-            $scope.undoConnect();
+            $scope.changePublish(data.show);
           }
         }
 

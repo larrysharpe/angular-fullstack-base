@@ -34,9 +34,11 @@ package com {
         stream = null;
       }
       console.log('Publish Attempt');
+      console.log('*******' + connection + '******');
 			stream = new NetStream(connection);
       console.log('Publish NetStream Created');
 			stream.addEventListener(NetStatusEvent.NET_STATUS, nsPublishOnStatus);
+      console.log('++++ publishing ++++ ' + broadcaster);
 			stream.bufferTime = 0; // set the buffer time to zero since it is chat
 			stream.publish(broadcaster); // publish the stream by name
       console.log('Publish Command Created');
