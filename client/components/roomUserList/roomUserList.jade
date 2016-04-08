@@ -1,0 +1,8 @@
+.left
+  ul.list-unstyled
+    li
+      a(href="", ng-click="openPm(broadcaster.slug + '-direct')") {{broadcaster.username}}
+    li(ng-if='broadcaster.slug !== user.slug')
+      a(href="", ng-click="openPm(user.slug + '-direct')") {{user.username}}
+    li(ng-repeat="guest in guestList")
+      a(href="", ng-click="openPm(guest.slug + '-direct')") {{guest.username}}

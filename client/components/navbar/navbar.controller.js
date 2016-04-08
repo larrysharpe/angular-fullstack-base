@@ -9,7 +9,6 @@ angular.module('baseApp')
 
     $scope.logout = function() {
       Auth.logout();
-      $location.path('/login');
     };
 
     if($scope.isLoggedIn()){

@@ -7,15 +7,10 @@ var swfConfig;
 var initVideoConfig = function (){
   var $scope = angular.element('#video-swf').scope();
    swfConfig = {
-    broadcaster: $scope.broadcaster.slug,
-    server: {
-      dev: 'rtmp://localhost/videochat/',
-      prod: 'rtmp://52.90.39.216:1935/videochat'
-    },
-    env: 'dev',
-    show: $scope.broadcaster.status.show
+     broadcaster: $scope.broadcaster.slug,
+     instanceType: $scope.broadcaster.status.show
   };
-  return config;
+  return swfConfig;
 }
 
 function getFlashMovie(movieName) {
@@ -43,7 +38,7 @@ var streamNotPlaying = function (){
 
 var camStatus = function (status){
   var statusObj = {};
-  var $scope = angular.element('.contain-broadcast').scope();
+  var $scope = angular.element('.video').scope();
 
   if(status === 'inherit') {
     statusObj.show = $scope.broadcaster.status.show;

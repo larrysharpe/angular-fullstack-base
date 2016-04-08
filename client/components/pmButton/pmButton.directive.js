@@ -9,7 +9,9 @@ angular.module('baseApp')
       },
       controller: function ($scope, $rootScope){
         $scope.togglePm = function (){
-          $rootScope.$broadcast('togglepm');
+          var to = $scope.broadcaster.slug + '-direct';
+
+          $rootScope.$broadcast('togglepm', to);
         }
       }
     };

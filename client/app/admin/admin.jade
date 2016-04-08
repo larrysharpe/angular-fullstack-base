@@ -1,36 +1,61 @@
-div(ng-include='"components/navbar/navbar.html"')
-
-.contain-main
-  .container
-    .row
-      .col-xs-12
-        p
-          a(ng-click='seedDB()') Seed The DB
-    .row
-      .col-md-6
-        table.table.table-striped.table-bordered
-          caption Users
-          tr
-            th Username
-            th Roles
-            th Online
-            th Availability
-            th Show
-          tr(ng-repeat="user in users | orderBy:'username' ")
-            td
-              a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
-            td {{::user.roles.join(',')}}
-            td {{user.status.online}}
+.container-fliud
+  .row
+    .col-sm-2
+      admin-nav
+    .col-xs-4
+      ul.list-unstyled
+        li(ng-repeat='(label, count) in stats')
+          h6 {{label}}s: {{count}}
+    .col-sm-10
+      div(ui-view='')
+      p
+        a(ng-click='seedDB()') Seed The DB
+      table.table.table-striped.table-bordered
+        caption Users
+        tr
+          th Username
+          th Status
+        tr(ng-repeat="user in users | orderBy:'username' ")
+          td
+            a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
+            br
+            small {{::user.roles.join(',')}}
+          td
+            div Online:
               select(ng-model='user.status.online', ng-change='statusOnlineChange(user)')
                 option(ng-repeat='opt in options.online', ng-value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
-            td
+            div Availability:
               select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user)')
-            td
+            div Show:
               select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user)')
-            td(ng-if="needsBroadcasterApproval($index)")
-              span
-                a(href="", ng-click="approveBroadcaster(user,$index)") Approve
-                a(href="", ng-click="denyBroadcaster(user,$index)") Deny
+          td(ng-if="needsBroadcasterApproval($index)")
+            span
+              a(href="", ng-click="approveBroadcaster(user,$index)") Approve
+              a(href="", ng-click="denyBroadcaster(user,$index)") Deny
+          td
+            a.trash(ng-click='delete(user)')
+              span.glyphicon.glyphicon-trash.pull-right
+        table.table.table-striped.table-bordered
+          caption Sockets To Users
+          tr(ng-repeat="(key, sock) in socketsToUsers")
             td
-              a.trash(ng-click='delete(user)')
-                span.glyphicon.glyphicon-trash.pull-right
+              div
+                small {{key}}
+              div {{sock.slug}}
+              div {{sock.username}}
+        table.table.table-striped.table-bordered
+          caption Users to Sockets
+          tr(ng-repeat="(key, sock) in usersToSockets")
+            td
+              div
+                small {{key}}
+              div {{sock.slug}}
+              div {{sock.username}}
+        table.table.table-striped.table-bordered
+          caption Users to Rooms
+          tr
+            td {{usersToRooms}}
+        table.table.table-striped.table-bordered
+          caption Rooms to Users
+          tr
+            td {{roomsToUsers}}

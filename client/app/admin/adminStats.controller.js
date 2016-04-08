@@ -1,20 +1,10 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('AdminCtrl', function ($scope, $http, Auth, User, socket, $state, $rootScope) {
+  .controller('AdminStatsCtrl', function ($scope, $http, Auth, User, socket, socketInit) {
 
     $scope.user = Auth.getCurrentUser();
 
-    var statsReceieved = function (results){
-      console.log('Stats Received:', results);
-      $scope.stats = results.data;
-    }
-
-    var checkStats = function (){
-      socket.emit('stats:get',{}, statsReceieved);
-    }
-
-    //var checkStatsInterval = setInterval(checkStats, 1000);
 
     var initReturn = function (data){
       console.log('init return: ',data);

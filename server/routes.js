@@ -6,7 +6,11 @@
 
 var errors = require('./components/errors');
 
-module.exports = function(app) {
+module.exports = function(app, config) {
+
+  app.route('/streamconfig').get(function(req, res){
+    res.send(config.stream);
+  })
 
   // Insert routes below
   app.use('/api/shows', require('./api/show'));

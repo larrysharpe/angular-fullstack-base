@@ -1,30 +1,24 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('WatchPvtCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, $rootScope) {
+  .controller('WatchPvtCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, socketInit) {
     $scope.slug = $stateParams.slug;
     $scope.user = Auth.getCurrentUser();
 
-
-    console.log('watch pvt');
 
     if(Auth.hasRole('broadcaster') && $scope.slug === $scope.user.slug){
       $location.path('/broadcast');
     }
 
-    var userObj = {
-      slug: $scope.user.slug,
-      username: $scope.user.username
-    };
 
-    socket.emit('init', {room: $stateParams.slug + '_public', user: userObj});
+    socketInit.run(null, $scope.user);
+
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
 
     $http.get(url)
       .success(function(data){
-        console.log('new broadcaster data: ' , data);
         $scope.broadcaster = data;
       });
 

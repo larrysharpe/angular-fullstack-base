@@ -1,0 +1,5 @@
+Broadcatser
+
+
+
+starts public show, url is broadcasters slug + '-public'

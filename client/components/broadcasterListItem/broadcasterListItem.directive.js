@@ -24,27 +24,28 @@ angular.module('baseApp')
         }
 
 
+
         if (userId) {
-          $scope.faves = Auth.getCurrentUser().faves;
+          $scope.faved = function () { return $scope.user.faves.indexOf($scope.broadcaster._id) > -1; }
 
-          $scope.faved = $scope.faves.indexOf($scope.broadcaster._id) > -1
 
-          $scope.isFaved = function (id) {
-            return $scope.faves.indexOf(id) > -1;
-          }
-
-          var handleSetFaves = function (data) {
-            $scope.faves = data.faves;
+          var handleSetFaves = function (res) {
+            $scope.user.faves = res.data.faves;
           };
 
 
-          $scope.fave = function (id, index) {
-            socket.emit('fave:set',{_id: userId, faves: [id]}, handleSetFaves);
-          }
+          $scope.faveUpdate = function (add, remove) {
 
-          $scope.unFave = function (id) {
-            socket.emit('fave:unset',{_id: userId, faves: [id]}, handleSetFaves);
-          }
+            var favObj = {
+              _id: userId
+            };
+
+            if(add) favObj.add = add;
+            if(remove) favObj.remove = remove;
+
+            socket.emit('faveUpdate', favObj, handleSetFaves );
+
+          };
         }
       }
     };

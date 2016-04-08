@@ -1,8 +1,14 @@
 div(ng-include='"components/navbar/navbar.html"')
 .contain-broadcast
   .container
+    .row
+      .col-xs-12
+        p
+          timer(interval="1000", auto-start='false', countdown='user.credits.units')
+            span(ng-if="hours") {{hhours}}:
+            span {{mminutes}}:{{sseconds}}/
+            span {{seconds * .05 | number: 2 }}
+        p {{user.credits.units}}
     .row(ng-if="user")
       video-chat-broadcast
 private-chat(user='user', broadcaster='broadcaster')
-.container
-  .row {{user}}

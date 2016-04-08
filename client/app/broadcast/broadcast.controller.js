@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket) {
+  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket, $rootScope) {
+
 
     socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
@@ -11,18 +12,59 @@ angular.module('baseApp')
     });
 
     $scope.user = Auth.getCurrentUser();
-    $scope.broadcaster = Auth.getCurrentUser();
-    $scope.camState = 'offline';
-    socket.emit('init', {room: $scope.user.slug + '_public', user: $scope.user.slug});
+    $scope.room = $scope.user.slug + '-public';
 
-    $scope.doConnect = function (show) {
+
+    var url = '/api/users/broadcasters/' + $scope.user.slug;
+
+    $http.get(url)
+      .success(function(data){
+        $scope.broadcaster = data;
+      });
+
+    $scope.camState = 'offline';
+
+    console.log('my user: ', $scope.user);
+
+
+    var initObj = {
+      page: $state.current.name,
+      room: $scope.user.slug + '-public',
+      user: {
+        slug: $scope.user.slug,
+        username: $scope.user.username
+      }
+    };
+
+    if($rootScope.removeUser){
+      initObj.remove = $rootScope.removeUser;
+      delete $rootScope.removeUser;
+    }
+
+    var initReturn = function (data){
+      console.log('init return:',data);
+      if(data.user) {
+        $scope.broadcaster = data.user;
+        $scope.user = data.user;
+      } else {
+        $scope.broadcaster = data.data;
+      }
+    };
+
+    socket.emit('init', initObj, initReturn);
+
+    $scope.doConnect = function (instanceType) {
       $scope.camState = 'going-online';
       var obj = {method: 'connect',
-        connectUrl: swfConfig.server[swfConfig.env],
-        show: show
+        instanceType: instanceType
       };
       callToActionscript(obj);
     };
+
+    $scope.checkScope = function (){
+      console.log($scope);
+    }
+
 
     $scope.undoConnect = function () {
       $scope.camState = 'going-offline';
@@ -30,9 +72,11 @@ angular.module('baseApp')
       callToActionscript(obj);
     };
 
-    $scope.changePublish = function (show){
-      var obj = {method: 'changePublish', instance: $scope.broadcaster.slug + '-' + show,
-        show: show }
+    $scope.changePublish = function (user){
+      var obj = {broadcaster: user.slug,
+        instanceType: user.status.show,
+        method: 'changePublish'
+      }
       callToActionscript(obj);
     }
 
@@ -49,7 +93,15 @@ angular.module('baseApp')
     }
 
     $scope.isStatus = function (status) {
-      return $scope.camState === status;
+      if($scope.broadcaster) {
+        if (typeof status === 'string')  return $scope.broadcaster.status.show === status;
+        else if (status.indexOf($scope.broadcaster.status.show) > -1) return true;
+        else return false;
+      } else return false;
+    }
+
+    $scope.isPassword = function (){
+      return $scope.broadcaster.status.show === 'password';
     }
 
     $scope.isCamOffline = function () {
@@ -62,22 +114,18 @@ angular.module('baseApp')
     }
 
     $scope.camStatus = function (status){
+
+      var statusObj = $scope.user.status;
+      if(status.show) statusObj.show = status.show;
+      if(status.availability) statusObj.availability = status.availability;
+      if(status.online) statusObj.online = status.online;
+
       socket.emit('status:change', {
         slug: $scope.user.slug,
-        status: status
+        status: statusObj
       }, function(data){
         $scope.camState = data.user.status.show;
+        $scope.user.status = data.user.status;
       });
     }
-
-    var data = {
-      page: $state.current.name,
-      user: {
-        slug: $scope.user.slug,
-        username: $scope.user.username
-      }
-    };
-
-    socket.emit('init', data);
-
   });

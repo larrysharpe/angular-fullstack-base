@@ -5,10 +5,6 @@ angular.module('baseApp')
     return {
       templateUrl: 'components/broadcasterList/broadcasterList.html',
       restrict: 'EA',
-      scope: {
-        type: '@',
-        header: '@'
-      },
       controller: function ($scope, socket, broadcasterListSVC, Auth){
 
         if (!$scope.header) $scope.header = '';
@@ -17,7 +13,19 @@ angular.module('baseApp')
         var user = Auth.getCurrentUser();
 
         var handleGetBroadcasters = function (data){
+
+
           if(data.status === 'success'){
+
+            if($scope.broadcaster && $scope.broadcaster.slug){
+              for(var i = 0; i < data.broadcasters.length; i++){
+                if (data.broadcasters[i].slug === $scope.broadcaster.slug){
+                  data.broadcasters.splice(i,1);
+                  break;
+                }
+              }
+            }
+
             $scope.broadcasters = data.broadcasters;
           }
         };

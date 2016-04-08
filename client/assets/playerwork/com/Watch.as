@@ -13,37 +13,29 @@
 
 	public class Watch extends MovieClip {
 
-    var config = ExternalInterface.call("initVideoConfig");
-    var broadcaster = (config && config.broadcaster) ? config.broadcaster : 'testing';
     var connector:Connector;
     var connectURL:String;
+    var config:Object;
     var console:Console = new Console();
     var browser:ScriptInterface = new ScriptInterface();
     var sub:Subscribe;
     var video:Video = new Video();
     var streamInstance:String;
-    var show:String;
+    var configClass:Config = new Config();
 
 		public function Watch() {
-      console.log('Watch Initial Config:');
-      console.log(this.config);
-
-      if(!this.config) {
-        this.config = {
-          broadcaster: 'testing',
-          server: { dev: 'rtmp://localhost/videochat/'},
-          env: 'dev',
-          show: 'public'
-        }
-      }
-
-      console.log('Watch Final Config');
-      console.log(this.config);
+      configClass.addEventListener(ConfigEvent.ON_CONFIGLOADED, configLoaded);
 
       ExternalInterface.addCallback("api", api);
       initConnector();
     }
 
+    public function configLoaded (e = null) {
+      console.log('config loaded');
+      this.config = configClass.getConfig();
+      ExternalInterface.addCallback("api", api);
+      initConnector();
+    };
 
     private function initConnector(){
       if(connector){
@@ -53,10 +45,10 @@
         connector = null;
       }
 
-      this.connectURL = this.config.server[this.config.env] + '/' + this.config.broadcaster
+      this.connectURL = this.config.server + '/' + this.config.broadcaster
 
-      console.log('Creating Connector::: ' + connectURL);
-      connector = new Connector(connectURL);
+      console.log('Creating Connector::: ' + this.connectURL);
+      connector = new Connector(this.connectURL);
       connector.addEventListener(ConnectorEvent.ON_DISCONNECT, onDisconnect);
       connector.addEventListener(ConnectorEvent.ON_SUCCESS, onConnect);
       connector.addEventListener(ConnectorEvent.ON_FAIL, onConnectFail);
@@ -83,7 +75,7 @@
 
       console.log('flash api call:' + obj);
       console.log('api');
-      if (obj && obj.show) this.show = obj.show;
+      if (obj && obj.instanceType) this.config.instanceType = obj.instanceType;
       methods[obj.method]();
     }
 
@@ -95,7 +87,7 @@
       private function onConnect(e = null){
         console.log('NC Connected');
 
-        this.streamInstance = this.config.broadcaster + '-' +this.config.show;
+        this.streamInstance = this.config.broadcaster + '-' +this.config.instanceType;
 
         sub = new Subscribe(connector.nc, this.streamInstance);
         sub.addEventListener(SubscribeEvent.ON_STREAMPUBLISHNOTIFY, onStreamPublishNotify);

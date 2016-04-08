@@ -1,20 +1,17 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, $rootScope) {
+  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, socketInit) {
     $scope.slug = $stateParams.slug;
     $scope.user = Auth.getCurrentUser();
+    $scope.room = $stateParams.slug + '-public';
 
     if(Auth.hasRole('broadcaster') && $scope.slug === $scope.user.slug){
       $location.path('/broadcast');
     }
 
-    var userObj = {
-      slug: $scope.user.slug,
-      username: $scope.user.username
-    };
+    socketInit.run(function(data){console.log(data)}, $scope.user);
 
-    socket.emit('init', {room: $stateParams.slug + '_public', user: userObj});
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
@@ -29,7 +26,7 @@ angular.module('baseApp')
       return false;
     };
 
-    var screenStatuses = ['public', 'jukebox', 'group', 'private', 'meter', 'courtesy', 'password', 'vip'];
+    var screenStatuses = ['public', 'jukebox', 'group', 'private', 'meter', 'courtesy', 'vip'];
 
     $scope.showVid  = function () {
 
@@ -55,19 +52,53 @@ angular.module('baseApp')
     }
 
     $scope.isOffline = function (){
-      return !$scope.broadcaster || $scope.broadcaster.status.show === 'offline';
+      return !$scope.broadcaster || $scope.broadcaster.status.online === false || $scope.broadcaster.status.availability === 'offline';
+    }
+
+    $scope.isOnCall = function (){
+      return $scope.broadcaster && $scope.broadcaster.status.show === 'offline' && $scope.broadcaster.status.availability === 'on call';
+    }
+
+    $scope.isAway = function (){
+      return $scope.broadcaster && $scope.broadcaster.status.online === true && $scope.broadcaster.status.show === 'offline' && $scope.broadcaster.status.availability === 'away';
+    }
+
+    $scope.isBusy = function (){
+      return $scope.broadcaster && $scope.broadcaster.status.show === 'offline' && $scope.broadcaster.status.availability === 'busy';
     }
 
     $scope.isOnline = function (){
-      return $scope.broadcaster && $scope.broadcaster.status.show === 'public';
+      return $scope.broadcaster && $scope.broadcaster.status.online === true && $scope.broadcaster.status.availability === 'online' && $scope.broadcaster.status.show === 'offline';
     }
+
+    var joinShow = function (){
+      var joinObj = {
+        show: $scope.show._id,
+        user: {
+          slug: $scope.user.slug,
+          username: $scope.user.username
+        }
+      }
+      socket.emit('showJoin', joinObj);
+    }
+
+    socket.on('showStart', function (show) {
+      $scope.show = show;
+    })
 
 
     socket.on('status:change', function (data) {
-      console.log('rcvd cam status',data);
-      if(data.status.show) $scope.broadcaster.status.show = data.status.show;
-      if(data.status.online) $scope.broadcaster.status.online = data.status.online;
-      $scope.camState = $scope.broadcaster.status.show;
+      if(data.slug === $scope.broadcaster.slug) {
+        //console.log('rcvd cam status', data.status);
+        if (data.status.show) $scope.broadcaster.status.show = data.status.show;
+        if (data.status.online === true || data.status.online === false) $scope.broadcaster.status.online = data.status.online;
+        if (data.status.availability) $scope.broadcaster.status.availability = data.status.availability;
+        $scope.camState = $scope.broadcaster.status.show;
+
+        if(data.status.show === 'public'){
+           joinShow()
+        }
+      }
     });
 
 

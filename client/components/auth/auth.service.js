@@ -3,39 +3,47 @@
 angular.module('baseApp')
   .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $window) {
     var currentUser = {};
-    var reload = function(data) {
-      $cookieStore.put('guest-token', data.token);
-      $window.location.reload();
-  };
 
-    var createGuest = function () {
-      console.log('User not logged in. Set guest cookie.');
-      $http.post('/api/guests')
-        .success(reload);
-    };
-    var loadGuest = function () {
-      console.log('guest user found');
-      $http.get('/api/guests/' + $cookieStore.get('guest-token'))
-        .success(getGuest)
-    };
-
-    var getGuest = function(data){
-      currentUser = {
-        username: 'Guest ' + data.guestNo,
-        slug: 'guest-' + data.guestNo,
+    var createClientCookie = function (data){
+      var guestNumber = getRandomIntInclusive(1,100000);
+      var clientCookie = {
         loggedIn: false
       };
-      deferred.resolve(data);
-      console.log('user created');
-    };
-    var deferred = $q.defer();
+      var clientCookieString;
 
-    if($cookieStore.get('token'))  currentUser = User.get();
-    else if ($cookieStore.get('guest-token')) loadGuest();
-    else createGuest();
+      if (data &&  data.token) {
+        clientCookie.loggedIn = true;
+        $cookieStore.put('token', data.token);
+      } else {
+        clientCookie.username = 'Guest ' + guestNumber;
+        clientCookie.slug = 'guest-' + guestNumber;
+        clientCookieString =  JSON.stringify(clientCookie);
+        $cookieStore.put('client', clientCookieString);
+        currentUser = clientCookie;
+      }
+    }
 
+    var getRandomIntInclusive = function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // set logged in user
+    if($cookieStore.get('token')) {
+      currentUser = User.get();
+    }
+    // set guest user from token
+    else if($cookieStore.get('client')){
+      var usr = $cookieStore.get('client');
+      usr = JSON.parse(usr);
+      currentUser = usr;
+    }
+    // create guest user and set
+    else {
+      createClientCookie();
+    }
 
     return {
+
       /**
        * Authenticate user and save token
        *
@@ -51,25 +59,20 @@ angular.module('baseApp')
           email: user.email,
           password: user.password
         }).
-        success(function(data) {
-          $cookieStore.remove('guest-token');
-          $cookieStore.put('token', data.token);
-          currentUser = User.get();
-          deferred.resolve(data);
-          return cb();
-        }).
-        error(function(err) {
-          deferred.reject(err);
-          return cb(err);
-        }.bind(this));
+          success(function(data) {
+            createClientCookie(data);
+            currentUser = User.get();
+            deferred.resolve(data);
+            return cb();
+          }).
+          error(function(err) {
+            this.logout();
+            deferred.reject(err);
+            return cb(err);
+          }.bind(this));
 
         return deferred.promise;
       },
-
-      refreshUser: function() {
-        currentUser = User.get();
-      },
-
 
       /**
        * Delete access token and user info
@@ -77,12 +80,9 @@ angular.module('baseApp')
        * @param  {Function}
        */
       logout: function() {
+        $cookieStore.remove('client');
         $cookieStore.remove('token');
-        currentUser = {};
-        if (!$cookieStore.get('guest-token')) {
-          createGuest();
-          $window.location.reload();
-        }
+        $window.location.reload();
       },
 
       /**
@@ -97,7 +97,7 @@ angular.module('baseApp')
 
         return User.save(user,
           function(data) {
-            $cookieStore.put('token', data.token);
+            createClientCookie(data);
             currentUser = User.get();
             return cb(user);
           },
@@ -136,10 +136,10 @@ angular.module('baseApp')
       getCurrentUser: function() {
         return currentUser;
       },
-
       setFaves: function (faves) {
         currentUser.faves = faves;
       },
+
 
       /**
        * Check if a user is logged in
@@ -147,7 +147,7 @@ angular.module('baseApp')
        * @return {Boolean}
        */
       isLoggedIn: function() {
-        return currentUser.hasOwnProperty('roles');
+        return currentUser.hasOwnProperty('role');
       },
 
       /**
@@ -160,7 +160,7 @@ angular.module('baseApp')
           }).catch(function() {
             cb(false);
           });
-        } else if(currentUser.hasOwnProperty('roles')) {
+        } else if(currentUser.hasOwnProperty('role')) {
           cb(true);
         } else {
           cb(false);
@@ -169,7 +169,7 @@ angular.module('baseApp')
 
       /**
        * Check if a user is an admin
-       * @param {String|[String]} roles - role to be looked up
+       *
        * @return {Boolean}
        */
       hasRole: function (roles) {

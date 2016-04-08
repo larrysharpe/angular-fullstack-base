@@ -1,7 +1,13 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('DashboardCtrl', function ($scope, Auth) {
+  .controller('DashboardCtrl', function ($scope, Auth, socketInit ) {
     $scope.user = Auth.getCurrentUser();
-    $scope.hasRole = Auth.hasRole;
+
+    var initReturn = function (data){
+      console.log('init return: ',data);
+    };
+
+    socketInit.run(initReturn, $scope.user);
+
   });

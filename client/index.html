@@ -15,6 +15,7 @@
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/angular-flash-alert/dist/angular-flash.css" />
       <link rel="stylesheet" href="bower_components/ngToast/dist/ngToast.css" />
+      <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -68,6 +69,8 @@
       <script src="bower_components/momentjs/moment.js"></script>
       <script src="bower_components/humanize-duration/humanize-duration.js"></script>
       <script src="bower_components/angular-timer/dist/angular-timer.js"></script>
+      <script src="bower_components/Chart.js/Chart.js"></script>
+      <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -87,6 +90,8 @@
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
           <script src="app/admin/admin.user.controller.js"></script>
+          <script src="app/admin/adminBroadcasters.js"></script>
+          <script src="app/admin/adminStats.controller.js"></script>
           <script src="app/admin/createBatch.controller.js"></script>
           <script src="app/admin/transactions/transactions.controller.js"></script>
           <script src="app/admin/transactions/transactions.js"></script>
@@ -101,6 +106,7 @@
           <script src="app/watch/watch.js"></script>
           <script src="app/watch/watchPvt.controller.js"></script>
           <script src="components/accountMenu/accountMenu.directive.js"></script>
+          <script src="components/adminNav/adminNav.directive.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/broadcasterList/broadcasterList.directive.js"></script>
@@ -111,6 +117,7 @@
           <script src="components/pmButton/pmButton.directive.js"></script>
           <script src="components/privateChat/privateChat.directive.js"></script>
           <script src="components/roomChat/roomChat.directive.js"></script>
+          <script src="components/roomUserList/roomUserList.directive.js"></script>
           <script src="components/showComponent/showComponent.directive.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <script src="components/tipComponent/tipComponent.directive.js"></script>
@@ -118,6 +125,7 @@
           <script src="components/videoChatBroadcast/videoChatBroadcast.directive.js"></script>
           <script src="components/videoChatWatch/videoChatWatch.directive.js"></script>
           <script src="services/broadcasterList/broadcasterList.service.js"></script>
+          <script src="services/socketInit/socketInit.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 

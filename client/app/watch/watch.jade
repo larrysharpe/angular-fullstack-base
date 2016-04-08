@@ -1,20 +1,59 @@
 div(ng-include='"components/navbar/navbar.html"')
+.container
+  .row
+    .col-xs-12
+      div(ui-view='')
 .contain-watch
   .container
     .row
-      .col-xs-12(ng-if='isOffline()')
-        h1 {{broadcaster.username}}'s cam is offline.
-          br
-          small Don't worry there's plenty more where that came from.
-    .row
-      video-chat-watch(ng-if='showVid()')
       .col-xs-12(ng-if="!broadcaster")
         h1
           small We're sorry {{slug}} does not exist.
           p
             Please checkout our other models below.
-      .extras
-        h1 Extras
-        pm-button
+    .row
+      .col-xs-6
+        div(ng-if="!showVid()")
+          div(ng-if='isOnCall()')
+            h1 {{broadcaster.username}} is waiting for you to join her room.
+              br
+              small {{broadcaster.username}} is waiting backstage. Just come on in and the show will begin.
+          div(ng-if='isOffline()')
+            h1 {{broadcaster.username}}'s cam is offline.
+              br
+              small Don't worry there's plenty more where that came from.
+          div(ng-if='isAway()')
+            h1 {{broadcaster.username}}'s cam is away check back soon.
+          div(ng-if='isShowStatus("password")')
+            h1 {{broadcaster.username}} is in a password show.
+            div
+              input(placeholder='Enter the password to see the show.', class='form-control', ng-model='passwordShow.password')
+              button.btn.btn-warning(ng-click='joinPasswordShow()') Join
+
+          div(ng-if='isShowStatus("goal")')
+            h1 {{broadcaster.username}} is in a goal show.
+            div
+              button.btn.btn-warning(ng-click='joinGoalShow()') Join For 5 Credits
+          div(ng-if='isBusy()')
+            h1 {{broadcaster.username}}'s cam is busy check back soon.
+          div(ng-if='isOnline()')
+            h1 {{broadcaster.username}} is online but not broadcasting.
+              br
+              small Feel free to interact with her.
+          .controls
+            tip-component.left
+            pm-button
+        div(ng-if='showVid()')
+          video-chat-watch
+          .controls
+            tip-component.left
+            show-component.left
+      .col-xs-4
+        div
+          h3 Here is my topic
+          room-chat
+      .col-xs-2
+        h3 Watchers
+        room-user-list
 div(ng-include='"components/broadcasterSuggestions/broadcasterSuggestions.html"')
 private-chat(user='user', broadcaster='broadcaster')

@@ -23,8 +23,8 @@ var statusObj = {
   type: String,
   required: true,
   default: 'requested',
-  enum: ['requested','accepted','denied']
-};
+  enum: ['requested','accepted','denied','started','denied', 'ended']
+}
 
 var ShowSchema = new Schema({
   requested: dateObj,
@@ -38,6 +38,11 @@ var ShowSchema = new Schema({
   broadcaster: userObj,
   users: [userObj],
   denied: Date,
+  password: String,
+  goal: Number,
+  goalMin: Number,
+  speed: Number,
+  milestones: [],
   denialReason: String,
   accepted: Date,
   started: Date,

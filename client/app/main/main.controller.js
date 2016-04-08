@@ -2,18 +2,14 @@
 
 angular.module('baseApp')
 
-  .controller('MainCtrl', function ($scope, $http, $state, $stateParams, Auth, socket) {
+  .controller('MainCtrl', function ($scope, Auth, socketInit) {
     $scope.user = Auth.getCurrentUser();
-    $scope.isLoggedIn= Auth.isLoggedIn();
+    $scope.isLoggedIn = Auth.isLoggedIn();
 
-    var data = {
-      page: $state.current.name,
-      user: {
-        slug: $scope.user.slug,
-        username: $scope.user.username
-      }
+    var initReturn = function (initObj){
+      console.log('init return: ',initObj);
     };
 
-    socket.emit('init', data);
+    socketInit.run(initReturn, $scope.user);
 
   });

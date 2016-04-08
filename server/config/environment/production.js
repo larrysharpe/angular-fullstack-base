@@ -20,5 +20,7 @@ module.exports = {
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://dbadmin:dbadmin@ds037215.mongolab.com:37215/comewatchlive'
             //'mongodb://localhost/base'
-  }
+  },
+  stream: 'rtmp://52.90.39.216:1935/videochat'
+
 };

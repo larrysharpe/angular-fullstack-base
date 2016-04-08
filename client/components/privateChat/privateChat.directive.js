@@ -66,7 +66,7 @@ angular.module('baseApp')
         $scope.sendMessage = function () {
 
           var msg = {
-            from: $scope.user.slug + '_direct',
+            from: $scope.user.slug + '-direct',
             fromUsername: $scope.user.username,
             to: $scope.selectedConvo,
             toUsername: $scope.convos[$scope.selectedConvo].username,
@@ -77,9 +77,8 @@ angular.module('baseApp')
           socket.emit('privatemessage:send', msg, postMessageSent );
           $scope.message = '';// clear message box
         };
-        $scope.togglePm = function (){
+        $scope.togglePm = function (to){
           console.log('toggle pm called');
-          var to = $scope.broadcaster.slug + '_direct';
 
           if(!$scope.convos) {
             $scope.selectUser(to);

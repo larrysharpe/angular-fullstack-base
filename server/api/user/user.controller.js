@@ -241,6 +241,9 @@ exports.applyBroadcaster = function (req, res) {
       if (user.roles.indexOf('broadcaster') > -1) res.json(422, 'Broadcaster Already Approved');
       else if (user.roles.indexOf('broadcaster applicant') > -1) res.json(422, 'Broadcaster Has Already Applied');
       else {
+        var userPermissionIndex = user.roles.indexOf('user');
+        if(userPermissionIndex > -1) user.roles.splice(userPermissionIndex, 1);
+
         user.roles.push('broadcaster applicant');
         user.save(function (err) {
           res.json(200, 'OK');

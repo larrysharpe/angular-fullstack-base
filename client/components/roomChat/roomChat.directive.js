@@ -11,7 +11,7 @@ angular.module('baseApp')
             var lst = element.find('.chat-box')[0];
             lst.scrollTop = lst.scrollHeight;
             if(scope[newValues[newValues.length-1].subType]) scope[newValues[newValues.length-1].subType].play();
-            console.log(newValues);
+            //console.log(newValues);
           }
         });
       },
@@ -24,48 +24,11 @@ angular.module('baseApp')
 
         $scope.messages = [];
 
-        var room = $stateParams.slug + '_public';
-        $http.get('/api/messages/room/' + room)
+        $http.get('/api/messages/room/' + $scope.room)
           .error(function(err){})
           .success(function(data){
             $scope.messages = data;
           })
-
-        // Socket listeners
-        // ================
-
-        socket.on('init', function (data) {
-          $scope.name = data.name;
-          $scope.users = data.users;
-        });
-
-
-        socket.on('user:join', function (data) {
-          $scope.messages.push({
-            to: 'chatroom',
-            from: 'chatroom',
-            content: data.name + ' has joined.'
-          });
-          $scope.users.push(data.name);
-        });
-
-        // add a message to the conversation when a user disconnects or leaves the room
-        socket.on('user:left', function (data) {
-          $scope.messages.push({
-            to: 'chatroom',
-            from: 'chatroom',
-            content: data.name + ' has left.'
-          });
-          var i, user;
-          for (i = 0; i < $scope.users.length; i++) {
-            user = $scope.users[i];
-            if (user === data.name) {
-              $scope.users.splice(i, 1);
-              break;
-            }
-          }
-        });
-
 
         var postMessage = function (msg){
           if(msg.rain) {
@@ -84,7 +47,7 @@ angular.module('baseApp')
 
           var msg = {
             from: $scope.user.username,
-            to: $scope.broadcaster.slug + '_public',
+            to: $scope.room,
             content: $scope.message
           };
 

@@ -6,22 +6,26 @@ angular.module('baseApp')
       .state('watch', {
         url: '/watch/:slug',
         templateUrl: 'app/watch/watch.html',
-        controller: 'WatchCtrl'
+        controller: 'WatchCtrl',
+        room: 'public'
       })
-      .state('vip', {
-        url: '/vip/:slug',
+      .state('watch.vip', {
+        url: '/vip',
         templateUrl: 'app/watch/watchVip.html',
-        controller: 'WatchCtrl'
+        controller: 'WatchCtrl',
+        room: 'vip'
       })
-      .state('private', {
-        url: '/private/:slug',
+      .state('watch.private', {
+        url: '/private',
         templateUrl: 'app/watch/watchPrivate.html',
-        controller: 'WatchPvtCtrl'
+        controller: 'WatchPvtCtrl',
+        room: 'private'
       })
-      .state('group', {
-        url: '/group/:slug',
+      .state('watch.group', {
+        url: '/group',
         templateUrl: 'app/watch/watchGroup.html',
-        controller: 'WatchCtrl'
+        controller: 'WatchCtrl',
+        room: 'group'
       })
     ;
   });

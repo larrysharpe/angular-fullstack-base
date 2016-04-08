@@ -45,3 +45,17 @@ password
   The broadcaster sets an amount to start the show and a time limit for the show.
   The show is for a set length of time.
   Time can be added by collecting more tokens from users.
+
+jukebox
+
+
+
+
+
+
+
+user initiated:
+group, pvt, booked pvt, vip, jukebox
+
+broadcaster:
+public, courtesy, meter, goal, password, on call, away

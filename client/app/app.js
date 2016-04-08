@@ -10,7 +10,8 @@ angular.module('baseApp', [
   'flash',
   'ngToast',
   'ngAudio',
-  'timer'
+  'timer',
+  'chart.js'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

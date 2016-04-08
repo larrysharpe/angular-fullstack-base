@@ -188,16 +188,12 @@ var UserSchema = new Schema({
     availability: {
       type: String,
       default: 'offline',
-      enum: ['offline', 'online',  'on call', 'away',
-        'busy']
+      enum: ['offline', 'online',  'on call', 'away', 'busy']
     },
     show: {
       type: String,
       default: 'offline',
-      enum: ['offline','public', 'group',
-        'private', 'booked private', 'vip',
-        'courtesy', 'meter', 'goal', 'jukebox',
-        'password']
+      enum: ['offline','public', 'group', 'private', 'booked private', 'vip', 'courtesy', 'meter', 'goal', 'jukebox', 'password']
     }
   },
   hashedPassword: String,

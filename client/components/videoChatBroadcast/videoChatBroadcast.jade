@@ -1,5 +1,11 @@
-.left
-  h1 {{broadcaster.username}}
+.col-xs-6
+  div
+    | You are {{broadcaster.status.availability}}.
+  div
+    a.btn.btn-success(ng-click='setAvailability("online")', ng-if='!isAvailability("online")') Go Online
+    a.btn.btn-primary(ng-click='setAvailability("on call")', ng-if='!isAvailability("on call")') Go On Call
+    a.btn.btn-warning(ng-click='setAvailability("away")', ng-if='!isAvailability("away")' ) Go Away
+    a.btn.btn-danger(ng-click='setAvailability("offline")', ng-if='!isAvailability("offline")') Go Invisible
   .video#video
     object#video-swf(classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000', codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0', width='100%', height='100%', align='middle')
       param(name='allowScriptAccess', value='sameDomain')
@@ -10,18 +16,49 @@
       embed(src='assets/playerwork/broadcast2.swf', quality='high', bgcolor='#000000', width='100%', height='100%', name='video-swf', align='middle', allowscriptaccess='sameDomain', allowfullscreen='true', type='application/x-shockwave-flash', pluginspage='http://www.macromedia.com/go/getflashplayer')
   .controls
     button.btn.btn-danger(ng-if="isStatus('camDenied')") Camera Access Denied
-    button.btn.btn-success(ng-click="doConnect('public')", ng-if="isStatus('offline')") Start
+    button.btn.btn-success(ng-click="startShow('public')", ng-if="isStatus(['offline','away'])") Public
+    button.btn.btn-success(ng-click="openPasswordControls()", ng-if="isStatus(['public','offline','away'])") Password
+    button.btn.btn-success(ng-click="openGoalControls()", ng-if="isStatus(['public','offline','away'])") Goal
+    button.btn.btn-success(ng-click="openMeterControls()", ng-if="isStatus(['public','offline','away'])") Meter
     button.btn.btn-warning(ng-if="isStatus('going-online')") Connecting
-    button.btn.btn-danger(ng-click="undoConnect()", ng-if="isStatus('public')") Stop
+    button.btn.btn-danger(ng-click="stopShow()", ng-if='isInShow()') Stop Show
+    .password-show-controls(ng-show='openPasswordShowControls')
+      input(name='password', class="form-control", ng-model="passwordShow.password",placeholder='Enter Your Show\'s Password')
+      button.btn.btn-warning(ng-click='startPasswordShow()', ng-disabled='!passwordShow.password') Start Password Show
+      button.btn.btn-danger(ng-click="closePasswordControls()") Cancel
+    .goal-show-controls(ng-show='openGoalShowControls')
+      input(name='goal', type='number', class="form-control", ng-model="goalShow.goal", placeholder='Enter Your Show\'s Goal')
+      input(name='goalMin', type='number', class="form-control", ng-model="goalShow.min", placeholder='Enter Your Shows Minimum Amount')
+      button.btn.btn-warning(ng-click='startGoalShow()', ng-disabled='!goalShowReady()') Start Goal Show
+      button.btn.btn-danger(ng-click="closeGoalControls()") Cancel
+    .meter-show-controls(ng-show='openMeterShowControls')
+      input(name='meter', type='number', class="form-control", ng-model="meterShow.speed", placeholder='Enter Your Shows Meter Speed')
+      ul
+        li(ng-repeat="ms in meterShow.milestones track by $index")
+          input(name='amt[]', type='number', class="form-control", ng-model="ms.amount", placeholder='Enter Your Shows Milestone Amount')
+          input(name='description[]', type='text', class="form-control", ng-model="ms.description", placeholder='Enter Your Shows Milestone Description')
+          button.btn.btn-danger(ng-click='removeMilestone($index)') X
+
+      button.btn.btn-primary(ng-click='addMilestone()') Add Milestone
+      button.btn.btn-warning(ng-click='startMeterShow()', ng-disabled='!meterShowReady()') Start Meter Show
+      button.btn.btn-danger(ng-click="closeMeterControls()") Cancel
+      div {{meterShow}}
     span.right {{camState}}
-.left
-  h1(contentEditable="true") Here is my topic
+    span.right {{isInShow()}}
+    div {{broadcaster.status}}
+.col-xs-4
+  h3 Here is my topic
   room-chat
-ul.request-list.left.list-unstyled
-  li(ng-repeat='req in requests track by $index')
-    p
-      b {{req.broadcaster.name}}
-      |  wants a {{req.show}} show.
-    p
-      button.btn.btn-success(ng-click='acceptShow($index)') Accept
-      button.btn.btn-danger(ng-click='denyShowStep1($index)') Deny
+.col-xs-2
+  h3 Watchers
+  room-user-list
+
+.col-xs-4
+  ul.request-list.left.list-unstyled
+    li(ng-repeat='req in requests track by $index')
+      p
+        b {{req.broadcaster.name}}
+        |  wants a {{req.show}} show.
+      p
+        button.btn.btn-success(ng-click='acceptShow($index)') Accept
+        button.btn.btn-danger(ng-click='denyShowStep1($index)') Deny
