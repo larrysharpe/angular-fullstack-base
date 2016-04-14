@@ -2,9 +2,9 @@
 
 angular.module('baseApp')
   .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, socketInit) {
-    $scope.slug = $stateParams.slug;
+    $scope.slug = $stateParams.slug.toLowerCase();
     $scope.user = Auth.getCurrentUser();
-    $scope.room = $stateParams.slug + '-public';
+    $scope.room = $stateParams.slug.toLowerCase() + '-public';
 
     if(Auth.hasRole('broadcaster') && $scope.slug === $scope.user.slug){
       $location.path('/broadcast');
@@ -13,7 +13,7 @@ angular.module('baseApp')
     socketInit.run(function(data){console.log(data)}, $scope.user);
 
 
-    var url = '/api/users/broadcasters/'+$stateParams.slug;
+    var url = '/api/users/broadcasters/'+$stateParams.slug.toLowerCase();
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
 
     $http.get(url)

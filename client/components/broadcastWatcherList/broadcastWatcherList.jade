@@ -1,0 +1,8 @@
+h4 People
+ul.list-unstyled(ng-repeat="(key, group) in chatGroups")
+  li.chatGroup
+    span.groupName {{key}}
+    span.groupCount  ({{groupCounts[key] || 0}})
+    ul.list-unstyled
+      li.groupUser(ng-repeat="usr in group")
+        a.chatUser(ng-click="") {{usr.username}}

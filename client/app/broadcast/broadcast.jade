@@ -2,6 +2,28 @@ div(ng-include='"components/navbar/navbar.html"')
 .contain-broadcast
   .container
     .row
+      .col-xs-6.col-sm-3
+        h1 {{broadcaster.username}}
+        p {{getReadableStatus()}}
+      .col-xs-6.col-sm-3
+        h1 {{todaysIncome | currency}}
+        p Earned Today
+      .col-xs-6.col-sm-3
+        h1 {{ userCount }}
+        p Users In Your Room
+      .col-xs-6.col-sm-3
+        h1 {{ guestCount }}
+        p Guests In Your Room
+    .row
+      .col-xs-6.col-sm-3.chatPeople
+        broadcast-watcher-list.row.chatComponent
+      .col-xs-6.col-sm-5.chatColumn
+        room-chat
+
+
+.contain-broadcast
+  .container
+    .row
       .col-xs-12
         p
           timer(interval="1000", auto-start='false', countdown='user.credits.units')
@@ -9,6 +31,4 @@ div(ng-include='"components/navbar/navbar.html"')
             span {{mminutes}}:{{sseconds}}/
             span {{seconds * .05 | number: 2 }}
         p {{user.credits.units}}
-    .row(ng-if="user")
-      video-chat-broadcast
 private-chat(user='user', broadcaster='broadcaster')

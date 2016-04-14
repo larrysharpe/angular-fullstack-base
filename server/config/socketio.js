@@ -113,26 +113,46 @@ module.exports = function (socketio) {
         for(var obj in socketRoomList) if (roomList.indexOf(obj) === -1) leaveRooms([obj], client.user);
 
         socket.user = {};
+        if(client.user.loggedIn || client.user.loggedIn === false) socket.user.loggedIn = client.user.loggedIn;
         if(client.user.slug) socket.user.slug = client.user.slug;
         if(client.user.username) socket.user.username = client.user.username;
         socket.currentRooms = Object.keys(socketRoomList);
       }
     };
 
+    var getRoom = function (roomName) {
+      var room = socket.adapter.rooms[roomName] || '';
+      var roomList = [];
+
+      if(room) {
+        var watchers = Object.keys(room);
+
+        for (var i = 0; i < watchers.length; i++) {
+          var watcher = socketio.sockets.connected[watchers[i]].user;
+          roomList.push(watcher);
+        }
+
+        return roomList;
+
+      }
+
+      return false;
+    }
+
     var roomInit = function (data, cb) {
       var room = socket.adapter.rooms[data.room];
       var roomList = [];
-      var watchers = Object.keys(room);
 
-      for(var i = 0; i < watchers.length; i ++){
-        var watcher = socketio.sockets.connected[watchers[i]].user;
+      if(room) {
+        var watchers = Object.keys(room);
 
-        console.log('watcher: ', watcher);
+        for (var i = 0; i < watchers.length; i++) {
+          var watcher = socketio.sockets.connected[watchers[i]].user;
+          roomList.push(watcher);
+        }
 
-        roomList.push(watcher);
+        cb(roomList);
       }
-
-      cb(roomList);
     };
 
     /**
@@ -183,7 +203,11 @@ module.exports = function (socketio) {
     var joinRooms = function (rooms, user) {
       for(var i = 0; i < rooms.length; i ++) {
         socket.join(rooms[i]);
+
+        user.room = rooms[i];
+
         socket.to(rooms[i]).emit('roomJoin', user);
+        console.log('emit roomJoin', rooms[i], user);
       }
     };
     var leaveRooms = function (rooms, user){
@@ -224,6 +248,31 @@ module.exports = function (socketio) {
         })
       })
     };
+    var getBroadcastChatGroups = function (data, cb) {
+      var chatGroups = {};
+      var _tmp = getRoom(data.room);
+
+      for(var i = 0; i < _tmp.length; i ++){
+        var user = _tmp[i];
+        if(!user.loggedIn){
+          if(!chatGroups.guests) chatGroups.guests = {};
+          chatGroups.guests[user.slug] = user;
+        } else {
+          if(!chatGroups[data.room]) chatGroups[data.room] = {};
+          chatGroups[data.room][user.slug] = user;
+        }
+      }
+
+      console.log('chatGroups',chatGroups);
+
+      cb(chatGroups);
+
+    }
+
+    var joinRoom = function (data) {
+      console.log('Join Room: ', data);
+      socket.join(data);
+    }
 
     var  listeners = {
       'stats:get': function (data,cb){
@@ -298,6 +347,12 @@ module.exports = function (socketio) {
               if (show.status === 'error') cb(show);
               else {
                 setUserStatus(data.broadcaster.slug, statusObj, function (user) {
+                  var room = data.broadcaster.slug + '-' + data.show;
+                  var usr = {
+                    username: user.data.username,
+                    slug: user.data.slug
+                  };
+                  joinRooms([room], usr);
                   cb({status: 'success', show: show, user: user.data});
                 });
               }
@@ -365,6 +420,8 @@ module.exports = function (socketio) {
       },
       init: init,
       roomInit: roomInit,
+      joinRoom: joinRoom,
+      getBroadcastChatGroups: getBroadcastChatGroups,
       'getSocketStats':    function (data, cb) {
         var obj = {
           socketsToUsers:socketsToUsers,

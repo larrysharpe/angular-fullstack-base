@@ -1,8 +1,40 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket, $rootScope) {
+  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket, $rootScope, socketInit) {
 
+
+    $scope.user = Auth.getCurrentUser();
+    $scope.broadcaster = $scope.user;
+    $scope.statusReadable = '';
+    $scope.room = $scope.user.slug + '-public';
+    var url = '/api/users/broadcasters/' + $scope.user.slug;
+
+    $scope.todaysIncome = 0;
+    $scope.userCount  = 0;
+    $scope.guestCount = 0;
+
+    var readableStatuses = {
+      away: 'You Are Away',
+      offline: 'Chat Is On Cam Is Off',
+      password: 'In A Password Show',
+      public: 'In Public',
+      private: 'In A Private Show'
+    };
+
+
+
+    $scope.getReadableStatus = function (){
+      if ($scope.user){
+        if($scope.broadcaster.status.online === false || $scope.broadcaster.status.availability == 'offline'){
+          return 'You are offline.';
+        } else if ($scope.broadcaster.status.show && readableStatuses[$scope.broadcaster.status.show]) {
+          return readableStatuses[$scope.broadcaster.status.show];
+        } else {
+          return $scope.broadcaster.status.show;
+        }
+      }
+    }
 
     socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
@@ -11,47 +43,9 @@ angular.module('baseApp')
       $scope.camState = $scope.user.status.show;
     });
 
-    $scope.user = Auth.getCurrentUser();
-    $scope.room = $scope.user.slug + '-public';
-
-
-    var url = '/api/users/broadcasters/' + $scope.user.slug;
-
-    $http.get(url)
-      .success(function(data){
-        $scope.broadcaster = data;
-      });
+    socketInit.run(function(data){console.log(data)}, $scope.user);
 
     $scope.camState = 'offline';
-
-    console.log('my user: ', $scope.user);
-
-
-    var initObj = {
-      page: $state.current.name,
-      room: $scope.user.slug + '-public',
-      user: {
-        slug: $scope.user.slug,
-        username: $scope.user.username
-      }
-    };
-
-    if($rootScope.removeUser){
-      initObj.remove = $rootScope.removeUser;
-      delete $rootScope.removeUser;
-    }
-
-    var initReturn = function (data){
-      console.log('init return:',data);
-      if(data.user) {
-        $scope.broadcaster = data.user;
-        $scope.user = data.user;
-      } else {
-        $scope.broadcaster = data.data;
-      }
-    };
-
-    socket.emit('init', initObj, initReturn);
 
     $scope.doConnect = function (instanceType) {
       $scope.camState = 'going-online';
@@ -64,7 +58,6 @@ angular.module('baseApp')
     $scope.checkScope = function (){
       console.log($scope);
     }
-
 
     $scope.undoConnect = function () {
       $scope.camState = 'going-offline';
