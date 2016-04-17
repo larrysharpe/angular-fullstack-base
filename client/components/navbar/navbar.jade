@@ -38,8 +38,8 @@ div(ng-controller='NavbarCtrl')
 
           li(ng-show='isLoggedIn() && !hasRole("admin")', ng-class='{active: isActive("/account/faves")}')
             a(href="/account/faves", title="{{faves.online.length}} Online, {{faves.total}} Total.")
-              span.text-danger Faves
-                span.badge.badge-danger {{faves.online.length}}
+              span.fa.fa-heart
+              span.badge.badge-danger {{faves.online.length}}
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
             a(href='/account/balance', title='Balance')
@@ -54,7 +54,8 @@ div(ng-controller='NavbarCtrl')
               i.fa.fa-photo
 
           li(ng-show='isLoggedIn()', ng-class='{active: isActive("/logout")}')
-            a(href='', ng-click='logout()', title='Logout') Logout
+            a(href='', ng-click='logout()', title='Logout')
+              span.fa.fa-power-off
 
     div(ng-if="isLoggedIn()")
       .text-center(ng-if="!isVerified() && !verificationSent") Your email has not been confirmed.
