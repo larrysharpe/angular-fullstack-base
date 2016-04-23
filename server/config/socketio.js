@@ -7,11 +7,23 @@ var Tips = require('../api/tips/tips.model');
 var Messages = require('../api/message/message.model');
 var Users = require('../api/user/user.model');
 var Show = require('../api/show/show.model');
+var Galleries = require('../api/gallery/gallery.model');
 var config = require('./environment');
 var socketsToUsers = {};
 var usersToSockets = {};
 var usersToRooms = {};
 var roomsToUsers = {};
+
+
+
+var slugify = function (text){
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '');            // Trim - from end of text
+};
 
 module.exports = function (socketio) {
   // socket.io (v1.x.x) is powered by debug.
@@ -274,6 +286,104 @@ module.exports = function (socketio) {
       socket.join(data);
     }
 
+    // Galleries
+    var deleteGalleries = function (galleries, cb){
+
+      Galleries.findByIdAndRemove(galleries, function (err, galleries ){
+        var returnObj = {
+          error: false,
+          errorInfo: ''
+        }
+
+        if (err) {
+          returnObj.error = true;
+          returnObj.errorInfo = err;
+        } else {
+          returnObj.results = galleries;
+        }
+        cb(returnObj);
+
+      })
+
+    };
+
+
+    var createNewGallery = function (gallery, cb ) {
+
+      var gal;
+
+      gal = new Galleries(gallery);
+      gal.slug = slugify(gal.name);
+      gal.save(function (err, gallery) {
+        console.log(err);
+        var returnObj = {
+          error: false,
+          errorInfo: ''
+        }
+
+        if (err) {
+          returnObj.error = true;
+          returnObj.errorInfo = err;
+        } else {
+          returnObj.results = gallery;
+        }
+        cb(returnObj);
+
+      });
+    };
+
+    var updateGallery = function (gallery, cb) {
+
+      if(gallery.$$hashKey) delete gallery.$$hashKey;
+
+      Galleries.findByIdAndUpdate(gallery._id, gallery, function (err, gallery){
+        console.log(err);
+        var returnObj = {
+          error: false,
+          errorInfo: ''
+        }
+
+        if (err) {
+          returnObj.error = true;
+          returnObj.errorInfo = err;
+        } else {
+          returnObj.results = gallery;
+        }
+        cb(returnObj);
+
+      });
+
+    }
+
+    var saveGallery = function ( gallery, cb ) {
+
+      console.log('save gallery', gallery);
+
+      if(gallery._id) {
+        updateGallery(gallery, cb);
+      }
+      else createNewGallery(gallery, cb);
+
+    };
+
+    var galleriesGetByOwner = function ( owner, cb ) {
+      Galleries.find({owner: owner}, function (err, galleries){
+        var returnObj = {
+          error: false,
+          errorInfo: ''
+        }
+
+        if (err) {
+          returnObj.error = true;
+          returnObj.errorInfo = err;
+        } else {
+          returnObj.results = galleries;
+        }
+        cb(returnObj);
+
+      });
+    };
+
     var  listeners = {
       'stats:get': function (data,cb){
         //Users.aggregate({$group: {_id:'$roles', count: { $sum: 1}}}, function (err, result){
@@ -421,6 +531,13 @@ module.exports = function (socketio) {
       init: init,
       roomInit: roomInit,
       joinRoom: joinRoom,
+
+      //gallery sockets
+      deleteGalleries: deleteGalleries,
+      saveGallery: saveGallery,
+      galleriesGetByOwner: galleriesGetByOwner,
+
+
       getBroadcastChatGroups: getBroadcastChatGroups,
       'getSocketStats':    function (data, cb) {
         var obj = {

@@ -1,11 +1,11 @@
 div(ng-include='"components/navbar/navbar.html"')
 .contain-main
   .container
-    .row(ng-if="!createAlbumForm")
+    .row(ng-if="!albumForm")
       .col-xs-12
         account-menu
       .col-sm-12
-        h1 Photo Albums
+        h1 Media Galleries
       .col-sm-3.photo-album
         a(href="", ng-click="openCreateAlbumForm()")
           i.fa.fa-plus.fa-4x
@@ -14,13 +14,24 @@ div(ng-include='"components/navbar/navbar.html"')
       .col-sm-3.photo-album(ng-repeat="album in user.albums")
         p(ng-if="!album.showRenameForm")
           a(href="") {{album.name}} &nbsp;
-          a(href="", ng-click="showRenameForm($index)")
+
+          a(href="", ng-click="editAlbum($index)")
             i.fa.fa-pencil-square-o
-          br
-          | {{album.pics.length}} Pics
+
+          a(href="", ng-click="deleteAlbum(album._id)")
+            i.fa.fa-times
+        p {{album.description}}
+        p.text-danger Nothing In This Gallery
+
         form(ng-show="album.showRenameForm")
           p
-            input(ng-model="newAlbumName")
+            input(ng-model="newAlbum.name", name="name")
+          p
+            textarea(ng-model="newAlbum.description", name="description", placeholder="Describe Your Album Here")
+          p
+            select(ng-model="newAlbum.privacy")
+              option(value="public") Everyone
+              option(value="internal") Internal (only people on the site can see)
           p
             a.btn.btn-primary(href="", ng-click="renameAlbum($index)")
               i.fa.fa-save
@@ -46,18 +57,18 @@ div(ng-include='"components/navbar/navbar.html"')
             button.btn.btn-success(ng-click="showUploadForm($index)")
               i.fa.fa-photo
               |  Add Pics
-          p
-            button.btn.btn-danger(ng-click="deleteAlbum($index)")
-              i.fa.fa-times
-              |  Delete Album
 
 
-    .row(ng-if="createAlbumForm")
+    .row(ng-if="albumForm")
       .col-xs-12
         h2 Create An Album
         form
           p
             input.form-control(ng-model="newAlbum.name", ng-required)
+          p
+            textarea.form-control(ng-model="newAlbum.description", placeholder="Describe Your Album")
+          p
+            input.form-control(ng-model="newAlbum.active", placeholder="active")
           p
             input.btn.btn-primary(type="submit", value="Create", ng-click="createAlbum()")
             input.btn.btn-danger(type="submit", value="Cancel", ng-click="closeCreateAlbumForm()")

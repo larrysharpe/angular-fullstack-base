@@ -13,6 +13,7 @@ module.exports = function(app, config) {
   })
 
   // Insert routes below
+  app.use('/api/galleries', require('./api/gallery'));
   app.use('/api/shows', require('./api/show'));
   app.use('/api/messages', require('./api/message'));
   app.use('/api/tips', require('./api/tips'));
