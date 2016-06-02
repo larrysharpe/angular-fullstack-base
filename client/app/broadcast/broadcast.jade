@@ -11,4 +11,4 @@ div(ng-include='"components/navbar/navbar.html"')
         p {{user.credits.units}}
     .row(ng-if="user")
       video-chat-broadcast
-private-chat(user='user', broadcaster='broadcaster')
+chat-room-module(rooms-list='roomsList', rooms='rooms', current-room='currentRoom')                                                                                               br

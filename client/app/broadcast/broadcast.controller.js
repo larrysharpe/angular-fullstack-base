@@ -53,6 +53,122 @@ angular.module('baseApp')
 
     socket.emit('init', initObj, initReturn);
 
+    $scope.roomsList = [
+      'public','group','vip','groupone'
+    ];
+    $scope.rooms = {
+      public: {
+        slug: 'public',
+        isActive: false,
+        displayname: 'Public Room A',
+        type: 'group',
+        watchercount: 8,
+        children: ['guest1'],
+        messages: [
+          {
+            username: 'User 6',
+            slug: 'user-6',
+            message: 'Lorem ipsum dolor sit amet',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
+          },
+          {
+            username: 'User 5',
+            slug: 'user-5',
+            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
+          }
+        ]
+      }
+      /*,
+      group: {
+        slug: 'group',
+        displayname: 'Group Room A',
+        type: 'group',
+        isActive: false,
+        watchercount: 6,
+        children: ['guest1'],
+        messages: [
+          {
+            username: 'User 6',
+            slug: 'user-6',
+            message: 'Lorem ipsum dolor sit amet',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
+          },
+          {
+            username: 'User 5',
+            slug: 'user-5',
+            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
+          }
+        ]
+      },
+      vip: {
+        slug: 'vip',
+        displayname: 'VIP Room',
+        isActive: false,
+        type: 'group',
+        messages: [
+          {
+            username: 'User 7',
+            slug: 'user-6',
+            message: 'Lorem ipsum dolor sit amet',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
+          },
+          {
+            username: 'User 8',
+            slug: 'user-5',
+            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
+          }
+        ]
+      },
+      groupone: {
+        slug: 'groupone',
+        displayname: 'Favorites',
+        type: 'set',
+        roomcount: 3,
+        children: ['user-2']
+      },
+      user1: {
+        slug: 'user1',
+        displayname: 'User 1',
+        type: 'user'
+      },
+      'user-2': {
+        slug: 'user-2',
+        displayname: 'User 2',
+        type: 'user'
+      }*/,
+      guest1: {
+        slug: 'guest1',
+        displayname: 'Guest 1',
+        type: 'user',
+        messages: [
+          {
+            username: 'User 6',
+            slug: 'user-6',
+            message: 'Lorem ipsum dolor sit amet',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
+          },
+          {
+            username: 'User 5',
+            slug: 'user-5',
+            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
+            time: '12:00am',
+            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
+          }
+        ]
+      }
+    };
+    $scope.currentRoom = $scope.rooms[$scope.roomsList[0]];
+
     $scope.doConnect = function (instanceType) {
       $scope.camState = 'going-online';
       var obj = {method: 'connect',

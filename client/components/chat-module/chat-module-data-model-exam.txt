@@ -1,0 +1,28 @@
+// rooms root
+{
+  roomSlug: RoomObject
+}
+
+
+
+// RoomObject
+{
+  children: [],     // Array of Strings
+  displayname: '',  // String, required
+  isOpen: '',       // Boolean
+  messages: [],     // Array of MessagesObject
+  slug: '',         // String, required, a-z and dashes
+  type: '',         // String, enum('group','set','user'), required
+  watchercount: 0   // Number, default 0, required if type is group
+}
+
+
+
+// MessagesObject
+{
+  username: '',     // String, required
+  slug: '',         // String, required
+  message: '',      // String, required
+  time: '',         // String, required
+  thumb: ''         // String, required
+}

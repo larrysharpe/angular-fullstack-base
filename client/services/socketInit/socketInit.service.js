@@ -35,6 +35,7 @@ angular.module('baseApp')
         $cookieStore.remove('removeUser');
       }
 
+
       socket.emit('init', initObj, cb);
 
     }

@@ -1,0 +1,4 @@
+Home Page
+  Shows a list of broadcasters
+  c - global nav
+  c - global footer
