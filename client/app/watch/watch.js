@@ -7,25 +7,29 @@ angular.module('baseApp')
         url: '/watch/:slug',
         templateUrl: 'app/watch/watch.html',
         controller: 'WatchCtrl',
-        room: 'public'
+        page: 'watch',
+        show: 'public'
       })
       .state('watch.vip', {
         url: '/vip',
         templateUrl: 'app/watch/watchVip.html',
         controller: 'WatchCtrl',
-        room: 'vip'
+        page: 'watch',
+        show: 'vip'
       })
       .state('watch.private', {
         url: '/private',
         templateUrl: 'app/watch/watchPrivate.html',
         controller: 'WatchPvtCtrl',
-        room: 'private'
+        page: 'watch',
+        show: 'private'
       })
       .state('watch.group', {
         url: '/group',
         templateUrl: 'app/watch/watchGroup.html',
         controller: 'WatchCtrl',
-        room: 'group'
+        page: 'watch',
+        show: 'group'
       })
     ;
   });

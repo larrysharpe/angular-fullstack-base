@@ -2,7 +2,7 @@
 
 angular.module('baseApp')
   .controller('LoginCtrl', function ($scope, Auth, $location, $window, $http, $stateParams, Flash) {
-    $scope.user = {};
+
     $scope.errors = {};
 
     if($stateParams.etoken){
@@ -63,7 +63,8 @@ angular.module('baseApp')
           password: $scope.user.password
         })
         .then( function(data) {
-            redirectHome(data.roles)
+            $scope.user = data.user;
+            redirectHome(data.user.roles)
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

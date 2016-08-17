@@ -25,16 +25,13 @@ router.post('/', function(req, res, next) {
       if(err)  {
         res.send(500);
       } else {
-        var resObj = {
-          roles: user.roles,
-          token: auth.signToken(user._id, roleSign)
-        };
-
+        var resObj = user;
+        var token = auth.signToken(user._id, roleSign);
         var query = {'user': user._id};
         var update = {$push: {"logins": new Date()}};
         History.findOneAndUpdate(query, update, {upsert:true}, function(err, doc){
           if (err) return res.send(500, { error: err });
-          res.json(resObj);
+          res.json({user: resObj, token: token});
         });
       }
     });

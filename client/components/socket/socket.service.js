@@ -1,6 +1,16 @@
 /* global io */
 'use strict';
 
+var serialize = function(obj) {
+  var str = [];
+  for(var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
+
+
 angular.module('baseApp')
   .factory('socket', function(socketFactory, $rootScope, Auth) {
 

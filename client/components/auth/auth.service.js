@@ -4,6 +4,10 @@ angular.module('baseApp')
   .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $window) {
     var currentUser = {};
 
+    var getRandomIntInclusive = function (min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     var createClientCookie = function (data){
       var guestNumber = getRandomIntInclusive(1,100000);
       var clientCookie = {
@@ -14,6 +18,7 @@ angular.module('baseApp')
       if (data &&  data.token) {
         clientCookie.loggedIn = true;
         $cookieStore.put('token', data.token);
+        currentUser = User.get();
       } else {
         clientCookie.username = 'Guest ' + guestNumber;
         clientCookie.slug = 'guest-' + guestNumber;
@@ -23,9 +28,7 @@ angular.module('baseApp')
       }
     }
 
-    var getRandomIntInclusive = function (min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    var deferred = $q.defer();
 
     // set logged in user
     if($cookieStore.get('token')) {
@@ -42,8 +45,8 @@ angular.module('baseApp')
       createClientCookie();
     }
 
-    return {
 
+    return {
       /**
        * Authenticate user and save token
        *
@@ -61,7 +64,6 @@ angular.module('baseApp')
         }).
           success(function(data) {
             createClientCookie(data);
-            currentUser = User.get();
             deferred.resolve(data);
             return cb();
           }).
@@ -73,6 +75,11 @@ angular.module('baseApp')
 
         return deferred.promise;
       },
+
+      refreshUser: function() {
+        currentUser = User.get();
+      },
+
 
       /**
        * Delete access token and user info
@@ -98,7 +105,6 @@ angular.module('baseApp')
         return User.save(user,
           function(data) {
             createClientCookie(data);
-            currentUser = User.get();
             return cb(user);
           },
           function(err) {
@@ -136,10 +142,10 @@ angular.module('baseApp')
       getCurrentUser: function() {
         return currentUser;
       },
+
       setFaves: function (faves) {
         currentUser.faves = faves;
       },
-
 
       /**
        * Check if a user is logged in
@@ -147,7 +153,7 @@ angular.module('baseApp')
        * @return {Boolean}
        */
       isLoggedIn: function() {
-        return currentUser.hasOwnProperty('role');
+        return currentUser.hasOwnProperty('roles');
       },
 
       /**
@@ -160,7 +166,7 @@ angular.module('baseApp')
           }).catch(function() {
             cb(false);
           });
-        } else if(currentUser.hasOwnProperty('role')) {
+        } else if(currentUser.hasOwnProperty('roles')) {
           cb(true);
         } else {
           cb(false);
@@ -169,7 +175,7 @@ angular.module('baseApp')
 
       /**
        * Check if a user is an admin
-       *
+       * @param {String|[String]} roles - role to be looked up
        * @return {Boolean}
        */
       hasRole: function (roles) {

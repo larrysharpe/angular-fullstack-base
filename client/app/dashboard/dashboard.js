@@ -6,6 +6,7 @@ angular.module('baseApp')
       .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/dashboard/dashboard.html',
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        page: 'dashboard'
       });
   });

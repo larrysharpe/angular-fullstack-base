@@ -1,40 +1,38 @@
 'use strict';
 
 angular.module('baseApp')
-  .service('socketInit', function (socket, $state, $cookieStore) {
+  .service('socketInit', function (socket, $state, $cookieStore, Auth) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
 
     var initObj = {
       page: '',
-      room: '',
-      remove: '',
       user: {
         slug: '',
-        username: '',
-        loggedIn: false
-      }
+        username: ''
+      },
+      loggedIn: false
     };
 
-    this.run = function (cb, user){
 
-      initObj.page = $state.current.name;
+    this.exec = function (cb){
 
-      if (user.slug) initObj.user.slug = user.slug;
-      if (user.username) initObj.user.username = user.username;
-      if (user.roles) initObj.user.loggedIn =  true;
-      if ($state.params.slug && $state.current.room){
-        initObj.room = $state.params.slug + '-' + $state.current.room;
-      } else {
-        initObj.room = '';
+      var client = Auth.getCurrentUser();
+
+      initObj.page = $state.current.page;
+      if ($state.current.show) initObj.show = $state.current.show;
+      if ($state.current.page === 'watch') initObj.broadcaster = $state.params.slug;
+      else if ($state.current.page === 'broadcast') {
+        initObj.isBroadcaster = true;
+        initObj.broadcaster = client.slug;
       }
 
-      /* Removes guest users from server after a user logs in */
-      if ($cookieStore.get('removeUser')) {
-        initObj.remove = $cookieStore.get('removeUser');
-        $cookieStore.remove('removeUser');
+      if (client.slug) initObj.user.slug = client.slug;
+      if (client.username) initObj.user.username = client.username;
+      if (client.roles) {
+        initObj.loggedIn = true;
+        initObj.roles = client.roles
       }
-
 
       socket.emit('init', initObj, cb);
 

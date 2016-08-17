@@ -44,7 +44,7 @@ var makeRandomString = function (length){
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
+  User.find({}, '-salt -hashedPassword', {sort: {'status.online': -1, slug: 1}}, function (err, users) {
     if(err) return res.send(500, err);
     res.json(200, users);
   });

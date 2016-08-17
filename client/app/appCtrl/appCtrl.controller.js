@@ -1,23 +1,28 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('AppCtrl', function ($scope, socket, ngToast, Auth, $stateParams) {
-    var broadcasterPublic = function (data){
-      var onlineToast = '<a href="/watch/'+data.slug+'">'+data.username+'</a> is in Public.';
+  .controller('AppCtrl', function ($scope, ngToast, Auth, socketInit, socket) {
 
-      ngToast.success({
-        content: onlineToast
-      });
+    var initialLoad = true;
+
+    $scope.hasRole = Auth.hasRole;
+    $scope.logout = Auth.logout;
+    $scope.user = Auth.getCurrentUser();
+    $scope.isLoggedIn = Auth.isLoggedIn;
+    $scope.hasNavBarAlt = function (){
+      if (!$scope.user || !$scope.user.roles || $scope.user.emailConfirmed) return false;
+      if (!$scope.user.emailConfirmed) return true;
+    }
+    $scope.showEmailNotConfirmed = function () {
+      if ($scope.user && !$scope.user.emailConfirmed ) return true;
     };
 
-    var broadcasterOffline = function (data){
-      var onlineToast = '<a href="/watch/'+data.slug+'">'+data.username+'</a> went offline.';
+    $scope.$on('$viewContentLoaded', function(event) {
+      if (initialLoad)  initialLoad = false;
+      else {
+        //console.log('$viewContentLoaded', event, $scope.user);
+        socketInit.exec($scope.user);
+      }
+    });
 
-      ngToast.danger({
-        content: onlineToast
-      });
-    };
-
-    socket.on('broadcaster:status:public', broadcasterPublic );
-    socket.on('broadcaster:status:offline', broadcasterOffline );
   });

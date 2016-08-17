@@ -8,6 +8,11 @@ var Messages = require('../api/message/message.model');
 var Users = require('../api/user/user.model');
 var Show = require('../api/show/show.model');
 var config = require('./environment');
+
+var pages_sockets = {};
+var sockets_slugs = {};
+var sockets_shows = {};
+
 var socketsToUsers = {};
 var usersToSockets = {};
 var usersToRooms = {};
@@ -67,12 +72,45 @@ module.exports = function (socketio) {
 
     socket.connectedAt = new Date();
 
-    socket.address = socket.handshake.address !== null ?
+    var addr = socket.handshake.address !== null ?
             socket.handshake.address.address + ':' + socket.handshake.address.port :
             process.env.DOMAIN;
 
+    socket.address = addr;
+
     var sortOrderList = ['public','on call','vip','group','meter','goal','password','courtesy','private','offline'];
 
+    var cleanup = {
+      pages_sockets: function (id){
+        if (sockets_slugs[id] && sockets_slugs[id].page && pages_sockets) {
+          var oldPage = sockets_slugs[id].page;
+          if (pages_sockets[oldPage] && pages_sockets[oldPage][id]) {
+            delete pages_sockets[oldPage][id];
+          }
+
+          if (!Object.keys(pages_sockets[oldPage]).length) delete pages_sockets[oldPage];
+        }
+      },
+      sockets_slugs: function (id){
+        if (sockets_slugs && sockets_slugs[id]) delete sockets_slugs[id];
+      },
+      socket_rooms: function () {
+        if(socket.currentRooms){
+          var directRoom = socket.user.slug + '-direct';
+          var pageRoom = socket.user.page + '-page';
+
+          var rooms = socket.currentRooms;
+          if (rooms[socket.id]) delete rooms[socket.id];
+          if (rooms[directRoom]) delete rooms[directRoom];
+          if (rooms[pageRoom]) delete rooms[pageRoom];
+
+          for (var room in rooms) {
+            if (rooms[room].emit) socket.to(room).emit('roomLeave', socket.user.slug);
+            delete rooms[room];
+          }
+        }
+      }
+    }
 
     /**
      * Socket Listener Functions
@@ -83,7 +121,11 @@ module.exports = function (socketio) {
      * @param reason
      */
     var disconnect = function (reason) {
-      //console.log('user disconnecting', reason);
+      //console.log('disconnecting ' + socket.id);
+
+      cleanup.pages_sockets(socket.id);
+      cleanup.sockets_slugs(socket.id);
+
       //console.log(socket.currentRooms );
       var rooms = socket.currentRooms;
     };
@@ -91,39 +133,141 @@ module.exports = function (socketio) {
     /**
      * Init
      *
-     * Called by the client
+     * Called by the client everytime a they load or change a page.
+     * This function tells sockets where every client is on the site, and what socket rooms they are in
+     * Each client gets a direct room and a room based on the page they are on
      *
      * @param client
      * @param cb
      */
     var init = function (client, cb){
+
+      console.log(client);
+
+      cleanup.pages_sockets(socket.id);
+      cleanup.socket_rooms(client)
+
+      var clientObj = {
+        username: client.user.username,
+        slug: client.user.slug,
+        socket_id: socket.id,
+        page: client.page,
+        show: client.show || null,
+        loggedIn: client.loggedIn,
+        broadcaster: client.broadcaster,
+        isBroadcaster: client.isBroadcaster,
+        time: new Date(),
+        roles: client.roles
+      };
+
+      // add to sockets_slugs
+      sockets_slugs[socket.id] = clientObj;
+
+      if(!pages_sockets[client.page]) pages_sockets[client.page] = {};
+      pages_sockets[client.page][socket.id] = clientObj;
+
+      client.addr = socket.handshake.address;
+
       if (!client)cb(handleError(1001));
       else if (!client.user) cb(handleError(1002));
       else {
+        var leaveRooms = [];
 
-        var directChannel = client.user.slug + '-direct';
-        var pageRoom = client.page + '-page';
-        var roomList = [socket.id, directChannel, pageRoom];
-        var socketRoomList = socket.adapter.sids[socket.id];
-
-        if (client.room) roomList.push(client.room);  // join a room based on room
-
-        joinRooms(roomList, client.user);
-
-        for(var obj in socketRoomList) if (roomList.indexOf(obj) === -1) leaveRooms([obj], client.user);
+        //console.log('CLIENT', client);
 
         socket.user = {};
         if(client.user.slug) socket.user.slug = client.user.slug;
         if(client.user.username) socket.user.username = client.user.username;
-        socket.currentRooms = Object.keys(socketRoomList);
+        if(client.page) socket.user.page = client.page;
+        if(client.loggedIn) socket.user.roles = client.roles;
+        else socket.user.roles = 'guest';
+        if (client.page === 'watch' || client.page === 'broadcast' && client.show) {
+          socket.user.broadcaster = client.broadcaster;
+          socket.user.show = client.show;
+        }
+
+        var directRoom = client.user.slug + '-direct';
+        var pageRoom = client.page + '-page';
+
+        if (!socket.currentRooms) socket.currentRooms = {};
+        if (!socket.currentRooms[socket.id]) socket.currentRooms[socket.id] = {emit: false}; //socket room
+        if (!socket.currentRooms[directRoom]) socket.currentRooms[directRoom] = {emit: false}; //slug direct room
+        if (!socket.currentRooms[pageRoom]) socket.currentRooms[pageRoom] = {emit: false}; // page room
+
+        if (client.roles) {
+          for (var i = 0; i < client.roles.length; i++) {
+            socket.currentRooms['all-role-' + client.roles[i]] = {emit: false};  // role rooms
+          }
+        }
+
+        if (client.page === 'watch' || client.page === 'broadcast' && client.show) {
+          var show = client.broadcaster + '-' + client.show;
+          if (!sockets_shows[show]) sockets_shows[show] = {
+
+          };
+          sockets_shows[show][client.user.slug] = clientObj;
+          socket.currentRooms[show] = {emit: true}; //show rooms
+        }
+
+        joinRooms(socket.currentRooms, client.user);
       }
+
+    //  console.log('SOCKETS_SLUGS:', sockets_slugs);
+    //  console.log('PAGES_SOCKETS:', pages_sockets);
+
     };
 
     var roomInit = function (data, cb) {
-      var room = socket.adapter.rooms[data.room];
-      var roomList = [];
-      var watchers = Object.keys(room);
 
+      //console.log('rOOMINIT',socket.user);
+
+      console.log(sockets_shows);
+
+      var roomsList = [];
+      var lists = {
+        sets: [],
+        rooms: [],
+        users: []
+      };
+      var rooms = {};
+
+      var showDefault = function () {
+        this.isActive = false;
+        this.type= null;
+        this.username= null;
+        this.children= [];
+        this.isOpen= false
+      };
+
+      for (var show in sockets_shows) {
+
+          var showObj = sockets_shows[show];
+
+          roomsList.push(show);
+          var showRoom = new showDefault;
+          showRoom.username = show;
+          showRoom.type = 'group';
+
+          for (var child in showObj) {
+            var childObj = new showDefault;
+            roomsList.push(child);
+            childObj.username = child;
+            childObj.type = 'user';
+            showRoom.children.push(child);
+            rooms[child] = childObj;
+          }
+
+
+          rooms[show] = showRoom;
+
+
+
+      }
+
+      //console.log('ROOM INIT:', roomList, data, socket.adapter.rooms);
+
+      //var watchers = Object.keys(room);
+/*
       for(var i = 0; i < watchers.length; i ++){
         var watcher = socketio.sockets.connected[watchers[i]].user;
 
@@ -131,8 +275,8 @@ module.exports = function (socketio) {
 
         roomList.push(watcher);
       }
-
-      cb(roomList);
+*/
+      cb({roomsList:roomsList, rooms: rooms});
     };
 
     /**
@@ -181,16 +325,20 @@ module.exports = function (socketio) {
       }
     };
     var joinRooms = function (rooms, user) {
-      for(var i = 0; i < rooms.length; i ++) {
-        socket.join(rooms[i]);
-        socket.to(rooms[i]).emit('roomJoin', user);
+      for(var room in rooms){
+        var r = rooms[room];
+        socket.join(room);
+
+        if (r.emit) socket.to(room).emit('roomJoin', user);
       }
+
     };
-    var leaveRooms = function (rooms, user){
+
+    var leavePage = function (rooms, client){
       for(var i = 0; i < rooms.length; i ++) {
-        console.log('Leave room: ', rooms[i]);
-        socket.leave(rooms[i]);
-        socket.to(rooms[i]).emit('roomLeave', user);
+        //console.log('Leave page: ', rooms[i], client);
+        socket.leave(rooms[i].name);
+        socket.to(rooms[i].name).emit('roomLeave', client);
       }
     };
     var saveUser = function (user, cb){
@@ -201,28 +349,18 @@ module.exports = function (socketio) {
         })
       })
     };
-    var setUserStatus = function (user, value, cb){
+    var setUserStatus = function (users, value, cb){
 
-      Users.findOne({slug: user}, function(err,user) {
-        checkObj(err, user, function (user) {
-          if (user.status === 'error') {
-            if(cb) cb(user);
-          }
-          else {
+      console.log('setUserStatus: ', value, users);
+      var slugs = [];
+      for (var i = 0; i < users.length; i++){
+        slugs.push(users[i].slug);
+      }
 
-            if (value.online || value.online === false) user.status.online = value.online;
-            if (value.availability) user.status.availability = value.availability;
-            if (value.show) user.status.show = value.show;
 
-            saveUser(user, function (res) {
-              console.log(' saving user status', user.status, res );
+      Users.update({slug: { $in: slugs }}, function(err,users) {
 
-              if(res.status !== 'error') socket.broadcast.emit('status:change', user);
-              if(cb) cb(res);
-            })
-          }
-        })
-      })
+      });
     };
 
     var  listeners = {
@@ -510,7 +648,11 @@ module.exports = function (socketio) {
           });
         },
       'status:change': function (data, cb) {
-        setUserStatus(data.slug, data.status, cb);
+        console.log('status changing', data);
+        setUserStatus(data, data[0].status, cb);
+      },
+      'statusUpdate': function (data, cb){
+        console.log('Status Update: ', data);
       },
       'tip:send':  function(tip, cb){
 

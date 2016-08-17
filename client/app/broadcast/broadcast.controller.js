@@ -1,8 +1,12 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('BroadcastCtrl', function ($scope, $http, $state, $stateParams, Auth, socket, $rootScope) {
+  .controller('BroadcastCtrl', function (chatRoomSvc, $scope, $http, $state, $stateParams, Auth, socket, $rootScope, socketInit) {
 
+
+    $scope.showNavBarMessage = function (){
+      return (!$scope.user.emailConfirmed);
+    };
 
     socket.on('status:change', function (data) {
       console.log('rcvd cam status',data);
@@ -11,7 +15,6 @@ angular.module('baseApp')
       $scope.camState = $scope.user.status.show;
     });
 
-    $scope.user = Auth.getCurrentUser();
     $scope.room = $scope.user.slug + '-public';
 
 
@@ -24,17 +27,6 @@ angular.module('baseApp')
 
     $scope.camState = 'offline';
 
-    console.log('my user: ', $scope.user);
-
-
-    var initObj = {
-      page: $state.current.name,
-      room: $scope.user.slug + '-public',
-      user: {
-        slug: $scope.user.slug,
-        username: $scope.user.username
-      }
-    };
 
     if($rootScope.removeUser){
       initObj.remove = $rootScope.removeUser;
@@ -42,7 +34,6 @@ angular.module('baseApp')
     }
 
     var initReturn = function (data){
-      console.log('init return:',data);
       if(data.user) {
         $scope.broadcaster = data.user;
         $scope.user = data.user;
@@ -51,123 +42,10 @@ angular.module('baseApp')
       }
     };
 
-    socket.emit('init', initObj, initReturn);
 
-    $scope.roomsList = [
-      'public','group','vip','groupone'
-    ];
-    $scope.rooms = {
-      public: {
-        slug: 'public',
-        isActive: false,
-        displayname: 'Public Room A',
-        type: 'group',
-        watchercount: 8,
-        children: ['guest1'],
-        messages: [
-          {
-            username: 'User 6',
-            slug: 'user-6',
-            message: 'Lorem ipsum dolor sit amet',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
-          },
-          {
-            username: 'User 5',
-            slug: 'user-5',
-            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
-          }
-        ]
-      }
-      /*,
-      group: {
-        slug: 'group',
-        displayname: 'Group Room A',
-        type: 'group',
-        isActive: false,
-        watchercount: 6,
-        children: ['guest1'],
-        messages: [
-          {
-            username: 'User 6',
-            slug: 'user-6',
-            message: 'Lorem ipsum dolor sit amet',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
-          },
-          {
-            username: 'User 5',
-            slug: 'user-5',
-            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
-          }
-        ]
-      },
-      vip: {
-        slug: 'vip',
-        displayname: 'VIP Room',
-        isActive: false,
-        type: 'group',
-        messages: [
-          {
-            username: 'User 7',
-            slug: 'user-6',
-            message: 'Lorem ipsum dolor sit amet',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
-          },
-          {
-            username: 'User 8',
-            slug: 'user-5',
-            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
-          }
-        ]
-      },
-      groupone: {
-        slug: 'groupone',
-        displayname: 'Favorites',
-        type: 'set',
-        roomcount: 3,
-        children: ['user-2']
-      },
-      user1: {
-        slug: 'user1',
-        displayname: 'User 1',
-        type: 'user'
-      },
-      'user-2': {
-        slug: 'user-2',
-        displayname: 'User 2',
-        type: 'user'
-      }*/,
-      guest1: {
-        slug: 'guest1',
-        displayname: 'Guest 1',
-        type: 'user',
-        messages: [
-          {
-            username: 'User 6',
-            slug: 'user-6',
-            message: 'Lorem ipsum dolor sit amet',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-6'
-          },
-          {
-            username: 'User 5',
-            slug: 'user-5',
-            message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec euismod dui, quis tristique urna. Suspendisse nunc augue, rhoncus placerat',
-            time: '12:00am',
-            thumb: 'http://loremflickr.com/320/240/woman,sexy/all?radn=user-5'
-          }
-        ]
-      }
-    };
-    $scope.currentRoom = $scope.rooms[$scope.roomsList[0]];
+
+
+    $scope.chatSvc =  chatRoomSvc;
 
     $scope.doConnect = function (instanceType) {
       $scope.camState = 'going-online';
@@ -244,4 +122,5 @@ angular.module('baseApp')
         $scope.user.status = data.user.status;
       });
     }
+
   });

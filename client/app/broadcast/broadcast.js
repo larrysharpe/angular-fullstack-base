@@ -7,6 +7,8 @@ angular.module('baseApp')
         url: '/broadcast',
         templateUrl: 'app/broadcast/broadcast.html',
         controller: 'BroadcastCtrl',
+        show: 'public',
+        page: 'broadcast',
         authenticate: true
       });
   });

@@ -29,7 +29,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div ng-controller="AppCtrl">
+    <div ng-controller="AppCtrl" ng-class='{"has-navbar-alt" : hasNavBarAlt()}'>
 
       <toast></toast>
       <!-- Add your site or application content here -->
@@ -95,6 +95,11 @@
           <script src="app/admin/createBatch.controller.js"></script>
           <script src="app/admin/transactions/transactions.controller.js"></script>
           <script src="app/admin/transactions/transactions.js"></script>
+          <script src="app/apiRunner/apiRunner.controller.js"></script>
+          <script src="app/apiRunner/apiRunner.js"></script>
+          <script src="app/apiRunner/endpoints/messages/apiRunnerMessages.controller.js"></script>
+          <script src="app/apiRunner/endpoints/shows/apiRunnerShows.controller.js"></script>
+          <script src="app/apiRunner/endpoints/users/apiRunnerUsers.controller.js"></script>
           <script src="app/appCtrl/appCtrl.controller.js"></script>
           <script src="app/broadcast/broadcast.controller.js"></script>
           <script src="app/broadcast/broadcast.js"></script>
@@ -102,7 +107,6 @@
           <script src="app/dashboard/dashboard.js"></script>
           <script src="app/directiveGallery/directiveGallery.controller.js"></script>
           <script src="app/directiveGallery/directiveGallery.js"></script>
-          <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
           <script src="app/watch/watch.controller.js"></script>
           <script src="app/watch/watch.js"></script>
@@ -113,6 +117,7 @@
           <script src="components/auth/user.service.js"></script>
           <script src="components/broadcasterList/broadcasterList.directive.js"></script>
           <script src="components/broadcasterListItem/broadcasterListItem.directive.js"></script>
+          <script src="components/chat-group-toggle/chat-group-toggle.directive.js"></script>
           <script src="components/chat-module/chat-module.directive.js"></script>
           <script src="components/chatRoomData/chatRoomData.directive.js"></script>
           <script src="components/chatRoomList/chatRoomList.directive.js"></script>
@@ -132,7 +137,9 @@
           <script src="components/videoChat/videoChat.directive.js"></script>
           <script src="components/videoChatBroadcast/videoChatBroadcast.directive.js"></script>
           <script src="components/videoChatWatch/videoChatWatch.directive.js"></script>
+          <script src="components/videoPlayer/videoPlayer.directive.js"></script>
           <script src="services/broadcasterList/broadcasterList.service.js"></script>
+          <script src="services/chatRoomSvc/chatRoomSvc.service.js"></script>
           <script src="services/socketInit/socketInit.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->

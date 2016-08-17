@@ -1,0 +1,30 @@
+strLowerReqTrim
+
+
+
+# Schema
+{
+  from: {
+    lowercase: true,
+    required: true,
+    trim: true
+  },
+
+  to: {
+    slug: {
+      lowercase: true,
+      required: true,
+      trim: true
+    },
+    type: {
+      enum: ['user', 'group', 'room']
+      required: true
+    }
+  },
+
+  content: {type: String, required: true},
+
+  created: {type: Date, required: true, default: new Date()},
+
+
+}

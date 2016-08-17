@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('AdminCtrl', function ($scope, $http, Auth, User, socket, $state, $rootScope) {
+  .controller('AdminCtrl', function ($scope, $http, Auth, User, socket, socketInit, $state, $rootScope) {
 
     $scope.user = Auth.getCurrentUser();
 
@@ -21,6 +21,22 @@ angular.module('baseApp')
     };
 
 
+
+    var selected = [];
+
+
+    $scope.toggleSelection = function (index){
+      //console.log('toggle selection', index);
+
+      var selectedIndex = selected.indexOf(index);
+
+      if(selectedIndex === -1) selected.push(index);
+      else selected.splice(selectedIndex, 1);
+
+      //console.log(selected);
+    }
+
+
     var getSocketStats = function (data){
       console.log('getSocketStats',data);
       for(var obj in data){
@@ -35,6 +51,11 @@ angular.module('baseApp')
     // Use the User $resource to fetch all users
 
     var handleLoadUsers = function (users) {
+
+      for (var i = 0; i < users.length; i++){
+        users[i].originalIndex = i;
+      }
+
       $scope.users = users;
     };
 
@@ -64,48 +85,146 @@ angular.module('baseApp')
       console.log(d)
     };
 
-    $scope.statusOnlineChange = function (user, index){
-      var obj = {
-        slug: user.slug,
-        status: {
-          online: user.status.online
-        },
-        index: index
-      };
+    $scope.statusChange = function (statusType, val, slug, index){
+
+      var toSocket = [];
+
+      if (selected.length){
+        for (var i = 0; i < selected.length; i ++) {
+          var _tmpObj = {
+            index: selected[i],
+            slug: $scope.users[selected[i]].slug,
+            status: {}
+          };
+
+          _tmpObj.status[statusType] = val;
+          toSocket.push(_tmpObj);
+        }
+      } else {
+        var _tmpObj = {
+          index: index,
+          slug: slug,
+          status: {}
+        };
+
+        _tmpObj.status[statusType] = val;
+        toSocket.push(_tmpObj);
+      }
+
+      console.log('to Socket:', toSocket);
+
+    };
+    $scope.statusOnlineChange = function (user, val, index){
+
+      console.log(val);
+
+      var obj = [];
+      var tmpObj;
+      if (!selected.length) {
+        obj.push({
+          slug: user.slug,
+          status: {
+            online: user.status.online
+          },
+          index: index
+        });
+      } else {
+        obj = [];
+        for (var i = 0; i < selected.length; i ++) {
+
+          $scope.users[selected[i]].status.online = val;
+
+          obj.push({
+            slug: $scope.users[selected[i]].slug,
+            status: {
+              online: val
+            },
+            index: selected[i]
+          });
+        }
+      }
+
+      console.log('obj: ',obj);
+
       socket.emit('status:change', obj, handleStatusOnline);
     };
 
 
     $scope.statusAvailabilityChange = function (user, index){
-      var obj = {
-        slug: user.slug,
-        status: {
-          availability: user.status.availability
-        },
-        index: index
-      };
+      var obj = [];
+      var tmpObj;
+      if (!selected.length) {
+        obj.push({
+          slug: user.slug,
+          status: {
+            availability: user.status.availability
+          },
+          index: index
+        });
+      } else {
+        obj = [];
+        for (var i = 0; i < selected.length; i ++) {
+          obj.push({
+            slug: $scope.users[selected[i]].slug,
+            status: {
+              availability: $scope.users[selected[i]].status.availability
+            },
+            index: selected[i]
+          });
+        }
+      }
       socket.emit('status:change', obj, handleStatusAvailability);
     };
 
     $scope.statusShowChange = function (user, index){
-      var obj = {
-        slug: user.slug,
-        status: {
-          show: user.status.show
-        },
-        index: index
-      };
+      var obj = [];
+      var tmpObj;
+      if (!selected.length) {
+        obj.push({
+          slug: user.slug,
+          status: {
+            show: user.status.show
+          },
+          index: index
+        });
+      } else {
+        obj = [];
+        for (var i = 0; i < selected.length; i ++) {
+          obj.push({
+            slug: $scope.users[selected[i]].slug,
+            status: {
+              show: $scope.users[selected[i]].status.show
+            },
+            index: selected[i]
+          });
+        }
+      }
       socket.emit('status:change', obj, handleStatusShow);
     };
 
     $scope.updateStatusOnline = function (status, slug, index){
-      var obj = {
-        slug: slug,
-        status: {
-          online: status
-        },
-        index: index
-      };
+      var obj = [];
+      var tmpObj;
+      if (!selected.length) {
+        obj.push({
+          slug: user.slug,
+          status: {
+            online: user.status.online
+          },
+          index: index
+        });
+      } else {
+        obj = [];
+        for (var i = 0; i < selected.length; i ++) {
+          obj.push({
+            slug: $scope.users[selected[i]].slug,
+            status: {
+              online: $scope.users[selected[i]].status.online
+            },
+            index: selected[i]
+          });
+        }
+      }
       socket.emit('status:change', obj, handleStatusOnline);
     } ;
 

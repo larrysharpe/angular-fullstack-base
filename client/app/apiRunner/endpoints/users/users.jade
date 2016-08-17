@@ -1,0 +1,15 @@
+h2 {{params.title}}
+table
+  tr
+    th User
+    th Status
+    th Last
+  tr(ng-repeat='u in users | filter:search | startFrom:currentPage*pageSize | limitTo:pageSize ')
+    td
+      a(href="/apiRunner/users/{{u.slug}}")
+        b {{::u.username}}
+    td {{getStatus(u.status)}}
+    td {{u.lastLogin | date: 'short'}}
+button(ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1") Previous
+| {{currentPage+1}}/{{numberOfPages()}}
+button(ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1") Next

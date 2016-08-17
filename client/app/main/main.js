@@ -3,9 +3,9 @@
 angular.module('baseApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('main', {
-        url: '/',
-        templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+      .state('home', {
+        url: '/'
+        , templateUrl: 'app/main/main.html'
+        , page: 'home'
       });
   });

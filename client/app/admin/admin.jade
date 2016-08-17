@@ -13,21 +13,25 @@
       table.table.table-striped.table-bordered
         caption Users
         tr
+          td
           th Username
-          th Status
-        tr(ng-repeat="user in users | orderBy:'username' ")
+          th Online
+          th Availability
+          th Show
+        tr(ng-repeat="user in users | orderBy:'username' ", ng-class="{selected: user.selected}")
+          td
+            input(type="checkbox" ng-model="user.selected" ng-change="toggleSelection(user.originalIndex)")
           td
             a(href="/admin/user/{{user._id}}", title="{{::user.email}}") {{::user.username}}
-            br
-            small {{::user.roles.join(',')}}
+            sup
+              small {{::user.roles.join(',')}}
           td
-            div Online:
-              select(ng-model='user.status.online', ng-change='statusOnlineChange(user)')
-                option(ng-repeat='opt in options.online', ng-value='opt.value', ng-selected="opt.value === user.status.online") {{opt.label}}
-            div Availability:
-              select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user)')
-            div Show:
-              select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user)')
+            select(ng-model="user.status.online", ng-change='statusChange("online", user.status.online, user.slug, user.originalIndex)', ng-options="opt.val as opt.label for opt in [{label:'online', val: true}, {label:'offline', val: false}]")
+
+          td
+            select(ng-model='user.status.availability', ng-options='o as o for o in options.availability',ng-change='statusAvailabilityChange(user)')
+          td
+            select(ng-model='user.status.show', ng-options='o as o for o in options.show', ng-change='statusShowChange(user)')
           td(ng-if="needsBroadcasterApproval($index)")
             span
               a(href="", ng-click="approveBroadcaster(user,$index)") Approve

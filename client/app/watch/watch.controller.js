@@ -1,17 +1,13 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('WatchCtrl', function ($scope, $http, $stateParams, $location, Auth, socket, socketInit) {
+  .controller('WatchCtrl', function ($state, $scope, $http, $stateParams, $location, Auth, socket) {
     $scope.slug = $stateParams.slug;
-    $scope.user = Auth.getCurrentUser();
     $scope.room = $stateParams.slug + '-public';
 
     if(Auth.hasRole('broadcaster') && $scope.slug === $scope.user.slug){
       $location.path('/broadcast');
     }
-
-    socketInit.run(function(data){console.log(data)}, $scope.user);
-
 
     var url = '/api/users/broadcasters/'+$stateParams.slug;
     if($scope.user._id) url += '?addRecent=1&user=' + $scope.user._id;
@@ -20,7 +16,6 @@ angular.module('baseApp')
       .success(function(data){
         $scope.broadcaster = data;
       });
-
 
     $scope.isBroadcaster = function () {
       return false;

@@ -1,14 +1,18 @@
 div(ng-include='"components/navbar/navbar.html"')
-.contain-broadcast
-  .container
-    .row
-      .col-xs-12
-        p
-          timer(interval="1000", auto-start='false', countdown='user.credits.units')
-            span(ng-if="hours") {{hhours}}:
-            span {{mminutes}}:{{sseconds}}/
-            span {{seconds * .05 | number: 2 }}
-        p {{user.credits.units}}
-    .row(ng-if="user")
-      video-chat-broadcast
-chat-room-module(rooms-list='roomsList', rooms='rooms', current-room='currentRoom')                                                                                               br
+
+.contain-main.contain-broadcast
+  .chatBlock
+    chat-room-module(rooms-list='chatSvc.roomsList', rooms='chatSvc.rooms', current-room='chatSvc.currentRoom')
+  .vidBlock
+    video-player
+
+.container
+  .row
+    .col-xs-12
+      p
+        timer(interval="1000", auto-start='false', countdown='user.credits.units')
+          span(ng-if="hours") {{hhours}}:
+          span {{mminutes}}:{{sseconds}}/
+          span {{seconds * .05 | number: 2 }}
+      p {{user.credits.units}}
+  .row(ng-if="user")

@@ -22,26 +22,24 @@ div(ng-controller='NavbarCtrl')
             a(href='', ng-click="broadcasterSetup()", ng-show='isLoggedIn()') Broadcast Yourself
           li(ng-show='hasRole(["broadcaster","broadcaster applicant", "broadcaster denied"])', ng-class='{active: isActive("/dashboard")}')
             a(href='/dashboard') Dashboard
-          li(ng-show='hasRole(["broadcaster"])', ng-class='{active: isActive("/broadcast")}')
+          li(ng-show='hasRole("broadcaster")', ng-class='{active: isActive("/broadcast")}')
             a(href='/broadcast') Broadcast
           li(ng-show='hasRole("admin")', ng-class='{active: isActive("/admin")}')
             a(href='/admin') Admin
 
         ul.nav.navbar-nav.navbar-right
-
-
           li
-            a Hello {{ getCurrentUser().username }}
+            a Hello {{ user.username }}
 
           li(ng-hide='isLoggedIn()', ng-class='{active: isActive("/login")}')
             a(href='/login') Login
 
-          li(ng-show='isLoggedIn() && !hasRole("admin")', ng-class='{active: isActive("/account/faves")}')
+          li(ng-show='isLoggedIn() && user.faves.length && !hasRole("admin")', ng-class='{active: isActive("/account/faves")}')
             a(href="/account/faves", title="{{faves.online.length}} Online, {{faves.total}} Total.")
-              span.text-danger Faves
-                span.badge.badge-danger {{faves.online.length}}
+              span.fa.fa-heart
+              span.badge.badge-danger {{faves.online.length}}
 
-          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account")}')
+          li(ng-show='isLoggedIn()', ng-class='{active: isActive("/account/balance")}')
             a(href='/account/balance', title='Balance')
               span.fa.fa-money
 
@@ -57,8 +55,8 @@ div(ng-controller='NavbarCtrl')
             a(href='', ng-click='logout()', title='Logout') Logout
 
     div(ng-if="isLoggedIn()")
-      .text-center(ng-if="!isVerified() && !verificationSent") Your email has not been confirmed.
+      .text-center(ng-if="showEmailNotConfirmed()") Your email has not been confirmed.
         a(href="", ng-click="resendVerification()") Resend Confirmation
-      .text-center(ng-if="!isVerified() && verificationSent") Your confirmation has been resent to {{getCurrentUser().email}}.
+      .text-center(ng-if="showConfirmationSent()") Your confirmation has been resent to {{user.email}}.
 
     div(flash-message="10000")

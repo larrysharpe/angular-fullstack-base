@@ -7,3 +7,7 @@ div(ng-include='"components/navbar/navbar.html"')
           p
             span(ng-if="hasRole('broadcaster applicant')") Your application is under review.
             span(ng-if="hasRole('broadcaster denied')") Your application has been denied.
+    .row
+      .col-md-12
+          h2 {{user.username}}
+| {{user}}

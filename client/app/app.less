@@ -4,36 +4,23 @@
 @icon-font-path: '/bower_components/bootstrap/fonts/';
 @fa-font-path: '/bower_components/font-awesome/fonts';
 
-/**
- * App-wide Styles
- */
-
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
-.contain-main {
-  margin-top: 50px;
-}
 
 // injector
 @import 'account/history/history.less';
 @import 'account/login/login.less';
 @import 'admin/admin.less';
 @import 'admin/transactions/transactions.less';
+@import 'apiRunner/apiRunner.less';
 @import 'broadcast/broadcast.less';
 @import 'colors.less';
 @import 'dashboard/dashboard.less';
 @import 'directiveGallery/directiveGallery.less';
-@import 'main/main.less';
 @import 'watch/watch.less';
 @import 'accountMenu/accountMenu.less';
 @import 'adminNav/adminNav.less';
 @import 'broadcasterList/broadcasterList.less';
 @import 'broadcasterListItem/broadcasterListItem.less';
+@import 'chat-group-toggle/chat-group-toggle.less';
 @import 'chat-module/chat-module.less';
 @import 'chatRoomList/chatRoomList.less';
 @import 'chatRoomModule/chatRoomModule.less';
@@ -49,8 +36,27 @@
 @import 'videoChat/videoChat.less';
 @import 'videoChatBroadcast/videoChatBroadcast.less';
 @import 'videoChatWatch/videoChatWatch.less';
+@import 'videoPlayer/videoPlayer.less';
 // endinjector
 
+/**
+ * App-wide Styles
+ */
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+.contain-main {
+  margin-top: 28px;
+}
+
+.has-navbar-alt .contain-main {
+  margin-top: 50px;
+}
 
 .photo-album{
   border: 1px solid #ccc;
