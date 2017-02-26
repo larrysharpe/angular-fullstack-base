@@ -10,6 +10,7 @@ var UserSchema = new Schema({
   email: { type: String, lowercase: true },
 
   created: {type: Date, required: true, default: new Date()},
+  lastLogin: Date,
 
   roles: {
     type: [String],
