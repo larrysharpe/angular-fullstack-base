@@ -1,0 +1,22 @@
+.container
+  .row
+    .col-xs-12
+      h1 CWL Directive Gallery
+    .col-xs-2
+      ul.list-unstyled
+        li(ng-repeat="dir in directives")
+          a(href="directiveGallery/{{dir.href}}") {{dir.name}}
+    .col-xs-10
+      div(ui-view="")
+
+  .row
+    .col-xs-4
+      form(ng-submit='addUser()')
+        p
+          input.form-control(placeholder='username', ng-model='newUsr.username')
+        p
+          input.form-control(placeholder='slug', ng-model='newUsr.slug')
+        p
+          input.form-control(placeholder='room', ng-model='newUsr.room')
+        p
+          input.btn.btn-primary(type='submit', value='Add Person')

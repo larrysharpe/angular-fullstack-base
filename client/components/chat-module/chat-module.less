@@ -1,0 +1,67 @@
+// Colors
+@gray-main: #e7e7e9;
+@gray-alt: #929292;
+@gray-light: #eaeaea;
+
+.main-padding {
+  padding: 5px;
+}
+
+
+.txt-gray-alt {
+  color: @gray-alt;
+}
+
+.chat-module {
+
+  align-items: stretch;
+  border-bottom: 1px solid @gray-main;
+  border-top: 1px solid @gray-main;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100%;
+  min-height: 300px;
+  min-width: 500px;
+  width: 100%;
+
+  a {
+    text-decoration: none;
+  }
+
+  .room-icon {
+    display: inline-block;
+    text-align: center;
+    width: 20px;
+  }
+
+  .rooms-panel {
+    background: #F8F8FA;
+    border-right: 1px solid #e7e7e9;
+    max-width: 250px;
+    min-width: 150px;
+
+    .room-title {
+      color: @gray-alt;
+    }
+
+  }
+
+  .room-item:hover {
+    background: #fff;
+  }
+  .room-item.active {
+    background: @gray-main;
+  }
+
+  .room-toggle {
+    float: right;
+  }
+
+
+
+  .child-list {
+    padding-left: 15px;
+  }
+
+}

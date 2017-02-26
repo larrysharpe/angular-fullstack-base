@@ -1,0 +1,10 @@
+.container
+  h2 API Admin
+  p
+      a.navLink(href="/apiRunner/{{n}}", ng-repeat="n in nav") {{n}}
+  p
+    input(ng-model="search")
+  p
+    b {{title}}
+  .mainBox
+    div(ui-view="")

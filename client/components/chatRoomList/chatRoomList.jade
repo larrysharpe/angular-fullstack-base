@@ -1,0 +1,32 @@
+.rooms-panel
+  ul.list-unstyled
+    li.room-item(ng-repeat="r in rooms", ng-class="{active: r.isActive}")
+      a.room-title()
+        span.room-icon
+          i.fa.fa-users
+        span {{r.displayname}}
+        .room-toggle(ng-if="r.numChildren")
+          a(href="", ng-click="expand(r)", ng-if="!r.isActive")
+            i.fa.fa-chevron-right.txt-gray-alt
+          a(href="", ng-click="collapse(r)", ng-if="r.isActive")
+            i.fa.fa-chevron-down.txt-gray-alt
+
+      ul.child-list.list-unstyled(ng-if="r.isActive")
+        li.room-item(ng-repeat="c in r.children", ng-class="{active: c.isActive}")
+          a.room-title()
+            span.room-icon
+              i.fa(ng-class="{'fa-star':!c.icon}", class="{{c.icon}}")
+            span {{c.displayname}}
+            span(ng-if="c.numChildren") ({{c.numChildren}})
+            .room-toggle(ng-if="c.numChildren")
+              a(href="", ng-click="expand(c)", ng-if="!c.isActive")
+                i.fa.fa-chevron-right.txt-gray-alt
+              a(href="", ng-click="collapse(c)", ng-if="c.isActive")
+                i.fa.fa-chevron-down.txt-gray-alt
+
+          ul.child-list.list-unstyled(ng-if="c.isActive")
+            li.room-item(ng-repeat="d in c.children", ng-class="{active: d.isActive}")
+              a.room-title()
+                span.room-icon
+                  i.fa.fa-user
+                a {{d.displayname}}

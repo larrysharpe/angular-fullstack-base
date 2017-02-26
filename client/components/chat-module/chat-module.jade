@@ -1,0 +1,49 @@
+.chat-module
+  .rooms-panel
+    ul.list-unstyled
+      li.room-item(ng-repeat="room in roomsList", ng-class="{active: rooms[room].isActive}")
+        a.room-title(href="", ng-click="selectRoom(room)")
+          span.room-icon
+            i.fa.fa-users(ng-if="rooms[room].type==='group'")
+            i.fa.fa-user(ng-if="rooms[room].type==='user'")
+            i.fa.fa-star(ng-if="rooms[room].type==='set'")
+          span {{rooms[room].displayname}}
+          .room-toggle(ng-show="rooms[room].children")
+            a(ng-if="!rooms[room].isOpen", href="", ng-click="openRoomList(room)")
+             i.fa.fa-chevron-right.txt-gray-alt
+            a(ng-if="rooms[room].isOpen", href="", ng-click="closeRoomList(room)")
+              i.fa.fa-chevron-down.txt-gray-alt
+          ul.child-list.list-unstyled(ng-if="rooms[room].children && rooms[room].isOpen")
+            li.room-item(ng-repeat="child in rooms[room].children", ng-class="{active: rooms[child].isActive}")
+              a.room-title(href="", ng-click="selectRoom(child)")
+                span.room-icon
+                  i.fa.fa-user
+                span {{rooms[child].displayname}}
+  .chat-panel
+    header
+      div
+        div
+          span.room-icon
+            i.fa.fa-users(ng-if="currentRoom.type==='group'")
+            i.fa.fa-user(ng-if="currentRoom.type==='user'")
+            i.fa.fa-star(ng-if="currentRoom.type==='set'")
+          b {{currentRoom.displayname}}
+        div.txt-gray-alt(ng-if="currentRoom.type === 'user'")
+          | Private Messages
+        div.txt-gray-alt(ng-if="currentRoom.type === 'set'")
+          ng-pluralize(count="currentRoom.roomcount", when="{'0': 'No Rooms', 'one': '1 Room', 'other': '{} Rooms'}")
+        div.txt-gray-alt(ng-if="currentRoom.type === 'group'")
+          ng-pluralize(count="currentRoom.watchercount", when="{'0': 'No Watchers', 'one': '1 Watcher', 'other': '{} Watchers'}")
+          | &nbsp;|&nbsp;
+          a.txt-gray-alt(href="#") Add a topic
+    .messages(scroll-to-bottom="currentRoom.messages")
+      ul.list-unstyled
+        li.message(ng-repeat="msg in currentRoom.messages track by $index")
+          div.chat-avatar
+            img.chat-avatar-img(src="{{msg.thumb}}")
+          div.chat-main
+            .chat-username {{msg.username}}
+            .chat-content {{msg.message}}
+    footer
+      form(ng-submit="sendMsg()")
+        input.chat-msg(ng-model="newMsg.message", placeholder="Enter Message Here")

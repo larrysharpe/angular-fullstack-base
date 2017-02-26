@@ -1,0 +1,41 @@
+.rooms-panel
+  ul.list-unstyled
+    li.room-item.active
+      a.room-title(href="")
+        span.room-icon
+          i.fa.fa-users
+          i.fa.fa-user(ng-if="rooms[room].type==='user'")
+          i.fa.fa-star(ng-if="rooms[room].type==='set'")
+        span whiskey public
+        .room-toggle
+          | {{isEnabled}}
+          chat-group-toggle(isEnabled="isEnabled")
+        ul.child-list.list-unstyled
+          li.room-item.active
+            a.room-title(href="")
+              span.room-icon
+                i.fa.fa-user
+              span Person
+
+
+
+
+  ul.list-unstyled
+    li.room-item(ng-repeat="room in roomsList", ng-class="{active: rooms[room].isActive}")
+      a.room-title(href="", ng-click="selectRoom(room)")
+        span.room-icon
+          i.fa.fa-users(ng-if="rooms[room].type==='group'")
+          i.fa.fa-user(ng-if="rooms[room].type==='user'")
+          i.fa.fa-star(ng-if="rooms[room].type==='set'")
+        span {{rooms[room].username}}
+        .room-toggle(ng-show="rooms[room].children.length")
+          a(ng-if="!rooms[room].isOpen", href="", ng-click="openRoomList(room)")
+            i.fa.fa-chevron-right.txt-gray-alt
+          a(ng-if="rooms[room].isOpen", href="", ng-click="closeRoomList(room)")
+            i.fa.fa-chevron-down.txt-gray-alt
+        ul.child-list.list-unstyled(ng-if="rooms[room].children && rooms[room].isOpen")
+          li.room-item(ng-repeat="child in rooms[room].children", ng-class="{active: rooms[child].isActive}")
+            a.room-title(href="", ng-click="selectRoom(child)")
+              span.room-icon
+                i.fa.fa-user
+              span {{rooms[child].username}}
