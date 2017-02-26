@@ -5,7 +5,7 @@ angular.module('baseApp')
     $stateProvider
       .state('admin', {
         url: '/admin',
-        templateUrl: 'app/admin/admin.html',
+        templateUrl: 'app/Pages/Admin/admin.html',
         controller: 'AdminCtrl'
       });
   });

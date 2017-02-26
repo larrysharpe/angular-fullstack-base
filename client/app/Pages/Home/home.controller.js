@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('MainCtrl', function ($scope, $http, socket) {
+  .controller('HomeCtrl', function ($scope, $http, socket) {
     $scope.awesomeThings = [];
 
     $http.get('/api/things').success(function(awesomeThings) {
