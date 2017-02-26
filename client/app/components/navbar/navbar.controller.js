@@ -9,7 +9,7 @@ angular.module('baseApp')
 
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
-    $scope.isAdmin = Auth.isAdmin;
+    $scope.hasRole = Auth.hasRole;
     $scope.getCurrentUser = Auth.getCurrentUser;
 
     $scope.logout = function() {

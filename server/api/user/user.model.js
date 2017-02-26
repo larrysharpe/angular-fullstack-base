@@ -8,9 +8,10 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
-  role: {
-    type: String,
-    default: 'user'
+  roles: {
+    type: [String],
+    default: 'user',
+    enum: ['admin', 'user']
   },
   hashedPassword: String,
   provider: String,
@@ -41,7 +42,7 @@ UserSchema
   .get(function() {
     return {
       'name': this.name,
-      'role': this.role
+      'roles': this.roles
     };
   });
 
@@ -51,7 +52,7 @@ UserSchema
   .get(function() {
     return {
       '_id': this._id,
-      'role': this.role
+      'roles': this.roles
     };
   });
 

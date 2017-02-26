@@ -41,15 +41,18 @@ function isAuthenticated() {
 function hasRole(roleRequired) {
   if (!roleRequired) throw new Error('Required role needs to be set');
 
+  var found = false, i;
   return compose()
     .use(isAuthenticated())
     .use(function meetsRequirements(req, res, next) {
-      if (config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf(roleRequired)) {
-        next();
+      for(i = 0; i < req.user.roles.length; i++) {
+        if (config.userRoles.indexOf(req.user.roles[i]) >= config.userRoles.indexOf(roleRequired)) {
+          found = true;
+          next();
+          break;
+        }
       }
-      else {
-        res.send(403);
-      }
+      if(!found) res.send(403);
     });
 }
 
@@ -65,7 +68,9 @@ function signToken(id) {
  */
 function setTokenCookie(req, res) {
   if (!req.user) return res.json(404, { message: 'Something went wrong, please try again.'});
-  var token = signToken(req.user._id, req.user.role);
+  var roleSign = req.user.role.join(''),
+      token = signToken(req.user._id, roleSign);
+
   res.cookie('token', JSON.stringify(token));
   res.redirect('/');
 }

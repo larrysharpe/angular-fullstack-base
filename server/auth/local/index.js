@@ -12,8 +12,15 @@ router.post('/', function(req, res, next) {
     if (error) return res.json(401, error);
     if (!user) return res.json(404, {message: 'Something went wrong, please try again.'});
 
-    var token = auth.signToken(user._id, user.role);
-    res.json({token: token});
+    var roleSign = user.roles.join('');
+    var token = auth.signToken(user._id, roleSign);
+
+    var resObj = {
+      token: token,
+      roles: user.roles
+    }
+
+    res.json(resObj);
   })(req, res, next)
 });
 

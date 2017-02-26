@@ -107,7 +107,7 @@ angular.module('baseApp')
        * @return {Boolean}
        */
       isLoggedIn: function() {
-        return currentUser.hasOwnProperty('role');
+        return currentUser.hasOwnProperty('roles');
       },
 
       /**
@@ -120,7 +120,7 @@ angular.module('baseApp')
           }).catch(function() {
             cb(false);
           });
-        } else if(currentUser.hasOwnProperty('role')) {
+        } else if(currentUser.hasOwnProperty('roles')) {
           cb(true);
         } else {
           cb(false);
@@ -128,12 +128,12 @@ angular.module('baseApp')
       },
 
       /**
-       * Check if a user is an admin
+       * Check if a user has a specific role
        *
        * @return {Boolean}
        */
-      isAdmin: function() {
-        return currentUser.role === 'admin';
+      hasRole: function (role) {
+        return (currentUser.roles && currentUser.roles.indexOf(role) > -1);
       },
 
       /**
