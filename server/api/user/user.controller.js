@@ -9,6 +9,17 @@ var validationError = function(res, err) {
   return res.json(422, err);
 };
 
+var makeRandomString = function (length){
+  if(!length) length = 5;
+  var text = "",
+    possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < length; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 /**
  * Get list of users
  * restriction: 'admin'
@@ -98,3 +109,25 @@ exports.me = function(req, res, next) {
 exports.authCallback = function(req, res, next) {
   res.redirect('/');
 };
+
+
+/**
+ * Reset password
+ * @param req
+ * @param res
+ * @returns {*}
+ */
+exports.accountHelp = function (req, res) {
+  if  (!req.body.email) return res.json(422, 'no email address');
+  User.findOne({email: req.body.email}, function(err, user) {
+    if (user) {
+      var resetToken = makeRandomString(16);
+      user.resetToken = {token: resetToken, date: Date.now()};
+      user.save();
+      res.json({resetToken: resetToken, url: '/api/users/reset', full: '/api/users/reset/' + resetToken});
+    } else {
+      res.json({resetError: 'Could not find user.'})
+    }
+  });
+}
+
