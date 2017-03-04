@@ -33,7 +33,6 @@ angular.module('baseApp')
       };
       $http.put('/api/users/' + userId + '/passwordreset/' + $stateParams.token, pwdObj)
         .then(function(res){
-          console.log('save password succeeded', res);
           $scope.user.newPassword = null;
           $cookieStore.put('flash-msg', 'Your password has been updated. You can now login.');
           $location.path('/login');
