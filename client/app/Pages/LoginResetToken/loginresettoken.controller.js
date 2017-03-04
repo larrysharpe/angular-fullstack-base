@@ -20,6 +20,8 @@ angular.module('baseApp')
         }
       },function(data){
         isTokenValid = false;
+        $cookieStore.put('flash-msg', 'Your token is invalid.');
+        $location.path('/loginhelp');
       }
     );
 
@@ -36,7 +38,6 @@ angular.module('baseApp')
           $scope.user.newPassword = null;
           $cookieStore.put('flash-msg', 'Your password has been updated. You can now login.');
           $location.path('/login');
-
         },function(data){
           console.log('save password failed', res);
         })
