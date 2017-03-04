@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
+  .controller('NavbarCtrl', function ($scope, $location, Auth, $cookieStore) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
@@ -11,6 +11,11 @@ angular.module('baseApp')
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.hasRole = Auth.hasRole;
     $scope.getCurrentUser = Auth.getCurrentUser;
+
+    var flash = $cookieStore.get('flash-msg');
+    if (flash) {
+      $cookieStore.remove('flash-msg');
+    }
 
     $scope.logout = function() {
       Auth.logout();

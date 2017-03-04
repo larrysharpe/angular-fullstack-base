@@ -12,6 +12,8 @@ var UserSchema = new Schema({
   created: {type: Date, required: true, default: new Date()},
   lastLogin: Date,
 
+  resetToken: {},
+
   roles: {
     type: [String],
     default: 'user',
