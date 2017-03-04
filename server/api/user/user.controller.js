@@ -131,3 +131,37 @@ exports.accountHelp = function (req, res) {
   });
 }
 
+exports.resetToken = function (req, res, next){
+  if  (!req.params.token) return res.json(422, 'no token');
+  User.findOne({'resetToken.token': req.params.token}, function (err, user){
+    if(user){
+      var hrsSinceToken = (user.resetToken.date - Date.now())/(100*60*60);
+      var isExpired = hrsSinceToken > 24;
+      if (isExpired) return res.json(422, 'token is expired');
+      else return res.json(200, {token: user.resetToken.token, id: user._id});
+    } else {
+      return res.json(422, 'token not valid');
+    }
+  });
+}
+
+
+exports.changePasswordReset = function (req, res, next){
+  if (!req.body.password) return res.json(422, 'no password provided');
+  User.findOne({'resetToken.token': req.params.token}, function (err, user){
+    if(user){
+      var hrsSinceToken = (user.resetToken.date - Date.now())/(100*60*60);
+      var isExpired = hrsSinceToken > 24;
+      if (isExpired) return res.json(422, 'token is expired');
+      else {
+        user.password = String(req.body.password);
+        user.save(function(err) {
+          if (err) return validationError(res, err);
+          res.send(200, {});
+        });
+      }
+    } else {
+      return res.json(422, 'token not valid');
+    }
+  });
+}
