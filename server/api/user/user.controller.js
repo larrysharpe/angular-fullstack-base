@@ -155,6 +155,7 @@ exports.changePasswordReset = function (req, res, next){
       if (isExpired) return res.json(422, 'token is expired');
       else {
         user.password = String(req.body.password);
+        user.resetToken = undefined;
         user.save(function(err) {
           if (err) return validationError(res, err);
           res.send(200, {});
