@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth, $cookieStore) {
+  .controller('NavbarCtrl', function ($scope, $location, Auth, $cookieStore, Flash) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
@@ -14,6 +14,7 @@ angular.module('baseApp')
 
     var flash = $cookieStore.get('flash-msg');
     if (flash) {
+      var id = Flash.create('success', flash, 0, {class: 'custom-class', id: 'custom-id'}, true);
       $cookieStore.remove('flash-msg');
     }
 
