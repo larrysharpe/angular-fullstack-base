@@ -14,7 +14,7 @@ angular.module('baseApp')
 
     var flash = $cookieStore.get('flash-msg');
     if (flash) {
-      var id = Flash.create('success', flash, 0, {class: 'custom-class', id: 'custom-id'}, true);
+      var id = Flash.create(flash.class, flash.text, 0, {class: 'custom-class', id: 'custom-id'}, true);
       $cookieStore.remove('flash-msg');
     }
 

@@ -19,8 +19,9 @@ angular.module('baseApp')
           }
         }
       },function(data){
+        var flashObj = {text: 'Your token is invalid.', class: 'danger'};
         isTokenValid = false;
-        $cookieStore.put('flash-msg', 'Your token is invalid.');
+        $cookieStore.put('flash-msg', flashObj);
         $location.path('/loginhelp');
       }
     );
@@ -35,8 +36,10 @@ angular.module('baseApp')
       };
       $http.put('/api/users/' + userId + '/passwordreset/' + $stateParams.token, pwdObj)
         .then(function(res){
+          var flashObj = {text: 'Your password has been updated. You can now login.', class: 'success'};
+
+          $cookieStore.put('flash-msg', flashObj);
           $scope.user.newPassword = null;
-          $cookieStore.put('flash-msg', 'Your password has been updated. You can now login.');
           $location.path('/login');
         },function(data){
           console.log('save password failed', res);
