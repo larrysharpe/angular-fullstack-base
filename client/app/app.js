@@ -43,7 +43,17 @@ angular.module('baseApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth, Alert) {
+
+    Auth.isLoggedInAsync(function(loggedIn) {
+      if(loggedIn){
+        var emailVerified = Auth.getCurrentUser().emailVerified;
+        if (!emailVerified){
+          Alert.open('emailVerification');
+        }
+      }
+    });
+
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
