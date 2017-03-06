@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('baseApp')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Alert) {
     var currentUser = {};
     if($cookieStore.get('token')) {
       currentUser = User.get();
     }
+
+    var isEmailVerified = null;
 
     return {
 
@@ -27,6 +29,11 @@ angular.module('baseApp')
         success(function(data) {
           $cookieStore.put('token', data.token);
           currentUser = User.get();
+            currentUser.$promise.then(function(user){
+              if (user.emailVerified === false) {
+                Alert.open('emailVerification');
+              }
+            });
           deferred.resolve(data);
           return cb();
         }).
@@ -45,6 +52,7 @@ angular.module('baseApp')
        * @param  {Function}
        */
       logout: function() {
+        Alert.closeAll();
         $cookieStore.remove('token');
         currentUser = {};
       },
