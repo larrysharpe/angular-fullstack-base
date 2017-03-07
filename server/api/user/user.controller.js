@@ -137,7 +137,6 @@ exports.resetToken = function (req, res, next){
     if(user){
       var hrsSinceToken = ( Date.now() - user.resetToken.date)/(100*60*60);
       var isExpired = hrsSinceToken > 24;
-      console.log(hrsSinceToken);
       if (isExpired) return res.json(422, 'token is expired');
       else return res.json(200, {token: user.resetToken.token, id: user._id});
     } else {
@@ -146,6 +145,36 @@ exports.resetToken = function (req, res, next){
   });
 }
 
+exports.emailVerificationToken = function (req, res, next){
+  if (!req.params.token) return res.json(422, 'no token provided');
+  var qry = {emailVerificationToken: req.params.token};
+  User.findOne(qry, function (err, user){
+    if (user){
+      user.emailVerified = true;
+      user.emailVerificationToken = undefined;
+      user.save(function(err){
+        res.send(200, {message: 'Email Verified'});
+      });
+    } else {
+      return res.json(422, 'token not valid');
+    }
+  });
+}
+
+exports.resendEmailVerification = function (req, res, next) {
+  var qry = {email: req.params.email};
+  User.findOne(qry, function (err, user){
+    if (user){
+      user.emailVerified = false;
+      user.emailVerificationToken = makeRandomString(16);
+      user.save(function(err){
+        res.send(200, {message: 'Verification Sent'});
+      });
+    } else {
+      return res.json(422, 'email not valid');
+    }
+  });
+}
 
 exports.changePasswordReset = function (req, res, next){
   if (!req.body.password) return res.json(422, 'no password provided');

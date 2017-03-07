@@ -6,7 +6,14 @@ angular.module('baseApp')
     var alert = {
       emailVerification: {
         type: 'warning',
-        content: 'Your Email Is Not Verified! <a href="">Resend Verification</a>',
+        content: 'Your Email Is Not Verified! <a href="/resendemailverification">Resend Verification</a>',
+        duration: 0,
+        attributes: {class: 'custom-class', id: 'custom-id'},
+        showClose: true
+      },
+      emailVerificationResent: {
+        type: 'warning',
+        content: 'Your Email Is Not Verified! <span class="text-success">We just sent another verification.</span> <a href="/resendemailverification">Resend Verification</a>',
         duration: 0,
         attributes: {class: 'custom-class', id: 'custom-id'},
         showClose: true

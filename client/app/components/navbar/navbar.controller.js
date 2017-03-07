@@ -7,6 +7,7 @@ angular.module('baseApp')
       'link': '/'
     }];
 
+
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.hasRole = Auth.hasRole;

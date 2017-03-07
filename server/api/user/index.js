@@ -16,5 +16,7 @@ router.post('/', controller.create);
 router.post('/accountHelp', controller.accountHelp);
 router.put('/:id/passwordreset/:token', controller.changePasswordReset);
 router.get('/resetToken/:token', controller.resetToken);
+router.get('/verifyEmail/:token', controller.emailVerificationToken);
+router.get('/resendEmailVerification/:email', controller.resendEmailVerification);
 
 module.exports = router;

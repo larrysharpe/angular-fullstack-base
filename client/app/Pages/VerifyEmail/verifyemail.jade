@@ -1,0 +1,11 @@
+div(ng-include='"app/Components/navbar/navbar.html"')
+.container
+  .row
+    .col-sm-12
+      h1 Verify Email
+      h1(ng-if="verified === null") Verifying Your Email
+      h1(ng-if="verified === true")
+        span.text-success Thanks! Your Email Been Verified!
+      h1(ng-if="verified === false")
+        span.text-danger Ooops! We Were Unable To Verify!
+

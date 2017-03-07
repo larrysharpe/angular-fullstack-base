@@ -43,7 +43,7 @@ angular.module('baseApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth, Alert) {
+  .run(function ($rootScope, $location, Auth, Alert, $cookieStore) {
 
     Auth.isLoggedInAsync(function(loggedIn) {
       if(loggedIn){
@@ -59,6 +59,14 @@ angular.module('baseApp', [
       Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
           $location.path('/login');
+        }
+        else if(loggedIn) {
+            var emailVerificationResent = $cookieStore.get('email-verification-resent');
+            if(emailVerificationResent) {
+              $cookieStore.remove('email-verification-resent');
+              Alert.closeAll();
+              Alert.open('emailVerificationResent');
+            }
         }
       });
     });
