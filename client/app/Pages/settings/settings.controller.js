@@ -18,6 +18,7 @@ angular.module('baseApp')
             err = err.data;
             $scope.errors = {};
 
+            //TODO: Create a mongoose error service
             // Update validity of form fields that match the mongoose errors
             angular.forEach(err.errors, function(error, field) {
               form[field].$setValidity('mongoose', false);

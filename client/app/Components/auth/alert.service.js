@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: Move this file to a services location
 angular.module('baseApp')
   .factory('Alert', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Flash) {
 
