@@ -4,13 +4,11 @@ div(ng-include='"app/Components/navbar/navbar.html"')
     table.table.table-striped.table-bordered
       caption Users
       tr
-        th Name
         th Username
         th Email
         th Roles
         th Trash
       tr(ng-repeat="user in users")
-        td {{::user.name}}
         td {{::user.username}}
         td {{::user.email}}
         td {{::user.roles.join(',')}}
