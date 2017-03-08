@@ -18,8 +18,9 @@ var makeRandomString = function (length){
 }
 
 var UserSchema = new Schema({
-  username: {type: String, required: true},
-  email: { type: String, lowercase: true },
+  username: {type: String, required: true, unique: true, trim: true},
+  username_lower: {type: String, unique: true, trim: true, lowercase: true},
+  email: {type: String, required: true, unique: true, trim: true, lowercase: true},
   emailVerified: {type: Boolean, default: false},
   emailVerificationToken: {type: String, default: makeRandomString(16)},
 
@@ -115,7 +116,8 @@ UserSchema
   .path('username')
   .validate(function(value, respond) {
     var self = this;
-    this.constructor.findOne({username: value}, function(err, user) {
+    this.constructor.findOne(
+      { $or:[{username: value}, {username_lower: value.toLowerCase()}] }, function(err, user) {
       if(err) throw err;
       if(user) {
         if(self.id === user.id) return respond(true);
@@ -134,8 +136,9 @@ var validatePresenceOf = function(value) {
  */
 UserSchema
   .pre('save', function(next) {
-    if (!this.isNew) return next();
+    this.username_lower = this.username.toLowerCase();
 
+    if (!this.isNew) return next();
     if (!validatePresenceOf(this.hashedPassword) && authTypes.indexOf(this.provider) === -1)
       next(new Error('Invalid password'));
     else
