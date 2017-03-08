@@ -1,0 +1,26 @@
+//TODO: come up with better format
+Fields and Requirements
+
+username | String, required, unique, trim | unique display name for each user, changeable by user
+username_lower: | String, unique, trim | to lowercase version of username, used to make sure usernames stay unique without requiring username itself to be a certain case, autopopulated upon creation
+email | String, required, unique, trim, lowercase |  changable by user
+emailVerified | Boolean, default: false | set to false whenever email changes
+emailVerificationToken: {type: String, default: makeRandomString(16)} | generated whenever email is updated
+
+created: {type: Date, required: true, default: new Date()},
+lastLogin: Date,
+
+resetToken: {},
+
+roles: {
+  type: [String],
+  default: 'user',
+  enum: ['admin', 'user']
+},
+hashedPassword: String,
+provider: String,
+salt: String,
+facebook: {},
+twitter: {},
+google: {},
+github: {}
