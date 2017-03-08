@@ -136,12 +136,22 @@ angular.module('baseApp')
       },
 
       /**
-       * Check if a user has a specific role
-       *
+       * Check if a user has a role, accepts single strings or arrays of strings
+       * @param {String|[String]} roles - role to be looked up
        * @return {Boolean}
        */
-      hasRole: function (role) {
-        return (currentUser && currentUser.roles && currentUser.roles.indexOf(role) > -1);
+      hasRole: function (roles) {
+        if(!roles || !currentUser || !currentUser.roles) return false;
+        if(Array.isArray(roles)){
+          for (var i = 0; i<roles.length;i++){
+            if(currentUser.roles.indexOf(roles[i]) > -1){
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return currentUser.roles.indexOf(roles) > -1;
+        }
       },
 
       /**
