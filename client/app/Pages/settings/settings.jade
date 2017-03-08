@@ -2,6 +2,19 @@ div(ng-include='"app/Components/navbar/navbar.html"')
 .container
   .row
     .col-sm-12
+      h1 Change Email
+      form.form(name='emailForm', ng-submit='changeEmail(emailForm)', novalidate='')
+        .form-group
+        input.form-control(type='email', name='email', ng-model='user.email', required='')
+        p.text-danger
+          span &nbsp;
+          span(ng-show='(emailForm.email.$error.minlength || emailForm.email.$error.required) && (emailForm.email.$dirty || submitted)') Email must be at least 3 characters.
+          span(ng-show='emailForm.email.$error.mongoose') {{ errors.email }}
+
+        p.help-block  {{ message }}
+
+        button.btn.btn-lg.btn-primary(type='submit') Save changes
+      hr
       h1 Change Username
       form.form(name='usernameForm', ng-submit='changeUsername(usernameForm)', novalidate='')
         .form-group

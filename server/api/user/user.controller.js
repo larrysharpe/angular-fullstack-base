@@ -71,7 +71,7 @@ exports.destroy = function(req, res) {
 /**
  * Change a users password
  */
-exports.changePassword = function(req, res, next) {
+exports.changepassword = function(req, res, next) {
   var userId = req.user._id;
   var oldPass = String(req.body.oldPassword);
   var newPass = String(req.body.newPassword);
@@ -89,13 +89,35 @@ exports.changePassword = function(req, res, next) {
   });
 };
 
-exports.changeUsername = function(req, res, next) {
+exports.changeusername = function(req, res, next) {
   var userId = req.user._id;
   var username = String(req.body.username);
 
   User.findById(userId, function (err, user) {
     if(user) {
       user.username = username;
+      user.save(function(err) {
+        if (err) return validationError(res, err);
+        res.send(200);
+      });
+    } else {
+      res.send(403);
+    }
+  });
+};
+
+exports.changeemail = function(req, res, next) {
+  var userId = req.user._id;
+  var email = String(req.body.email);
+
+  User.findById(userId, function (err, user) {
+    if(user) {
+      //set new email
+      user.email = email;
+      //set email verified to false
+      user.emailVerified = false;
+      //create new verification token
+      user.emailVerificationToken = makeRandomString(16);
       user.save(function(err) {
         if (err) return validationError(res, err);
         res.send(200);

@@ -30,6 +30,29 @@ angular.module('baseApp')
       }
     };
 
+    $scope.changeEmail = function (form){
+      $scope.submitted = true;
+      if(form.$valid) {
+        $http.put('/api/users/' + $scope.user._id + '/email', {email: $scope.user.email})
+          .then(function(res){
+            console.log('SUCCESS!!!!!');
+          })
+          .catch(function(err){
+            err = err.data;
+            $scope.errors = {};
+
+            //TODO: Create a mongoose error service
+            // Update validity of form fields that match the mongoose errors
+            angular.forEach(err.errors, function(error, field) {
+              form[field].$setValidity('mongoose', false);
+              $scope.errors[field] = error.message;
+            });
+
+            console.log('FAIL:: ', $scope.errors, form);
+          })
+      }
+    };
+
     $scope.changePassword = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
