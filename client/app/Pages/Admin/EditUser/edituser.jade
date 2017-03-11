@@ -1,0 +1,32 @@
+div(ng-include='"app/Components/navbar/navbar.html"')
+.container
+  .row
+    .col-sm-12
+      h1 Edit User
+      form.form(name='newUserForm', ng-submit='send(newUserForm)', novalidate='')
+        .form-group(ng-class='{ "has-success": newUserForm.username.$valid && submitted,\
+              "has-error": newUserForm.username.$invalid && submitted }')
+          input.form-control(type='text', name='username', ng-model='newUser.username', required='', placeholder="Enter Username")
+          p.help-block(ng-show='newUserForm.username.$error.required && submitted')
+            | A username is required
+            .form-group(ng-class='{ "has-success": newUserForm.email.$valid && submitted,\
+              "has-error": newUserForm.email.$invalid && submitted }')
+          input.form-control(type='email', name='email', ng-model='newUser.email', required='', mongoose-error='', placeholder="Enter Email")
+          p.help-block(ng-show='newUserForm.email.$error.email && submitted')
+            | Doesn't look like a valid email.
+          p.help-block(ng-show='newUserForm.email.$error.required && submitted')
+            | What's your email address?
+          p.help-block(ng-show='newUserForm.email.$error.mongoose')
+            | {{ errors.email }}
+        .row
+          .form-group
+            .col-xs-2(ng-repeat="role in userRoles")
+              label
+                input(type="checkbox", checklist-model="newUser.roles", checklist-value="role")
+                | {{role}}
+        .form-group
+          label
+            input(type="checkbox" ng-model="newUser.validationNeeded")
+            | Require Email Validation
+            div
+        button.btn.btn-inverse.btn-lg.btn-login(type='submit') Edit User

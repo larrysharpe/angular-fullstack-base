@@ -5,6 +5,13 @@ angular.module('baseApp')
   .factory('Alert', function Auth($location, $rootScope, $http, User, $cookieStore, $q, Flash) {
 
     var alert = {
+      EditUserSuccess: {
+        type: 'success',
+        content: 'User Updated Successfully.',
+        duration: 3000,
+        attributes: {class: 'custom-class', id: 'custom-id'},
+        showClose: true
+      },
       emailVerification: {
         type: 'warning',
         content: 'Your Email Is Not Verified! <a href="/resendemailverification">Resend Verification</a>',
@@ -27,7 +34,8 @@ angular.module('baseApp')
 
       open: function (alertName) {
         var a = alert[alertName];
-        return Flash.create(a.type, a.content, a.duration, a.attributes, a.showClose);
+        var fl =  Flash.create(a.type, a.content, a.duration, a.attributes, a.showClose);
+        return fl;
       },
 
       close: function (id){

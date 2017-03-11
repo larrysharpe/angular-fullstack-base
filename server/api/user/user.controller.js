@@ -43,6 +43,46 @@ exports.create = function (req, res, next) {
     res.json({ token: token });
   });
 };
+exports.createByAdmin = function (req, res, next) {
+
+  var newUser = new User(req.body);
+  newUser.provider = 'local';
+
+  if(!req.body.requireValidation){
+    newUser.emailVerified = true;
+    newUser.emailVerificationToken = undefined;
+  }
+
+  newUser.save(function(err, user) {
+    if (err) return validationError(res, err);
+    res.json({ user: user.adminProfile });
+  });
+};
+
+exports.editByAdmin = function (req, res, next) {
+  var userId = req.params.id;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+
+
+    if (req.body.username) user.username = req.body.username;
+    if (req.body.email) user.email = req.body.email;
+    if (req.body.roles) user.roles = req.body.roles;
+
+    if(!req.body.requireValidation){
+      user.emailVerified = true;
+      user.emailVerificationToken = undefined;
+    }
+
+    user.save(function(err, user){
+      if (err) return next(err);
+      if (!user) return res.send(401);
+      res.json(user);
+    });
+  });
+}
 
 /**
  * Get a single user

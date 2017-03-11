@@ -62,6 +62,20 @@ UserSchema
   .virtual('profile')
   .get(function() {
     return {
+      '_id': this._id,
+      'email': this.email,
+      'emailVerified': this.emailVerified,
+      'username': this.username,
+      'roles': this.roles
+    };
+  });
+
+UserSchema
+  .virtual('adminProfile')
+  .get(function() {
+    return {
+      'email': this.email,
+      '_id': this._id,
       'username': this.username,
       'roles': this.roles
     };

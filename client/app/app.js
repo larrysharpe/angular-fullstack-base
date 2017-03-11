@@ -7,7 +7,8 @@ angular.module('baseApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'ngFlash'
+  'ngFlash',
+  'checklist-model'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
