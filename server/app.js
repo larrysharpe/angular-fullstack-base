@@ -66,8 +66,7 @@ transporter.sendMail(mailoptions, function(err, res){
   } else {
     console.log('Email Sent');
   }
-})
-
+});
 
 
 // Expose app
