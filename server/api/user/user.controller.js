@@ -36,6 +36,12 @@ exports.index = function(req, res) {
  */
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
+
+  if(req.body.joinAs === 'broadcaster') {
+    newUser.roles.push('broadcaster');
+    newUser.accounts.push({});
+  }
+
   newUser.provider = 'local';
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);

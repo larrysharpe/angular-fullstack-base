@@ -17,6 +17,45 @@ var makeRandomString = function (length){
   return text;
 }
 
+var AccountStatuses = [
+  'action-user',    // account is awaiting an action
+  'action-admin',   // account is awaiting an action
+  'active',         // account is normal
+  'stale',          // user has not used account for x amount of days
+  'suspended',      // account is suspended by admin
+  'closed'          // account is closed
+];
+
+var ChatStatuses = [
+  'offline',
+  'away',
+  'busy',
+  'invisible',
+  'online'
+];
+
+
+var AccountsSchema = new Schema({
+  type: {
+    required: true,
+    type: String,
+    enum: ['broadcaster'],
+    default: 'broadcaster'
+  },
+  statuses: {
+    account: {
+      type: String,
+      enum: AccountStatuses,
+      default: 'action-user'
+    },
+    chat: {
+      type: String,
+      enum: ChatStatuses,
+      default: 'offline'
+    }
+  }
+});
+
 var UserSchema = new Schema({
   username: {type: String, required: true, unique: true, trim: true},
   username_lower: {type: String, unique: true, trim: true, lowercase: true},
@@ -32,8 +71,12 @@ var UserSchema = new Schema({
   roles: {
     type: [String],
     default: 'user',
-    enum: ['admin', 'user']
+    enum: ['admin', 'user', 'broadcaster']
   },
+
+  accounts: [AccountsSchema],
+
+
   hashedPassword: String,
   provider: String,
   salt: String,

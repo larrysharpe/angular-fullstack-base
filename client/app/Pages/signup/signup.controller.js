@@ -12,7 +12,8 @@ angular.module('baseApp')
         Auth.createUser({
           username: $scope.user.username,
           email: $scope.user.email,
-          password: $scope.user.password
+          password: $scope.user.password,
+          joinAs: $scope.user.joinAs
         })
         .then( function() {
           // Account created, redirect to home
