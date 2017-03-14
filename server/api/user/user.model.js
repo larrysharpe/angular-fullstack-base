@@ -76,6 +76,26 @@ var UserSchema = new Schema({
 
   accounts: [AccountsSchema],
 
+  //changes invalidate identity verification
+  name: {
+    prefix: String,
+    first: String,
+    middle: String,
+    last: String,
+    suffix: String
+  },
+
+  birthdate: Date,
+  gender: {
+    type: String,
+    enum: ['w']   // only women are allow in this phase
+  },
+  isUSCitizen: {
+    type: String,
+    enum: ['y']  // only us citizen allowed in this phase
+  },
+
+
 
   hashedPassword: String,
   provider: String,
