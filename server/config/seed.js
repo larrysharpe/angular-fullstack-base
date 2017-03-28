@@ -41,13 +41,42 @@ User.find({}).remove(function() {
     username: 'Test User 2',
     email: 'test2@test.com',
     password: 'test'
-  }, {
+  },
+  {
     provider: 'local',
     roles: ['admin'],
     username: 'Admin',
     email: 'admin@admin.com',
-    password: 'admin'
-  }, function() {
+    password: 'admin',
+    "name": {
+      "prefix": 'Mr.',
+      "first": 'Larry',
+      "middle": 'Le Roy',
+      "last": 'Sharpe',
+      "suffix": 'III'
+    },
+    "birthdate": "1981/01/12",
+    "gender": 'm',
+    "isUSCitizen": 'y'
+  },
+  {
+    provider: 'local',
+    roles: ['broadcaster'],
+    username: 'Broadcaster',
+    email: 'broadcaster@test.com',
+    password: 'test',
+    "name": {
+      "prefix": 'Ms',
+      "first": 'Jeanie',
+      "middle": 'Katie',
+      "last": 'Jones',
+      "suffix": ''
+    },
+    "birthdate": "1981/12/12",
+    "gender": 'w',
+    "isUSCitizen": 'y'
+  },
+    function() {
       console.log('finished populating users');
     }
   );

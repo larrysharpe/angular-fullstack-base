@@ -88,11 +88,17 @@ var UserSchema = new Schema({
   birthdate: Date,
   gender: {
     type: String,
-    enum: ['w']   // only women are allow in this phase
+    enum: {
+      values: ['f', 'm', 'o'],   // only women are allowed to broadcast in this phase
+      message: 'enum validator failed for path `{PATH}` with value `{VALUE}`'
+    }
   },
   isUSCitizen: {
     type: String,
-    enum: ['y']  // only us citizen allowed in this phase
+    enum:  {
+      values: ['y'],   // only us citizen allowed in this phase
+      message: 'enum validator failed for path `{PATH}` with value `{VALUE}`'
+    }
   },
 
 

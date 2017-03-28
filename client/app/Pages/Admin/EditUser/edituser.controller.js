@@ -1,23 +1,32 @@
 'use strict';
 
 angular.module('baseApp')
-  .controller('EditUserCtrl', function ($scope, Auth, $location, $window, $stateParams, $http, Alert) {
+  .controller('EditUserCtrl', function ($scope, Auth, $location, $window, $stateParams, $http) {
 
     $scope.userRoles = ['user','admin'];
 
-    $http.get('/api/users/' + $stateParams.id)
-    .then(function(res){
-      $scope.newUser = res.data;
-    })
+    $scope.view = 'email';
+    $scope.yesNo = [{text: 'Yes', value: 'y'}, {text: 'No', value: 'n'}];
+    $scope.genders = [{text: 'Female', value: 'f'}, {text: 'Male', value: 'm'}, {text: 'Other', value: 'o'}];
 
-    $scope.send = function() {
-      $http.put('/api/users/' + $stateParams.id, $scope.newUser)
-        .then(function(res){
-          if(res.status === 200){
-            Alert.open('EditUserSuccess');
-          }
-        })
+    $scope.menu = [
+      {text: 'Email', view: 'email'},
+      {text: 'Username', view: 'username'},
+      {text: 'Password', view: 'password'},
+      {text: 'Identity', view: 'identity'},
+      {text: 'Roles', view: 'roles'}
+    ];
+
+    $scope.changeView = function (view) {
+      $scope.view = view;
     }
+
+    $http.get('/api/users/' + $stateParams.id + '/all/admin')
+      .then(function(res){
+        res.data.birthdate = new Date(res.data.birthdate);
+        $scope.user = res.data;
+      })
+
 
 
 

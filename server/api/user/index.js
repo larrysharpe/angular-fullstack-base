@@ -15,6 +15,7 @@ router.post('/accountHelp', controller.accountHelp);
 router.get('/', auth.hasRole('admin'), controller.index);     /// get a list
 router.get('/me', auth.isAuthenticated(), controller.me);     /// a user getting their own data
 router.get('/:id', auth.isAuthenticated(), controller.show);  /// get a single user
+router.get('/:id/all/:admin', auth.hasRole('admin'), controller.show);  /// get a single user
 router.get('/resetToken/:token', controller.resetToken);
 router.get('/verifyEmail/:token', controller.emailVerificationToken);
 router.get('/resendEmailVerification/:email', controller.resendEmailVerification);
@@ -23,7 +24,7 @@ router.get('/resendEmailVerification/:email', controller.resendEmailVerification
 router.put('/:id', auth.hasRole('admin'), controller.editByAdmin);
 router.put('/:id/passwordreset/:token', controller.changePasswordReset);
 ////update individual fields
-var updateRoutes = ['email', 'password', 'username'];
+var updateRoutes = ['email', 'identity', 'password', 'username'];
 for (var r in updateRoutes){
   var route = '/:id/' + updateRoutes[r];
   var method = controller['change' + updateRoutes[r]];

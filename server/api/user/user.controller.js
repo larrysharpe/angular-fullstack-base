@@ -99,7 +99,11 @@ exports.show = function (req, res, next) {
   User.findById(userId, function (err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
-    res.json(user.profile);
+    if (req.params.admin){
+      res.json(user);
+    } else {
+      res.json(user.profile);
+    }
   });
 };
 
@@ -280,4 +284,20 @@ exports.changePasswordReset = function (req, res, next){
       return res.json(422, 'token not valid');
     }
   });
+}
+
+exports.changeidentity = function (req, res, next) {
+  User.update(
+    {_id: req.user._id},
+    req.body,
+    function (err, data){
+      if (err) {
+        res.send(500, 'err: ' + err);
+      } else if (!data){
+        res.send(500, 'data empty');
+      } else {
+        res.send(200, 'data ok');
+      }
+    }
+  )
 }
