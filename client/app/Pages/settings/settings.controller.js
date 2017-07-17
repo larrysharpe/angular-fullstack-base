@@ -4,8 +4,16 @@ angular.module('baseApp')
   .controller('SettingsCtrl', function ($scope, User, Auth, $http) {
     $scope.errors = {};
 
-    $scope.user = Auth.getCurrentUser();
+    $scope.view = 'email';
+    $scope.isView = function (view) {
+      return $scope.view === view;
+    }
 
+    $scope.setView = function (view) {
+      $scope.view = view;
+    }
+
+    $scope.user = Auth.getCurrentUser();
 
     $scope.changeUsername = function (form){
       $scope.submitted = true;
