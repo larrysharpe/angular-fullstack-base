@@ -5,6 +5,9 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
+var GenderList = require('../../data-lists/genders.json');
+var StatesList = require('../../data-lists/states.us.json');
+var CountryList = require('../../data-lists/countries.json');
 
 var makeRandomString = function (length){
   if(!length) length = 5;
@@ -17,12 +20,53 @@ var makeRandomString = function (length){
   return text;
 }
 
+var getCurrentYear = function () {
+  var today = new Date();
+  return today.getFullYear();
+}
+
 var UserSchema = new Schema({
   username: {type: String, required: true, unique: true, trim: true},
   username_lower: {type: String, unique: true, trim: true, lowercase: true},
+
   email: {type: String, required: true, unique: true, trim: true, lowercase: true},
   emailVerified: {type: Boolean, default: false},
   emailVerificationToken: {type: String, default: makeRandomString(16)},
+
+  birthDate: {
+    month: {
+      max: 12,
+      min: 1,
+      type: Number
+    },
+    day:  {
+      max: 31,
+      min: 1,
+      type: Number
+    },
+    year: {
+      max: getCurrentYear() - 18,
+      min: 1917,
+      type: Number
+    }
+  },
+
+  gender: {
+    type: String,
+    enum: GenderList
+  },
+
+  address: String,
+  city: String,
+  state: {
+    type: String,
+    enum: StatesList.codes
+  },
+  country: {
+    type: String,
+    enum: CountryList.codes
+  },
+  zip: Number,
 
   created: {type: Date, required: true, default: new Date()},
   lastLogin: Date,
