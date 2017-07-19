@@ -45,7 +45,7 @@ angular.module('baseApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth, Alert, $cookieStore) {
+  .run(function ($rootScope, $location, Auth, Alert, $cookieStore, $stateParams, $state) {
 
     Auth.isLoggedInAsync(function(loggedIn) {
       if(loggedIn){
@@ -58,11 +58,25 @@ angular.module('baseApp', [
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
+
+
+
       Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
           $location.path('/login');
         }
         else if(loggedIn) {
+            //console.log('$stateChangeStart: ', event, next, Auth.getCurrentUser(), $stateParams, $state);
+          var usr = Auth.getCurrentUser();
+
+          $state.transition.then(function(){
+            if ( next.name === 'Watch' && (usr.username_lower === $stateParams.username)) {
+              console.log('You cannot watch yourself.');
+              $location.path('/');
+            }
+          })
+
+
             var emailVerificationResent = $cookieStore.get('email-verification-resent');
             if(emailVerificationResent) {
               $cookieStore.remove('email-verification-resent');
