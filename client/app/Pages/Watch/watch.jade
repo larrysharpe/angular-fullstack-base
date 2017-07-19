@@ -1,0 +1,18 @@
+div(ng-include='"app/Components/navbar/navbar.html"')
+.container
+  .row
+    .col-sm-12
+      h1 Watch
+      swf-object(
+        swf-url="/assets/swf/broadcast_CS5.swf", swf-load="onLoadHandler(evt)"
+        swf-width="300",
+        swf-height="225",
+        swf-callbacks="{'setStatus': setStatus}"
+        )
+      p#video-text {{status}}
+
+      p
+        button(ng-click="goPrivate()", ng-show="showGoPrivate") Go Private
+        button(ng-click="goVIP()", ng-show="showGoVIP") Go VIP
+        button(ng-click="goPassword()", ng-show="showGoPassword") Go Password
+
