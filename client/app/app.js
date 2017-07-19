@@ -8,7 +8,8 @@ angular.module('baseApp', [
   'ui.router',
   'ui.bootstrap',
   'ngFlash',
-  'checklist-model'
+  'checklist-model',
+  'swfobject'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
