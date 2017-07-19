@@ -11,11 +11,11 @@ div(ng-include='"app/Components/navbar/navbar.html"')
         )
       p#video-text {{status}}
       p
-        button(ng-click="goPublic()") Go Public
-        button(ng-click="goAway()") Go Away
-        button(ng-click="goOffline()") Go Offline
+        button(ng-click="goPublic()", ng-show="showGoPublic") Go Public
+        button(ng-click="goAway()", ng-show="showGoAway") Go Away
+        button(ng-click="goOffline()", ng-show="showGoOffline") Go Offline
       p
-        button(ng-click="goPrivate()") Go Private
-        button(ng-click="goVIP()") Go VIP
-        button(ng-click="goPassword()") Go Password
+        button(ng-click="goPrivate()", ng-show="showGoPrivate") Go Private
+        button(ng-click="goVIP()", ng-show="showGoVIP") Go VIP
+        button(ng-click="goPassword()", ng-show="showGoPassword") Go Password
 

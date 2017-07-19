@@ -7,10 +7,45 @@ angular.module('baseApp')
     $scope.user = Auth.getCurrentUser();
 
     $scope.status = 'Offline';
+    $scope.showGoPublic = true;
+    $scope.showGoAway = false;
+    $scope.showGoOffline = false;
+    $scope.showGoPrivate = false;
+    $scope.showGoVIP = false;
+    $scope.showGoPassword = false;
+
+
+    var showAll = function(list){
+      for(var item in list){
+        $scope[list[item]] = true;
+      }
+    }
+    var hideAll = function(list){
+      for(var item in list){
+        $scope[list[item]] = false;
+      }
+    }
 
     $scope.setStatus = function (status){
-      console.log('setStatusCalled', status);
       $scope.status = status;
+      var hideEm;
+      var showEm;
+
+      if (status ===  'Public'){
+        hideEm = ['showGoPublic'];
+        showEm = ['showGoAway','showGoOffline','showGoPrivate','showGoVIP','showGoPassword'];
+      } else if (status ===  'Away'){
+        hideEm = ['showGoAway','showGoPrivate','showGoVIP','showGoPassword'];
+        showEm = ['showGoPublic','showGoOffline'];
+      } else if (status ===  'Offline'){
+        hideEm = ['showGoAway','showGoOffline','showGoPrivate','showGoVIP','showGoPassword'];
+        showEm = ['showGoPublic'];
+      }
+
+      hideAll(hideEm);
+      showAll(showEm);
+
+      if(!$scope.$$phase) $scope.$apply();
     }
 
     $scope.onLoadHandler = function (evt){
